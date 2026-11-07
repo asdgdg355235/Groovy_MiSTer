@@ -3868,7 +3868,7 @@ void HandleUI(void)
 
 			if (get_map_button() >= 0)
 			{
-				if (is_menu() && get_map_button() > SYS_BTN_CNT_ESC)
+				if (is_menu() && get_map_button() > SYS_BTN_CNT_ESC && get_map_button() < SYS_MAP_EXT_FIRST)
 				{
 					strcpy(s, joy_button_map[(get_map_button() - SYS_BTN_CNT_ESC - 1) + DPAD_BUTTON_NAMES + 2]);
 				}
@@ -6518,8 +6518,14 @@ void HandleUI(void)
 		strcpy(joy_bnames[SYS_BTN_OSD_KTGL - DPAD_NAMES], "Menu");
 		strcpy(joy_bnames[SYS_BTN_CNT_OK - DPAD_NAMES], "Menu: OK");
 		strcpy(joy_bnames[SYS_BTN_CNT_ESC - DPAD_NAMES], "Menu: Back");
-		joy_bcount = 20 + 1; //buttons + OSD/KTGL button
-		start_map_setting(joy_bcount + 6); // + dpad + Analog X/Y
+		// Append prompts after the existing analog stages. Storage slots 32..35
+		// keep all v3 system mouse, menu and axis positions intact.
+		strcpy(joy_bnames[SYS_MAP_EXT_FIRST - DPAD_NAMES], "L2");
+		strcpy(joy_bnames[SYS_MAP_EXT_FIRST + 1 - DPAD_NAMES], "R2");
+		strcpy(joy_bnames[SYS_MAP_EXT_FIRST + 2 - DPAD_NAMES], "L3");
+		strcpy(joy_bnames[SYS_MAP_EXT_FIRST + 3 - DPAD_NAMES], "R3");
+		joy_bcount = SYS_MAP_COUNT - DPAD_NAMES;
+		start_map_setting(SYS_MAP_COUNT);
 		menustate = MENU_JOYDIGMAP;
 		menusub = 0;
 		break;

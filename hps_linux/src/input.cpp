@@ -1142,13 +1142,13 @@ typedef struct
 
 	uint8_t  num;
 	uint8_t  has_map;
-	uint32_t map[NUMBUTTONS];
+	uint32_t map[NUMSYSTEMBUTTONS];
 	int      map_shown;
 
 	uint8_t  osd_combo;
 
 	uint8_t  has_mmap;
-	uint32_t mmap[NUMBUTTONS];
+	uint32_t mmap[NUMSYSTEMBUTTONS];
 	uint8_t  has_jkmap;
 	uint16_t jkmap[1024];
 	int      stick_l[2];
@@ -1216,7 +1216,7 @@ static devInput player_pdsp[NUMPLAYERS] = {};
 #define JOYCON_REQ(dev)      ((input[(dev)].misc_flags & 7) == 7)
 #define JOYCON_COMBINED(dev) (input[(dev)].quirk == QUIRK_JOYCON && JOYCON_COMBO((dev)))
 
-#define BTN_NUM (sizeof(devInput::map) / sizeof(devInput::map[0]))
+#define BTN_NUM NUMBUTTONS // only core slots may become uint64_t state bits
 
 int mfd = -1;
 int mwd = -1;
@@ -1485,9 +1485,59 @@ static char *get_map_name(int dev, int def)
 	static char name[1024];
 	char *id = get_unique_mapping(dev);
 
-	if (def || is_menu()) sprintfz(name, "input_%s%s_v3.map", id, input[dev].mod ? "_m" : "");
-	else sprintfz(name, "%s_input_%s%s_v3.map", user_io_get_core_name(), id, input[dev].mod ? "_m" : "");
+	if (def || is_menu()) sprintfz(name, "input_%s%s_v4.map", id, input[dev].mod ? "_m" : "");
+	else sprintfz(name, "%s_input_%s%s_v%d.map", user_io_get_core_name(), id, input[dev].mod ? "_m" : "", is_groovy() ? 4 : 3);
 	return name;
+}
+
+// Load v4 first. A v3 file has exactly the same first 32 words; never
+// reinterpret its mouse or axis slots as additional gamepad buttons.
+static int load_system_map(int dev)
+{
+	uint32_t *map = input[dev].mmap;
+	memset(map, 0, sizeof(input[dev].mmap));
+	if (load_map(get_map_name(dev, 1), map, sizeof(input[dev].mmap)) == sizeof(input[dev].mmap)) return 1;
+	memset(map, 0, sizeof(input[dev].mmap));
+	char legacy[1024];
+	snprintf(legacy, sizeof(legacy), "input_%s%s_v3.map", get_unique_mapping(dev), input[dev].mod ? "_m" : "");
+	if (load_map(legacy, map, NUMBUTTONS * sizeof(map[0])) == NUMBUTTONS * sizeof(map[0]))
+	{
+		printf("Loaded legacy system mapping %s; define L2/R2/L3/R3 in Menu to save v4\n", legacy);
+		return 1;
+	}
+	memset(map, 0, sizeof(input[dev].mmap));
+	return 0;
+}
+
+// Groovy's old core maps had ten named buttons. Preserve every existing
+// assignment, adding stick clicks only in previously empty slots. Keeping the
+// legacy file until an explicit save also lets later system mapping supply them.
+static int load_core_map(int dev)
+{
+	uint32_t *map = input[dev].map;
+	memset(map, 0, sizeof(input[dev].map));
+	if (load_map(get_map_name(dev, 0), map, NUMBUTTONS * sizeof(map[0])) == NUMBUTTONS * sizeof(map[0])) return 1;
+	if (is_menu() || !is_groovy()) return 0;
+	char legacy[1024];
+	snprintf(legacy, sizeof(legacy), "%s_input_%s%s_v3.map", user_io_get_core_name(), get_unique_mapping(dev), input[dev].mod ? "_m" : "");
+	memset(map, 0, sizeof(input[dev].map));
+	if (load_map(legacy, map, NUMBUTTONS * sizeof(map[0])) != NUMBUTTONS * sizeof(map[0])) return 0;
+	if (!map[14]) map[14] = input[dev].mmap[SYS_BTN_L3];
+	if (!map[15]) map[15] = input[dev].mmap[SYS_BTN_R3];
+	printf("Loaded legacy Groovy mapping %s; existing assignments retained, empty L3/R3 slots use system mapping\n", legacy);
+	return 1;
+}
+
+static void report_groovy_mapping_alias(int dev)
+{
+	if (!is_groovy() || is_menu()) return;
+	for (int a = 0; a < 2; a++)
+		for (int b = 0; b < 2; b++)
+		{
+			unsigned key = (input[dev].map[5] >> (16 * a)) & 0xFFFF;
+			if (key && key == ((input[dev].map[6] >> (16 * b)) & 0xFFFF))
+				printf("Groovy controller %s: Button 2 and Button 3 share physical code 0x%04x (sets %d/%d); redefine core buttons if unintended\n", get_unique_mapping(dev), key, a + 1, b + 1);
+		}
 }
 
 static char *get_jkmap_name(int dev)
@@ -1531,8 +1581,17 @@ void finish_map_setting(int dismiss)
 			input[i].has_mmap = 0;
 		}
 
-		if (!dismiss) save_map(get_map_name(mapping_dev, 0), &input[mapping_dev].map, sizeof(input[mapping_dev].map));
-		if (dismiss == 2) delete_map(get_map_name(mapping_dev, 0));
+		if (!dismiss) save_map(get_map_name(mapping_dev, 0), &input[mapping_dev].map, (is_menu() ? NUMSYSTEMBUTTONS : NUMBUTTONS) * sizeof(uint32_t));
+		if (dismiss == 2)
+		{
+			delete_map(get_map_name(mapping_dev, 0));
+			if (is_menu() || is_groovy())
+			{
+				char legacy[1024];
+				snprintf(legacy, sizeof(legacy), "%sinput_%s%s_v3.map", is_menu() ? "" : "Groovy_", get_unique_mapping(mapping_dev), input[mapping_dev].mod ? "_m" : "");
+				delete_map(legacy);
+			}
+		}
 	}
 }
 
@@ -2559,7 +2618,7 @@ static void input_cb(struct input_event *ev, struct input_absinfo *absinfo, int 
 		}
 		else if (input[dev].quirk != QUIRK_PDSP && input[dev].quirk != QUIRK_MSSP)
 		{
-			if (!load_map(get_map_name(dev, 1), &input[dev].mmap, sizeof(input[dev].mmap)))
+			if (!load_system_map(dev))
 			{
 				if (!gcdb_map_for_controller(input[sub_dev].bustype, input[sub_dev].vid, input[sub_dev].pid, input[sub_dev].version, pool[sub_dev].fd, input[dev].mmap))
 				{
@@ -2617,7 +2676,7 @@ static void input_cb(struct input_event *ev, struct input_absinfo *absinfo, int 
 			memset(input[dev].map, 0, sizeof(input[dev].map));
 			input[dev].map[map_paddle_btn()] = 0x120;
 		}
-		else if (!load_map(get_map_name(dev, 0), &input[dev].map, sizeof(input[dev].map)))
+		else if (!load_core_map(dev))
 		{
 			memset(input[dev].map, 0, sizeof(input[dev].map));
 			if (!is_menu())
@@ -2635,6 +2694,7 @@ static void input_cb(struct input_event *ev, struct input_absinfo *absinfo, int 
 			input[dev].has_map++;
 		}
 		input[dev].has_map++;
+		report_groovy_mapping_alias(dev);
 	}
 
 	if (!input[dev].has_jkmap)
@@ -2651,9 +2711,9 @@ static void input_cb(struct input_event *ev, struct input_absinfo *absinfo, int 
 		int assign_btn = ((input[dev].quirk == QUIRK_PDSP || input[dev].quirk == QUIRK_MSSP) && (ev->type == EV_REL || ev->type == EV_KEY));
 		if (!assign_btn && ev->type == EV_KEY && ev->value >= 1 && ev->code >= 256)
 		{
-			for (int i = SYS_BTN_RIGHT; i <= SYS_BTN_START; i++)
+			for (int i = SYS_BTN_RIGHT; i < NUMSYSTEMBUTTONS; i++)
 			{
-				if (ev->code == input[dev].mmap[i]) assign_btn = 1;
+				if ((i <= SYS_BTN_START || i >= SYS_BTN_L2) && ev->code == input[dev].mmap[i]) assign_btn = 1;
 			}
 		}
 
@@ -2899,7 +2959,7 @@ static void input_cb(struct input_event *ev, struct input_absinfo *absinfo, int 
 				}
 
 				mapping_clear = 0;
-				if (mapping_dev >= 0 && !map_skip && (mapping_dev == dev || clear) && mapping_button < (is_menu() ? (mapping_type ? SYS_BTN_CNT_ESC + 1 : SYS_BTN_OSD_KTGL + 1) : mapping_count))
+				if (mapping_dev >= 0 && !map_skip && (mapping_dev == dev || clear) && mapping_button < mapping_count && (!is_menu() || system_map_button_position(mapping_button, mapping_type)))
 				{
 					if (ev->value == 1 && !key_mapped)
 					{
@@ -2910,10 +2970,11 @@ static void input_cb(struct input_event *ev, struct input_absinfo *absinfo, int 
 								if (!mapping_button) memset(input[dev].map, 0, sizeof(input[dev].map));
 								input[dev].osd_combo = 0;
 
+								int slot = system_map_slot(mapping_button);
 								int found = 0;
-								if (mapping_button < SYS_BTN_CNT_OK)
+								if (mapping_button < SYS_BTN_CNT_OK || mapping_button >= SYS_MAP_EXT_FIRST)
 								{
-									for (int i = (mapping_button >= BUTTON_DPAD_COUNT) ? BUTTON_DPAD_COUNT : 0; i < mapping_button; i++) if (input[dev].map[i] == ev->code) found = 1;
+									for (int i = (mapping_button >= BUTTON_DPAD_COUNT) ? BUTTON_DPAD_COUNT : 0; i < mapping_button; i++) if (input[dev].map[system_map_slot(i)] == ev->code) found = 1;
 								}
 
 								if (!found || (mapping_button == SYS_BTN_OSD_KTGL && mapping_type))
@@ -2926,7 +2987,7 @@ static void input_cb(struct input_event *ev, struct input_absinfo *absinfo, int 
 										input[dev].map[SYS_BTN_OSD_KTGL + 2] = input[dev].map[SYS_BTN_OSD_KTGL + 1];
 										mapping_current_key = 0; // allow 2 buttons to be pressed
 									}
-									else input[dev].map[mapping_button] = ev->code;
+									else input[dev].map[slot] = ev->code;
 
 									key_mapped = ev->code;
 
@@ -3114,6 +3175,7 @@ static void input_cb(struct input_event *ev, struct input_absinfo *absinfo, int 
 						if (idx) input[mapping_dev].map[idx] = 0;
 						else if (mapping_button > 0)
 						{
+							if (is_menu() && mapping_button >= SYS_MAP_EXT_FIRST) input[mapping_dev].map[system_map_slot(mapping_button)] = 0;
 							if (!is_menu()) input[mapping_dev].map[mapping_button] &= mapping_set ? 0x0000FFFF : 0xFFFF0000;
 						}
 					}

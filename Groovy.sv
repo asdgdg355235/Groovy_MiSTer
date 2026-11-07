@@ -259,8 +259,10 @@ localparam CONF_STR = {
    "P3-;",	 
    "D7P3-,Save and reload to apply!;",
    "-;",
-   "J1,Button 1,Button 2,Button 3,Button 4,Button 5,Button 6,Button 7,Button 8, Button 9, Button 10,L3,R3;",        
-   "J2,Button 1,Button 2,Button 3,Button 4,Button 5,Button 6,Button 7,Button 8, Button 9, Button 10,L3,R3;",     
+   "J1,Button 1,Button 2,Button 3,Button 4,Button 5,Button 6,Button 7,Button 8,Button 9,Button 10,L3,R3;",
+   // J1 forces joystick keyboard emulation; it is not a player selector.
+   // One declaration supplies the same bit order to every controller port.
+   "jn,A,B,X,Y,L,R,L2,R2,Select,Start,L3,R3;",
    "V,v",`BUILD_DATE
 };
 
