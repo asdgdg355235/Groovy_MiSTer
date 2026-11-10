@@ -148,7 +148,10 @@ static int find_linux_code_for_button(char *btn_name, uint16_t *btn_map, uint16_
 
 			case 'a':
 			{
-				int aidx = strtol(btn_name + (a_edge != 0 ? 2 : 1) , NULL, 10);
+				const char *index = btn_name + (a_edge != 0 ? 2 : 1);
+				char *end;
+				const long aidx = strtol(index, &end, 10);
+				if (end == index || aidx < 0 || aidx >= ABS_MAX || abs_map[aidx] > ABS_MAX) return -1;
 				int abs_axis = abs_map[aidx];
 				if (a_edge)
 				{
@@ -288,7 +291,7 @@ void gcdb_show_string_for_ctrl_map(uint16_t bustype, uint16_t vid, uint16_t pid,
 			if (cur_map[i])
 			{
 				uint32_t i_code = cur_map[i] & 0xFFFF;
-				if (i_code > KEY_EMU) //hat/analog
+				if (i_code >= KEY_EMU) //hat/analog
 				{
 						bool is_max = i_code & 0x1;
 						uint16_t axis_idx = (i_code - KEY_EMU) >> 1;
@@ -374,7 +377,7 @@ static bool parse_mapping_string(char *map_str, char *guid, int dev_fd, uint32_t
 	if (strcmp(map_guid, guid)) //New guid, map out button indexes for this new controller
 	{
 		bzero(btn_map, sizeof(btn_map));
-		bzero(abs_map, sizeof(abs_map));
+		memset(abs_map, 0xff, sizeof(abs_map));
 		get_ctrl_index_maps(dev_fd, guid, btn_map, abs_map);
 	}
 
@@ -405,8 +408,13 @@ static bool parse_mapping_string(char *map_str, char *guid, int dev_fd, uint32_t
 				{
 					map_parsed = true;
 					fill_map[m_button_num] =  m_button_high ? ((uint32_t(l_button_code) << 16) | (fill_map[m_button_num] & 0xFFFF)) : ((l_button_code & 0xFFFF) | (fill_map[m_button_num] & 0xFFFF0000));
-					if ((m_button_num == SYS_BTN_L2 || m_button_num == SYS_BTN_R2) &&
-						(l_btn[0] == 'a')) l_button_code = KEY_EMU + (l_button_code << 1) + 1;
+					if ((m_button_num == SYS_BTN_L2 || m_button_num == SYS_BTN_R2) && l_btn[0] == 'a')
+					{
+						// A full SDL axis normally presses toward its maximum.
+						// An inverted mapping (aN~) presses toward its minimum.
+						const bool inverted = strchr(l_btn, '~') != nullptr;
+						l_button_code = KEY_EMU + (l_button_code << 1) + !inverted;
+					}
 					if (m_button_num == SYS_BTN_L2 || m_button_num == SYS_BTN_R2)
 						fill_map[m_button_num] = l_button_code;
 					if (m_button_num >= SYS_AXIS1_X && m_button_num <= SYS_AXIS_MX)

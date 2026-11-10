@@ -295,6 +295,7 @@ static uint32_t ip_check_1 = 0;
 static uint32_t ip_check_13 = 0;
 static uint32_t inputs_ip_check_9 = 0;
 static uint32_t inputs_ip_check_17 = 0;
+static uint32_t inputs_ip_check_21 = 0;
 static uint32_t inputs_ip_check_37 = 0;
 static uint32_t inputs_ip_check_41 = 0;
 
@@ -302,6 +303,7 @@ static uint32_t udp_check_1 = 0;
 static uint32_t udp_check_13 = 0;
 static uint32_t inputs_udp_check_9 = 0;
 static uint32_t inputs_udp_check_17 = 0;
+static uint32_t inputs_udp_check_21 = 0;
 static uint32_t inputs_udp_check_37 = 0;
 static uint32_t inputs_udp_check_41 = 0;
 #endif
@@ -341,6 +343,13 @@ static uint8_t doXDPServer = 0;
 static uint8_t doARMClock = 0;
 static uint8_t isConnected = 0;
 static uint8_t isConnectedInputs = 0;
+static bool triggerExtension = false;
+static int16_t triggerPositions[2][2] = {{-1, -1}, {-1, -1}};
+
+static bool groovy_trigger_registration(const char *data, int length)
+{
+	return length == 5 && memcmp(data, "GMTR\x01", 5) == 0;
+}
 static uint8_t isConnectedGMC = 0;
 
 
@@ -837,6 +846,7 @@ static void setClose()
 	initDDR();
 	isConnected = 0;
 	isConnectedInputs = 0;
+	triggerExtension = false;
 
 	// load LOGO
 	if (doScreensaver)
@@ -903,6 +913,21 @@ static void groovy_send_joysticks()
 		sendbufPtr[15] = poc->PoC_joystick_r_analog_X2;
 		sendbufPtr[16] = poc->PoC_joystick_r_analog_Y2;
 		len += 8;
+		if (triggerExtension)
+		{
+			const uint32_t buttons[] = {poc->PoC_joystick_map1, poc->PoC_joystick_map2};
+			const uint32_t masks[] = {JOY_L2, JOY_R2};
+			for (int player = 0; player < 2; ++player)
+			{
+				for (int trigger = 0; trigger < 2; ++trigger)
+				{
+					const int value = triggerPositions[player][trigger];
+					sendbufPtr[17 + player * 2 + trigger] =
+						value >= 0 ? value : (buttons[player] & masks[trigger] ? 255 : 0);
+				}
+			}
+			len += 4;
+		}
 	}
 	poc->PoC_joystick_keep_alive = 0;
 	if (!doXDPServer)
@@ -930,6 +955,11 @@ static void groovy_send_joysticks()
 		{
 			iph->check = inputs_ip_check_9;
 			compute_udp_checksum((unsigned short *)udph, inputs_udp_check_9);	
+		}
+		else if (len == 21)
+		{
+			iph->check = inputs_ip_check_21;
+			compute_udp_checksum((unsigned short *)udph, inputs_udp_check_21);
 		}
 		else
 		{
@@ -1134,6 +1164,19 @@ static void sendACK(uint32_t udp_frame, uint16_t udp_vsync)
 	}
 }
 
+static bool groovy_register_udp_inputs()
+{
+	char registration[5];
+	struct sockaddr_in endpoint{};
+	socklen_t endpointLength = sizeof(endpoint);
+	const int len = recvfrom(sockfdInputs, registration, sizeof(registration), MSG_TRUNC,
+		(struct sockaddr *)&endpoint, &endpointLength);
+	if (len <= 0) return false;
+	clientaddrInputs = endpoint;
+	triggerExtension = groovy_trigger_registration(registration, len);
+	return true;
+}
+
 static void setInit(uint8_t compression, uint8_t audio_rate, uint8_t audio_chan, uint8_t rgb_mode)
 {
 	difMs = 0;
@@ -1168,13 +1211,8 @@ static void setInit(uint8_t compression, uint8_t audio_rate, uint8_t audio_chan,
 
 	if (doPs2Inputs || doJoyInputs)
   	{
-  		int len = 0;
-  		if (!doXDPServer)
-  		{
-  			len = recvfrom(sockfdInputs, recvbuf, 1, 0, (struct sockaddr *)&clientaddrInputs, &clilen);
-  		}
-		
-  		if (len > 0 || isConnectedInputs)
+		const bool registered = !doXDPServer && groovy_register_udp_inputs();
+		if (registered || isConnectedInputs)
   		{
 			getnameinfo((struct sockaddr *)&clientaddrInputs, clilen, hoststr, sizeof(hoststr), portstr, sizeof(portstr), NI_NUMERICHOST | NI_NUMERICSERV);
 			LOG(1,"[Inputs][%s:%s]\n", hoststr, portstr);
@@ -1864,6 +1902,7 @@ static void groovy_udp_server_init_inputs()
 
 inputs_error:
     	isConnectedInputs = 0;
+	triggerExtension = false;
 }
 
 static void groovy_udp_server_init_gmc()
@@ -2202,8 +2241,10 @@ static inline int process_packet_eth(struct xsk_socket_info *xsk, uint64_t addr,
 	//set headers preparing send inputs
 	if (ntohs(udp->dest) == UDP_PORT_INPUTS && (doPs2Inputs || doJoyInputs))
 	{
+		triggerExtension = udp_len == 5 && len >= 42 + 5 &&
+			groovy_trigger_registration(data_pointer + 42, udp_len);
 		ip->tos = 7 << 5; //max priority
-		
+
 		memset(&clientaddrInputs, 0, sizeof (clientaddrInputs));
  		clientaddrInputs.sin_family = AF_INET;
 		clientaddrInputs.sin_addr.s_addr = ip->saddr;
@@ -2235,7 +2276,18 @@ static inline int process_packet_eth(struct xsk_socket_info *xsk, uint64_t addr,
 		ip->tot_len = htons(sizeof(iphdr) + sizeof(struct udphdr) + 17);
 		update_iph_checksum(ip);
 		inputs_ip_check_17 = ip->check;
-		inputs_udp_check_17 = sum_udp_checksum(ip, udp->len); 
+		inputs_udp_check_17 = sum_udp_checksum(ip, udp->len);
+
+		if (triggerExtension)
+		{
+			udp->check = 0;
+			ip->check = 0;
+			udp->len = htons(21 + sizeof(struct udphdr));
+			ip->tot_len = htons(sizeof(iphdr) + sizeof(struct udphdr) + 21);
+			update_iph_checksum(ip);
+			inputs_ip_check_21 = ip->check;
+			inputs_udp_check_21 = sum_udp_checksum(ip, udp->len);
+		}
 
 		udp->check = 0;
 		ip->check = 0;
@@ -2472,6 +2524,8 @@ void groovy_stop()
 	}
 	printf("Groovy-Server %d stopped\n", GROOVY_VERSION);
 	groovyServer = 0;
+	isConnectedInputs = 0;
+	triggerExtension = false;
 }
 
 void groovy_poll()
@@ -2579,6 +2633,20 @@ void groovy_send_analog(unsigned char joystick, unsigned char analog, char value
 	else
 	{
 		LOG(2, "[JOY_%s][%d][x=%d,y=%d]\n", (analog) ? "R" : "L", joystick, valueX, valueY);
+	}
+}
+
+void groovy_set_triggers(unsigned joystick, int16_t left, int16_t right)
+{
+	if (joystick >= 2) return;
+	auto &values = triggerPositions[joystick];
+	if (values[0] == left && values[1] == right) return;
+	values[0] = left;
+	values[1] = right;
+	if (poc && isConnectedInputs && doJoyInputs == 2 && triggerExtension)
+	{
+		++poc->PoC_joystick_order;
+		groovy_send_joysticks();
 	}
 }
 

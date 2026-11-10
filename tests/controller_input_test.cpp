@@ -20,11 +20,16 @@ static std::string db_line;
 static bool db_read;
 static std::vector<uint16_t> spi_words;
 static std::vector<uint8_t> packet;
+static std::vector<char> queuedRegistration;
+static uint16_t registrationPort;
 static int joyswap, joy_transl;
 static int doXDPServer, doJoyInputs = 2, isConnectedInputs = 1, sockfdInputs;
 static sockaddr_in clientaddrInputs;
 static socklen_t clilen = sizeof(clientaddrInputs);
 static uint8_t sendbufInputs[128];
+static bool triggerExtension;
+static int16_t triggerPositions[2][2] = {{-1, -1}, {-1, -1}};
+static std::map<std::pair<int, unsigned>, input_absinfo> fixtureAxes;
 struct TestPoc {
     uint32_t PoC_frame_ddr = 12, PoC_joystick_keep_alive = 0;
     uint8_t PoC_joystick_order = 0;
@@ -90,7 +95,7 @@ const char* FileReadLine(fileTextReader*) {
     db_read = true;
     return db_line.c_str();
 }
-extern "C" int ioctl(int, unsigned long request, ...) noexcept {
+extern "C" int ioctl(int fd, unsigned long request, ...) noexcept {
     va_list ap; va_start(ap, request); auto dst = va_arg(ap, uint8_t*); va_end(ap);
     auto size = _IOC_SIZE(request);
     memset(dst, 0, size);
@@ -99,6 +104,15 @@ extern "C" int ioctl(int, unsigned long request, ...) noexcept {
     } else if (_IOC_NR(request) == _IOC_NR(EVIOCGBIT(EV_ABS, 0))) {
         for (auto key : {ABS_X, ABS_Y, ABS_RX, ABS_RY, ABS_Z, ABS_RZ})
             dst[key / 8] |= 1 << (key % 8);
+        for (auto& item : fixtureAxes) {
+            const auto axis = item.first.second;
+            if (item.first.first == fd) dst[axis / 8] |= 1 << (axis % 8);
+        }
+    } else if (_IOC_NR(request) >= _IOC_NR(EVIOCGABS(0)) &&
+               _IOC_NR(request) <= _IOC_NR(EVIOCGABS(ABS_MAX))) {
+        const auto it = fixtureAxes.find({fd, _IOC_NR(request) - _IOC_NR(EVIOCGABS(0))});
+        if (it == fixtureAxes.end()) return -1;
+        memcpy(dst, &it->second, sizeof(input_absinfo));
     } else { assert(false); }
     return size;
 }
@@ -120,16 +134,152 @@ static void event(int dev, unsigned code, int value) {
     input_cb(&ev, nullptr, dev);
 }
 static uint16_t wire_mask(int player) {
-    assert(packet.size() == 9 || packet.size() == 17);
+    assert(packet.size() == 9 || packet.size() == 17 || packet.size() == 21);
     return packet[5 + player * 2] | (packet[6 + player * 2] << 8);
 }
 static void publish(int dev) {
     user_io_digital_joystick(dev, joy[dev], 0);
     assert(spi_words[0] == wire_mask(dev));
 }
-static void db_parse(const char* text, uint32_t* map) {
+static void db_parse(const char* text, uint32_t* map, int fd = 0) {
     std::string line(text); char guid[] = "test";
-    assert(parse_mapping_string(&line[0], guid, 0, map));
+    assert(parse_mapping_string(&line[0], guid, fd, map));
+}
+
+extern "C" ssize_t recvfrom(int fd, void* data, size_t size, int flags, sockaddr* addr, socklen_t* addrlen)
+{
+    assert(fd == sockfdInputs && flags == MSG_TRUNC && *addrlen == sizeof(sockaddr_in));
+    if (queuedRegistration.empty()) return -1;
+    auto* endpoint = reinterpret_cast<sockaddr_in*>(addr);
+    endpoint->sin_family = AF_INET;
+    endpoint->sin_port = htons(registrationPort);
+    const auto length = queuedRegistration.size();
+    memcpy(data, queuedRegistration.data(), std::min(size, length));
+    queuedRegistration.clear();
+    return length;
+}
+
+static void trigger_tests()
+{
+    constexpr char registration[] = "GMTR\x01";
+    assert(!groovy_trigger_registration("\0", 1));
+    assert(!groovy_trigger_registration(registration, 4));
+    assert(!groovy_trigger_registration(registration, 6));
+    assert(!groovy_trigger_registration("GMTR\x02", 5));
+    assert(groovy_trigger_registration(registration, 5));
+
+    reset_device(0, 1);
+    reset_device(1, 2);
+    pool[0].fd = 40;
+    pool[1].fd = 41;
+    fixtureAxes[{40, ABS_THROTTLE}] = {100, -100, 1100, 0, 0, 0};
+    fixtureAxes[{40, ABS_RUDDER}] = {900, -100, 1100, 0, 0, 0};
+    fixtureAxes[{41, ABS_GAS}] = {0, 0, 1023, 0, 0, 0};
+    fixtureAxes[{41, ABS_BRAKE}] = {0, 0, 1023, 0, 0, 0};
+    remember_trigger_rest(0);
+    remember_trigger_rest(1);
+    db_parse("a:b0,lefttrigger:a8,righttrigger:a99,", input[0].mmap, 40);
+    assert(!input[0].mmap[SYS_BTN_L2] && !input[0].mmap[SYS_BTN_R2]);
+    db_parse("lefttrigger:a6,righttrigger:a7~,", input[0].mmap, 40);
+    assert(input[0].mmap[SYS_BTN_L2] == KEY_EMU + 2 * ABS_THROTTLE + 1);
+    assert(input[0].mmap[SYS_BTN_R2] == KEY_EMU + 2 * ABS_RUDDER);
+    map_joystick(input[0].map, input[0].mmap);
+    // Primary digital binding with an alternate mapped physical axis.
+    input[1].map[12] = BTN_TL2 | ((KEY_EMU + 2 * ABS_GAS + 1) << 16);
+    input[1].map[13] = BTN_TR2;
+    input[1].db_trigger_keys[1] = KEY_EMU + 2 * ABS_BRAKE + 1;
+    auto axisEvent = [](int dev, unsigned code, int value) {
+        input_absinfo info{};
+        assert(ioctl(pool[dev].fd, EVIOCGABS(code), &info) >= 0);
+        input_event ev{};
+        ev.type = EV_ABS;
+        ev.code = code;
+        ev.value = value;
+        input_cb(&ev, &info, dev);
+    };
+    auto values = [](uint8_t l1, uint8_t r1, uint8_t l2, uint8_t r2) {
+        assert(packet.size() == 21);
+        assert(packet[17] == l1 && packet[18] == r1 && packet[19] == l2 && packet[20] == r2);
+    };
+
+    registrationPort = 34567;
+    queuedRegistration = {0};
+    assert(groovy_register_udp_inputs() && !triggerExtension);
+    assert(ntohs(clientaddrInputs.sin_port) == registrationPort);
+    doJoyInputs = 1;
+    publish(0);
+    assert(packet.size() == 9);
+    doJoyInputs = 2;
+    publish(1);
+    assert(packet.size() == 17);
+    groovy_send_analog(0, 0, 1, -2);
+    groovy_send_analog(0, 1, 3, -4);
+    groovy_send_analog(1, 0, 5, -6);
+    groovy_send_analog(1, 1, 7, -8);
+    const auto legacy = packet;
+    assert(std::vector<uint8_t>(legacy.begin() + 9, legacy.end()) ==
+        (std::vector<uint8_t>{1, 254, 3, 252, 5, 250, 7, 248}));
+    axisEvent(0, ABS_THROTTLE, 300);
+    assert(packet == legacy); // Legacy clients get no trigger-only snapshots.
+    queuedRegistration.assign(registration, registration + 5);
+    ++registrationPort;
+    assert(groovy_register_udp_inputs() && triggerExtension);
+    assert(ntohs(clientaddrInputs.sin_port) == registrationPort);
+    assert(!groovy_register_udp_inputs() && triggerExtension);
+    groovy_send_joysticks();
+    assert(std::equal(legacy.begin(), legacy.end(), packet.begin()));
+    values(51, 0, 0, 0);
+    axisEvent(0, ABS_RUDDER, 400);
+    axisEvent(1, ABS_GAS, 700);
+    axisEvent(1, ABS_BRAKE, 900);
+    values(51, 128, 174, 224);
+    const auto heldOrder = packet[4];
+    axisEvent(1, ABS_BRAKE, 900);
+    assert(packet[4] == heldOrder);
+    for (int value = 100, last = 0; value <= 1100; value += 10) {
+        axisEvent(0, ABS_THROTTLE, value);
+        assert(packet[17] >= last && packet[18] == 128 && packet[19] == 174 && packet[20] == 224);
+        last = packet[17];
+    }
+    values(255, 128, 174, 224);
+    axisEvent(0, ABS_RUDDER, -100);
+    values(255, 255, 174, 224);
+    axisEvent(0, ABS_RUDDER, 900);
+    axisEvent(0, ABS_THROTTLE, 100);
+    values(0, 0, 174, 224);
+
+    // Physical analog and digital sources retain independent values.
+    event(1, BTN_TL2, 1);
+    event(1, BTN_TR2, 1);
+    publish(1);
+    assert(wire_mask(1) == (JOY_L2 | JOY_R2));
+    values(0, 0, 174, 224);
+    axisEvent(0, ABS_THROTTLE, 300);
+    clear_groovy_device_triggers(1); // Same reset used on evdev loss.
+    publish(1);
+    assert(wire_mask(1) == 0);
+    values(51, 0, 0, 0);
+    assign_player(0, 3);
+    values(0, 0, 0, 0);
+
+    input[1].map[12] = BTN_TL2;
+    input[1].db_trigger_keys[1] = 0;
+    event(1, BTN_TL2, 1);
+    publish(1);
+    values(0, 0, 255, 0);
+    event(1, BTN_TL2, 0);
+    publish(1);
+    values(0, 0, 0, 0);
+
+    doJoyInputs = 1;
+    groovy_send_joysticks();
+    assert(packet.size() == 9);
+    doJoyInputs = 2;
+    queuedRegistration.assign(registration, registration + 6);
+    assert(groovy_register_udp_inputs() && !triggerExtension);
+    groovy_send_joysticks();
+    assert(packet.size() == 17);
+    puts("PASS: trigger calibration, polarity, both slots, digital fallback, reset, registration and packet lengths");
 }
 
 int main(int argc, char** argv) {
@@ -243,6 +393,8 @@ int main(int argc, char** argv) {
     assert(mapping_button == SYS_MAP_COUNT);
     finish_map_setting(0); assert(files["inputs/input__v4.map"].size() == 144);
     assert(load_system_map(0)); assert(input[0].mmap[SYS_BTN_L3] == 0x262);
+    menu_core = false;
+    trigger_tests();
     // Config parser accepts its full 28-button limit without touching system slots.
     menu_core = false; conf_buttons = "J1";
     for (int i = 0; i < 28; ++i) conf_buttons += ",B" + std::to_string(i);

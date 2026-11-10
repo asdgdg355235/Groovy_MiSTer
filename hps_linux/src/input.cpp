@@ -1139,6 +1139,11 @@ typedef struct
 	uint8_t  mouse;
 	uint8_t  axis_edge[256];
 	int8_t   axis_pos[256];
+	uint64_t trigger_rest_axes;
+	int32_t  trigger_rest[ABS_CNT];
+	uint32_t db_trigger_keys[2];
+	uint16_t trigger_keys[2];
+	uint8_t  trigger_values[2];
 
 	uint8_t  num;
 	uint8_t  has_map;
@@ -1557,6 +1562,8 @@ static char *get_kbdmap_name(int dev)
 	return name;
 }
 
+static void reset_groovy_triggers(unsigned player, bool clearButtons = true);
+
 void finish_map_setting(int dismiss)
 {
 	mapping = 0;
@@ -1575,6 +1582,8 @@ void finish_map_setting(int dismiss)
 	}
 	else
 	{
+		reset_groovy_triggers(1);
+		reset_groovy_triggers(2);
 		for (int i = 0; i < NUMDEV; i++)
 		{
 			input[i].has_map = 0;
@@ -2391,11 +2400,28 @@ static void update_num_hw(int dev, int num)
 	}
 }
 
+static void reset_groovy_triggers(unsigned player, bool clearButtons)
+{
+	if (!is_groovy() || player < 1 || player > 2) return;
+	const uint64_t triggerMask = JOY_L2 | JOY_R2;
+	if (clearButtons) joy[player - 1] &= ~(triggerMask | (triggerMask << 32));
+	groovy_set_triggers(player - 1, 0, 0);
+}
+
+static void clear_groovy_device_triggers(int dev)
+{
+	reset_groovy_triggers(input[dev].num);
+	memset(input[dev].trigger_keys, 0, sizeof(input[dev].trigger_keys));
+}
+
 void reset_players()
 {
+	reset_groovy_triggers(1);
+	reset_groovy_triggers(2);
 	for (int i = 0; i < NUMDEV; i++)
 	{
 		input[i].num = 0;
+		memset(input[i].trigger_keys, 0, sizeof(input[i].trigger_keys));
 		input[i].map_shown = 0;
 		update_num_hw(i, 0);
 	}
@@ -2549,10 +2575,83 @@ static uint16_t def_mmap[] = {
 
 static void assign_player(int dev, int num, int force = 0)
 {
+	if (input[dev].num != num)
+	{
+		clear_groovy_device_triggers(dev);
+		reset_groovy_triggers(num);
+	}
 	input[dev].num = num;
 	if (JOYCON_COMBINED(dev)) input[input[dev].bind].num = num;
 	store_player(num, dev);
 	printf("Device %s %sassigned to player %d\n", input[dev].id, force ? "forcebly " : "", input[dev].num);
+}
+
+static uint16_t groovy_trigger_key(int dev, int trigger)
+{
+	// Core Button 9/10 are L2/R2. A saved core axis takes precedence.
+	const uint32_t core = input[dev].map[12 + trigger];
+	const uint32_t keys[] = {core & 0xffff, core >> 16, input[dev].mmap[SYS_BTN_L2 + trigger],
+		input[dev].db_trigger_keys[trigger]};
+	for (auto key : keys)
+		if (key >= KEY_EMU && key < KEY_EMU + 2 * ABS_CNT) return key;
+	return 0;
+}
+
+static void remember_trigger_rest(int dev)
+{
+	uint8_t axes[(ABS_CNT + 7) / 8] = {};
+	if (ioctl(pool[dev].fd, EVIOCGBIT(EV_ABS, sizeof(axes)), axes) < 0) return;
+	for (int axis = 0; axis < ABS_CNT; ++axis)
+	{
+		if (!test_bit(axis, axes)) continue;
+		input_absinfo info{};
+		if (ioctl(pool[dev].fd, EVIOCGABS(axis), &info) < 0) continue;
+		input[dev].trigger_rest_axes |= uint64_t(1) << axis;
+		input[dev].trigger_rest[axis] = info.value;
+	}
+}
+
+static void update_groovy_triggers(int dev, int source, const input_event &ev, const input_absinfo *info)
+{
+	const auto player = input[dev].num;
+	if (!is_groovy() || !player || player > 2 || !grabbed) return;
+
+	int16_t values[2];
+	for (int trigger = 0; trigger < 2; ++trigger)
+	{
+		const auto key = groovy_trigger_key(dev, trigger);
+		if (!key)
+		{
+			values[trigger] = -1;
+			input[dev].trigger_keys[trigger] = 0;
+			continue;
+		}
+
+		const int axis = (key - KEY_EMU) / 2;
+		if (ev.type == EV_ABS && ev.code == axis && info &&
+			int64_t(info->maximum) - info->minimum > 2)
+		{
+			const bool positive = (key - KEY_EMU) & 1;
+			const int64_t direction = positive ? 1 : -1;
+			const int64_t pressed = positive ? info->maximum : info->minimum;
+			int64_t neutral = positive ? info->minimum : info->maximum;
+			if (input[source].trigger_rest_axes & (uint64_t(1) << axis))
+			{
+				const int64_t rest = input[source].trigger_rest[axis];
+				// Reject samples outside the range or near the pressed end.
+				if (direction * (rest - neutral) >= 0 &&
+					direction * (pressed - rest) * 4 >= direction * (pressed - neutral))
+					neutral = rest;
+			}
+			const int64_t travel = direction * (pressed - neutral);
+			const int64_t position = direction * (ev.value - neutral);
+			input[dev].trigger_keys[trigger] = key;
+			input[dev].trigger_values[trigger] = position <= 0 ? 0 : position >= travel ? 255 :
+				(position * 255 + travel / 2) / travel;
+		}
+		values[trigger] = input[dev].trigger_keys[trigger] == key ? input[dev].trigger_values[trigger] : -1;
+	}
+	groovy_set_triggers(player - 1, values[0], values[1]);
 }
 
 static void input_cb(struct input_event *ev, struct input_absinfo *absinfo, int dev)
@@ -2608,6 +2707,8 @@ static void input_cb(struct input_event *ev, struct input_absinfo *absinfo, int 
 
 	if (!input[dev].has_mmap)
 	{
+		memset(input[dev].db_trigger_keys, 0, sizeof(input[dev].db_trigger_keys));
+		memset(input[dev].trigger_keys, 0, sizeof(input[dev].trigger_keys));
 		if (input[dev].quirk == QUIRK_TOUCHGUN)
 		{
 			memset(input[dev].mmap, 0, sizeof(input[dev].mmap));
@@ -2628,6 +2729,13 @@ static void input_cb(struct input_event *ev, struct input_absinfo *absinfo, int 
 				}
 			} else {
 				gcdb_show_string_for_ctrl_map(input[sub_dev].bustype, input[sub_dev].vid, input[sub_dev].pid, input[sub_dev].version, pool[sub_dev].fd, input[sub_dev].name, input[dev].mmap);
+				uint32_t db_map[NUMSYSTEMBUTTONS];
+				if (is_groovy() && gcdb_map_for_controller(input[sub_dev].bustype, input[sub_dev].vid,
+					input[sub_dev].pid, input[sub_dev].version, pool[sub_dev].fd, db_map))
+				{
+					input[dev].db_trigger_keys[0] = db_map[SYS_BTN_L2];
+					input[dev].db_trigger_keys[1] = db_map[SYS_BTN_R2];
+				}
 			}
 			if (!input[dev].mmap[SYS_BTN_OSD_KTGL + 2]) input[dev].mmap[SYS_BTN_OSD_KTGL + 2] = input[dev].mmap[SYS_BTN_OSD_KTGL + 1];
 
@@ -3355,6 +3463,7 @@ static void input_cb(struct input_event *ev, struct input_absinfo *absinfo, int 
 						input[dev].has_map = 1;
 					}
 					
+					update_groovy_triggers(dev, sub_dev, *ev, nullptr);
 					for (uint i = 0; i < BTN_NUM; i++)
 					{
 						uint64_t mask = 0;
@@ -3500,6 +3609,7 @@ static void input_cb(struct input_event *ev, struct input_absinfo *absinfo, int 
 		case EV_ABS:
 			if (!user_io_osd_is_visible())
 			{
+				update_groovy_triggers(dev, sub_dev, *ev, absinfo);
 				int value = ev->value;
 				if (ev->value < absinfo->minimum) value = absinfo->minimum;
 				else if (ev->value > absinfo->maximum) value = absinfo->maximum;
@@ -4383,6 +4493,8 @@ int process_joycon(int dev, input_event *ev, input_absinfo *absinfo)
 			led_path = get_led_path(l); if (led_path) set_led(led_path, ":combo", id);
 			led_path = get_led_path(r); if (led_path) set_led(led_path, ":combo", id);
 
+			reset_groovy_triggers(1);
+			reset_groovy_triggers(2);
 			printf("Close all devices.\n");
 			for (int i = 0; i < NUMDEV; i++) if (pool[i].fd >= 0)
 			{
@@ -5006,6 +5118,7 @@ int input_test(int getchar)
 			{
 				printf("opened %d(%2d): %s (%04x:%04x:%08x) %d \"%s\" \"%s\"\n", i, input[i].bind, input[i].devname, input[i].vid, input[i].pid, input[i].unique_hash, input[i].quirk, input[i].id, input[i].name);
 				restore_player(i);
+				if (!input[i].mouse) remember_trigger_rest(i);
 				setup_deadzone(&ev, i);
 			}
 			unflag_players();
@@ -5074,6 +5187,8 @@ int input_test(int getchar)
 
 			if ((pool[NUMDEV].revents & POLLIN) && check_devs())
 			{
+				reset_groovy_triggers(1);
+				reset_groovy_triggers(2);
 				printf("Close all devices.\n");
 				for (int i = 0; i < NUMDEV; i++) if (pool[i].fd >= 0)
 				{
@@ -5089,6 +5204,14 @@ int input_test(int getchar)
 				int i = pos;
 
 
+				if (pool[i].fd >= 0 && (pool[i].revents & (POLLERR | POLLHUP | POLLNVAL)) && is_groovy())
+				{
+					const int dev = input[i].bind >= 0 ? input[i].bind : i;
+					clear_groovy_device_triggers(dev);
+					close(pool[i].fd);
+					pool[i].fd = -1;
+					continue;
+				}
 				if ((pool[i].fd >= 0) && (pool[i].revents & POLLIN))
 				{
 					if (!input[i].mouse)
@@ -5531,8 +5654,22 @@ int input_test(int getchar)
 										int only_max = 1;
 										for (int n = 0; n < 4; n++) if (input[dev].mmap[SYS_AXIS1_X + n] && ((input[dev].mmap[SYS_AXIS1_X + n] & 0xFFFF) == ev.code)) only_max = 0;
 
-										if (ev.value < center - treshold && !only_max) axis_edge = 1;
-										if (ev.value > center + treshold) axis_edge = 2;
+										// A reversed trigger uses the negative synthetic button edge.
+										if (is_groovy() && only_max)
+										{
+											const int key = KEY_EMU + (ev.code << 1);
+											for (int trigger = 0; trigger < 2; ++trigger)
+												if (groovy_trigger_key(dev, trigger) == key) only_max = 0;
+										}
+										const bool mappingTrigger = mapping && mapping_type <= 1 &&
+											(is_menu() ? mapping_button == SYS_MAP_EXT_FIRST || mapping_button == SYS_MAP_EXT_FIRST + 1 :
+												is_groovy() && (mapping_button == 12 || mapping_button == 13));
+										const bool reversed = mappingTrigger && ev.code < ABS_CNT &&
+											(input[pos].trigger_rest_axes & (uint64_t(1) << ev.code)) &&
+											input[pos].trigger_rest[ev.code] > center;
+
+										if (ev.value < center - treshold && (!only_max || reversed)) axis_edge = 1;
+										if (ev.value > center + treshold && !reversed) axis_edge = 2;
 									}
 
 									uint8_t last_state = input[dev].axis_edge[ev.code & 255];
@@ -5798,7 +5935,16 @@ int input_poll(int getchar)
 		}
 	}
 
-	if (!grabbed || user_io_osd_is_visible())
+	static bool inputSuppressed = false;
+	const bool suppressInput = !grabbed || user_io_osd_is_visible();
+	if (suppressInput && !inputSuppressed)
+	{
+		reset_groovy_triggers(1, false);
+		reset_groovy_triggers(2, false);
+		for (auto &dev : input) memset(dev.trigger_keys, 0, sizeof(dev.trigger_keys));
+	}
+	inputSuppressed = suppressInput;
+	if (suppressInput)
 	{
 		for (int i = 0; i < NUMPLAYERS; i++)
 		{

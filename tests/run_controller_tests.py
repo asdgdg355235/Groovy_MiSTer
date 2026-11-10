@@ -47,8 +47,10 @@ def main():
         tmp = Path(tmp)
         code = function('hps_linux/src/user_io.cpp', 'void user_io_digital_joystick(')
         code += function('hps_linux/src/user_io.cpp', 'int substrcpy(')
-        for signature in ('static void groovy_send_joysticks()',
-                          'void groovy_send_joystick(', 'void groovy_send_analog('):
+        for signature in ('static bool groovy_trigger_registration(',
+                          'static bool groovy_register_udp_inputs()',
+                          'static void groovy_send_joysticks()', 'void groovy_send_joystick(',
+                          'void groovy_send_analog(', 'void groovy_set_triggers('):
             code += function('hps_linux/src/support/groovy/groovy.cpp', signature)
         (tmp / 'production_functions.h').write_text(code)
         flags = ['-std=gnu++14', '-funsigned-char', '-g', '-O1',
