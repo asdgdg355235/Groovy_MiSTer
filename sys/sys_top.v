@@ -1156,6 +1156,9 @@ cyclonev_hps_interface_peripheral_i2c hdmi_i2c
 		.io_din(io_din),
 
 		.clk_video(clk_hdmi),
+`ifdef GROOVY_CRT_GEOMETRY
+	.vpos_adjust(13'sd0),
+`endif
 		.din(hdmi_data_mask),
 		.hs_in(hdmi_hs_mask),
 		.vs_in(hdmi_vs_mask),
@@ -1377,6 +1380,9 @@ osd vga_osd
 	.osd_status(osd_status),
 
 	.clk_video(clk_vid),
+`ifdef GROOVY_CRT_GEOMETRY
+	.vpos_adjust(crt_osd_voffset),
+`endif
 	.din(vga_data_sl),
 	.hs_in(vga_hs_sl),
 	.vs_in(vga_vs_sl),
@@ -1652,6 +1658,9 @@ wire  [1:0] scanlines;
 wire  [7:0] r_out, g_out, b_out, hr_out, hg_out, hb_out;
 wire        vs_fix, hs_fix, de_emu, vs_emu, hs_emu, f1;
 wire        hvs_fix, hhs_fix, hde_emu;
+`ifdef GROOVY_CRT_GEOMETRY
+wire signed [12:0] crt_osd_voffset;
+`endif
 wire        clk_vid, ce_pix, clk_ihdmi, ce_hpix;
 wire        vga_force_scaler;
 
@@ -1741,6 +1750,9 @@ emu emu
 	.VGA_HS(hs_emu),
 	.VGA_VS(vs_emu),
 	.VGA_DE(de_emu),
+`ifdef GROOVY_CRT_GEOMETRY
+	.VGA_OSD_VOFFSET(crt_osd_voffset),
+`endif
 	.VGA_F1(f1),
 	.VGA_SCALER(vga_force_scaler),
 

@@ -5,6 +5,7 @@
 // Applies horizontal scaling to an analogue signal
   
 module jtframe_hsize #( parameter
+    VW         =9,    // address bits per bank, including blanking
     COLORW     =4     // bits per colour
     //VIDEO_WIDTH=256   // screen pixel width (excluding blanking)
 ) (
@@ -34,7 +35,7 @@ module jtframe_hsize #( parameter
 );
 
 //localparam VW = VIDEO_WIDTH <= 256 ? 9 : (VIDEO_WIDTH <= 512 ? 9 : 10);
-localparam VW = 9; // Max 512 pixels including blanking
+// VW defaults to the inherited 512-sample bank; Groovy selects 4096.
 localparam SW = 8;
 
 wire [   VW+SW-2:0] summand;

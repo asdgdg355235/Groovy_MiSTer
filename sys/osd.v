@@ -11,6 +11,9 @@ module osd
 	input         clk_video,
 	input  [23:0] din,
 	input         de_in,
+`ifdef GROOVY_CRT_GEOMETRY
+	input signed [12:0] vpos_adjust,
+`endif
 	input         vs_in,
 	input         hs_in,
 	output [23:0] dout,
@@ -152,6 +155,20 @@ always @(posedge clk_video) if(ce_pix) begin
 	v_info_start_5 <= rot[0] ? (infox + (infox << 2)) : (infoy + (infoy << 2));
 end
 
+// Optional core-specific compensation for a resized native DE window.
+// Without the Groovy macro this function is an identity and adds no port.
+function [21:0] anchor_vpos(input [21:0] position);
+`ifdef GROOVY_CRT_GEOMETRY
+    reg signed [23:0] adjusted;
+    begin
+        adjusted = $signed({2'b00,position}) + $signed({{11{vpos_adjust[12]}},vpos_adjust});
+        anchor_vpos = adjusted < 0 ? 22'd0 : adjusted[21:0];
+    end
+`else
+    anchor_vpos = position;
+`endif
+endfunction
+
 always @(posedge clk_video) begin
 	reg        deD;
 	reg  [2:0] osd_div;
@@ -209,28 +226,28 @@ always @(posedge clk_video) begin
 					half <= 0;
 					if(v_cnt_h) begin
 						multiscan <= 0;
-						v_osd_start <= info ? v_info_start_h : v_osd_start_h;
+						v_osd_start <= info ? v_info_start_h : anchor_vpos(v_osd_start_h);
 						half <= 1;
 					end
 					else if(v_cnt_1 | (rot[0] & v_cnt_2)) begin
 						multiscan <= 0;
-						v_osd_start <= info ? v_info_start_1 : v_osd_start_1;
+						v_osd_start <= info ? v_info_start_1 : anchor_vpos(v_osd_start_1);
 					end
 					else if(rot[0] ? v_cnt_3 : v_cnt_2) begin
 						multiscan <= 1;
-						v_osd_start <= info ? v_info_start_2 : v_osd_start_2;
+						v_osd_start <= info ? v_info_start_2 : anchor_vpos(v_osd_start_2);
 					end
 					else if(rot[0] ? v_cnt_4 : v_cnt_3) begin
 						multiscan <= 2;
-						v_osd_start <= info ? v_info_start_3 : v_osd_start_3;
+						v_osd_start <= info ? v_info_start_3 : anchor_vpos(v_osd_start_3);
 					end
 					else if(rot[0] | v_cnt_4) begin
 						multiscan <= 3;
-						v_osd_start <= info ? v_info_start_4 : v_osd_start_4;
+						v_osd_start <= info ? v_info_start_4 : anchor_vpos(v_osd_start_4);
 					end
 					else begin
 						multiscan <= 4;
-						v_osd_start <= info ? v_info_start_5 : v_osd_start_5;
+						v_osd_start <= info ? v_info_start_5 : anchor_vpos(v_osd_start_5);
 					end
 				end
 			end

@@ -46,6 +46,7 @@ module emu
    output        VGA_HS,
    output        VGA_VS,
    output        VGA_DE,    // = ~(VBlank | HBlank)
+   output signed [12:0] VGA_OSD_VOFFSET, // optional Groovy framework OSD anchor
    output        VGA_F1,
    output [1:0]  VGA_SL,
    output        VGA_SCALER, // Force VGA scaler
@@ -226,6 +227,10 @@ localparam CONF_STR = {
    "P1O[26:22],CRT V offset,0,-1,-2,-3,-4,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,-15,+16,+15,+14,+13,+12,+11,+10,+9,+8,+7,+6,+5,+4,+3,+2,+1;",  
    "H8P1O[47],CRT scale enable, Off,On;",  
    "H3P1O[51:48],CRT scale factor,0,+1,+2,+3,+4,+5,+6,+7,-8,-7,-6,-5,-4,-3,-2,-1;",
+   "P1O[63:60],CRT V-Size,0,+1,+2,+3,+4,+5,+6,+7,-7,-6,-5,-4,-3,-2,-1;",
+   "P1O[72],Overscan mask,Off,On;",
+   "HFP1O[67:64],Mask horizontal,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30;",
+   "HFP1O[71:68],Mask vertical,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15;",
    "P1-;",
    "P1O[37],PWM,Off,On;",
    "P1-;",
@@ -285,7 +290,7 @@ wire [1:0]  hps_audio_buffer = status[36:35];
 wire        hps_pwm = status[37];
 wire        hps_vsync_overlay = status[46];
 
-wire [60:0] status;
+wire [127:0] status;
 
 wire [31:0] joy0;
 wire [31:0] joy1;
@@ -314,7 +319,7 @@ hps_io #(.CONF_STR(CONF_STR)) hps_io
 // OSD option visibility
 wire [15:0] status_menumask; // a high value hides the menu item
 
-assign status_menumask[15] = 0, 
+assign status_menumask[15] = ~status[72],
        status_menumask[14] = 0, 
        status_menumask[13] = 1, 
        status_menumask[12] = 1, 
@@ -357,7 +362,7 @@ hps_ext hps_ext
         .vga_vcount(vga_vcount), 
         .vga_frame(vga_frame),
         .vga_vblank(vblank_core),
-        .vga_f1(VGA_F1),                  
+        .vga_f1(vga_field_core),
         .vram_pixels(vram_pixels),  
         .vram_queue(vram_queue),                 
         .vram_synced(vram_synced),     
@@ -498,7 +503,7 @@ end
 
 always @(posedge clk_sys) begin
     ce_pix  <= cencnt == 4'd0;      
-    ce_pix2 <= cencnt == (ce_pix_arm >> 1) - 1'b1;     
+    ce_pix2 <= cencnt == (ce_pix_arm < 2 ? 8'd0 : (ce_pix_arm >> 1) - 1'b1);
 end
 
 reg cmd_scandoubler = 1'b0; 
@@ -1564,6 +1569,7 @@ reg vram_drive_lz4 = 1'b0;
 
 wire[7:0] r_core, g_core, b_core;
 wire hsync_core, vsync_core,  vblank_core, hblank_core, vga_de_core;
+wire vga_field_core;
 wire[15:0] vga_vcount;
 wire[23:0] vga_frame;
 
@@ -1638,10 +1644,39 @@ vga vga
  .vga_de         (vga_de_core),  
  .hblank         (hblank_core),
  .vblank         (vblank_core),
- .vga_f1         (VGA_F1)
+ .vga_f1         (vga_field_core)
          
 );
 
+
+// Fixed-timing Cabinet scaler: field-local rows, no regenerated sync.
+// Source FIFOs still drain at the original rate. Their protocol counters and
+// vblank/field feedback remain connected to the native vga instance above.
+wire [3:0] vsize_index = status[63:60];
+wire signed [5:0] vsize_lines = vsize_index <= 7 ? $signed({2'b00,vsize_index})
+    : (vsize_index <= 14 ? $signed({2'b00,vsize_index}) - 6'sd15 : 6'sd0);
+wire native_interlaced = !(cmd_scandoubler && PoC_pll_S) && PoC_interlaced;
+wire [15:0] next_field_height = native_interlaced ?
+    ((PoC_V + {15'd0,vga_field_core}) >> 1) : PoC_V;
+wire [15:0] source_field_height = native_interlaced ?
+    ((PoC_V + {15'd0,~vga_field_core}) >> 1) : PoC_V;
+wire [23:0] vsize_rgb;
+wire vsize_ce, vsize_ce2, vsize_hs, vsize_vs, vsize_hb, vsize_vb;
+wire [15:0] vsize_height;
+wire [5:0] vsize_top;
+wire vsize_running, vsize_underrun;
+crt_vsize_fixed #(.LINE_PX(2560), .MAX_DELTA(7), .RING_LINES(12)) u_vsize (
+    .clk(clk_sys), .reset(vga_reset | vga_soft_reset | ~pll_locked),
+    .ce_in(ce_pix), .ce2_in(ce_pix2), .size(vsize_lines),
+    .width(PoC_H), .height(next_field_height),
+    .rgb_in({r_core,g_core,b_core}),
+    .hs_in(hsync_core), .vs_in(vsync_core),
+    .hb_in(hblank_core), .vb_in(vblank_core), .field_in(vga_field_core),
+    .rgb_out(vsize_rgb), .ce_out(vsize_ce), .ce2_out(vsize_ce2),
+    .hs_out(vsize_hs), .vs_out(vsize_vs), .hb_out(vsize_hb), .vb_out(vsize_vb),
+    .field_out(VGA_F1), .picture_height(vsize_height),
+    .running(vsize_running), .underrun(vsize_underrun), .picture_top(vsize_top)
+);
 
 wire hs_jt, vs_jt;
 
@@ -1649,14 +1684,14 @@ wire hs_jt, vs_jt;
 
 wire [4:0] hoffset = status[21:17];
 wire [4:0] voffset = status[26:22];
-jtframe_resync jtframe_resync
+jtframe_resync #(.CNTW(12)) jtframe_resync
 (
  .clk(clk_sys),
- .pxl_cen(ce_pix),
- .hs_in(hsync_core),
- .vs_in(vsync_core),
- .LVBL(~vblank_core),
- .LHBL(~hblank_core),
+ .pxl_cen(vsize_ce),
+ .hs_in(vsize_hs),
+ .vs_in(vsize_vs),
+ .LVBL(~vsize_vb),
+ .LHBL(~vsize_hb),
  .hoffset(hoffset),
  .voffset(voffset),
  .hs_out(hs_jt),
@@ -1664,27 +1699,28 @@ jtframe_resync jtframe_resync
 );
 
 // Horizontal scaling for CRT
-wire       hsize_enable = status[47];
+wire [16:0] crt_line_total = {1'b0,PoC_H} + PoC_HFP + PoC_HS + PoC_HBP;
+wire       hsize_enable = status[47] && crt_line_total <= 17'd4096;
 wire [3:0] hsize_scale = status[51:48];
 wire       hsize_hs, hsize_vs, hsize_hb, hsize_vb;
 wire [7:0] hsize_r, hsize_g, hsize_b;
 
- jtframe_hsize #(.COLORW(8)) u_hsize(
+ jtframe_hsize #(.COLORW(8), .VW(12)) u_hsize(
         .clk        ( clk_sys  ),
-        .pxl_cen    ( ce_pix   ),
-        .pxl2_cen   ( ce_pix2  ),
+        .pxl_cen    ( vsize_ce ),
+        .pxl2_cen   ( vsize_ce2 ),
 
         .scale      ( hsize_scale  ),
         .offset     ( 5'd0         ),
         .enable     ( hsize_enable ),
 
-        .r_in       ( r_core    ),
-        .g_in       ( g_core    ),
-        .b_in       ( b_core    ),
+        .r_in       ( vsize_rgb[23:16] ),
+        .g_in       ( vsize_rgb[15:8] ),
+        .b_in       ( vsize_rgb[7:0] ),
         .HS_in      ( hs_jt ),
         .VS_in      ( vs_jt ),
-        .HB_in      ( hblank_core ),
-        .VB_in      ( vblank_core ),
+        .HB_in      ( vsize_hb ),
+        .VB_in      ( vsize_vb ),
         // filtered video
         .HS_out     ( hsize_hs  ),
         .VS_out     ( hsize_vs  ),
@@ -1695,19 +1731,42 @@ wire [7:0] hsize_r, hsize_g, hsize_b;
         .b_out      ( hsize_b   )
     );
 
+// Mask RGB only, keeping the DE window stable for the OSD and HDMI scaler.
+wire [23:0] mask_rgb;
+crt_edge_mask u_edge_mask (
+    .clk(clk_sys), .reset(vga_reset | vga_soft_reset), .ce(vsize_ce),
+    .enable(status[72]), .horizontal({3'd0,status[67:64],1'b0}),
+    .vertical({4'd0,status[71:68]}), .width(PoC_H),
+    .height(vsize_running ? vsize_height : source_field_height),
+    .hb(hsize_hb), .vb(hsize_vb), .field(VGA_F1),
+    .rgb_in({hsize_r,hsize_g,hsize_b}), .rgb_out(mask_rgb)
+);
+
+// The analog OSD measures the processed DE window. Compensate its centering
+// for that window's top and height, so changing V-Size does not move the menu.
+wire mixer_scandoubler = PoC_interlaced && !PoC_FB_interlaced ? 1'b0
+                         : (forced_scandoubler || scandoubler_fx != 2'b00);
+wire [16:0] osd_native_rows = {1'b0,source_field_height} << mixer_scandoubler;
+wire [16:0] osd_processed_rows = {1'b0,vsize_height} << mixer_scandoubler;
+wire [6:0] osd_top_rows = {1'b0,vsize_top} << mixer_scandoubler;
+wire signed [16:0] osd_anchor_lines = $signed({1'b0,osd_native_rows[16:1]})
+                                  - $signed({1'b0,osd_processed_rows[16:1]})
+                                  - $signed({10'd0,osd_top_rows});
+assign VGA_OSD_VOFFSET = vsize_running ? 13'($signed(osd_anchor_lines)) : 13'sd0;
+
 video_mixer #(640, 0, 1) video_mixer(
  .CLK_VIDEO(CLK_VIDEO),
  .CE_PIXEL(CE_PIXEL),
- .ce_pix(ce_pix),
+ .ce_pix(vsize_ce),
 
- .scandoubler(PoC_interlaced && !PoC_FB_interlaced ? 1'b0 : (forced_scandoubler || scandoubler_fx != 2'b00)),
+ .scandoubler(mixer_scandoubler),
  .hq2x(0),
 
  .gamma_bus(gamma_bus),
  
- .R(hsize_r),
- .G(hsize_g),
- .B(hsize_b),
+ .R(mask_rgb[23:16]),
+ .G(mask_rgb[15:8]),
+ .B(mask_rgb[7:0]),
 
  .HBlank(hsize_hb),
  .VBlank(hsize_vb),
