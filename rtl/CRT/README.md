@@ -2,7 +2,7 @@
 
 The following files are copied without modification from
 [`asdgdg355235/MiSTer-CRT-Adjust`](https://github.com/asdgdg355235/MiSTer-CRT-Adjust),
-commit [`04be786998d04769238b09190df1e36279f6e84a`](https://github.com/asdgdg355235/MiSTer-CRT-Adjust/commit/04be786998d04769238b09190df1e36279f6e84a):
+commit [`597e000eed284c75df29b80c70a6ec9db918561c`](https://github.com/asdgdg355235/MiSTer-CRT-Adjust/commit/597e000eed284c75df29b80c70a6ec9db918561c):
 
 | File | Source path |
 |---|---|

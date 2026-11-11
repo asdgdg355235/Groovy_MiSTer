@@ -1665,7 +1665,9 @@ wire vsize_ce, vsize_ce2, vsize_hs, vsize_vs, vsize_hb, vsize_vb;
 wire [15:0] vsize_height;
 wire [5:0] vsize_top;
 wire vsize_running, vsize_underrun;
-crt_vsize_fixed #(.LINE_PX(2560), .MAX_DELTA(7), .RING_LINES(12)) u_vsize (
+// Retain RGB888 and all twelve lines; use logic RAM for one packed lane to
+// leave M10Ks available to the unchanged streaming FIFOs and HDMI scaler.
+crt_vsize_fixed #(.LINE_PX(2560), .MAX_DELTA(7), .RING_LINES(12), .MLAB_PARTS(1)) u_vsize (
     .clk(clk_sys), .reset(vga_reset | vga_soft_reset | ~pll_locked),
     .ce_in(ce_pix), .ce2_in(ce_pix2), .size(vsize_lines),
     .width(PoC_H), .height(next_field_height),

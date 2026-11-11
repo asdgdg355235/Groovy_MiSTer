@@ -82,8 +82,23 @@ The twelve-line RGB ring holds 2560 active pixels per line:
 `12 * 2560 * 24 = 737280` bits, plus 192 tag bits & completion registers.
 Twelve is the smallest even ring satisfying the selected seven-line range
 plus four lines of margin. The even/odd banks each have one read & one write
-port. Generic Yosys collection confirms two 368640-bit RGB memories, without
-duplicated RGB storage for interpolation reads.
+port. Five RGB888 pixels now occupy three 40-bit words. The six physical
+lanes are each 3072 words deep, without duplicated RGB storage for reads.
+Groovy sets `MLAB_PARTS=1`, moving one 40-bit lane from each bank into logic
+RAM: 245760 bits in 384 MLABs at 32x20. The remaining four lanes require
+48 M10Ks at 256x40. These are geometry-based estimates; Quartus must confirm
+mapping, placement & timing in the complete core.
+
+The first user fit of `b6753d41495caa7fb97de7ffee4e1a32c12df195`
+with Quartus Lite 17.0.2 failed with error 170048: more than 553 M10Ks.
+It reported 5146500 logical block-memory bits & 29445/41910 ALMs. Logical
+bit usage alone missed the RAM-mode packing cost. The lossless packing &
+distributed allocation address that M10K pressure while retaining all twelve
+lines, RGB888, the full 2560-pixel width & the seven-line adjustment range.
+The existing streaming FIFOs & HDMI scaler remain unchanged. Reference basis:
+Cyclone V Device Handbook, Volume 1, "MLAB" & "M10K Blocks Mixed-Width
+Configurations"; this core's `rtl/vga.v` & `rtl/fifo_vga.v` for the retained
+destructive FIFO capacity, plus the pre-packing Cabinet RTL in the fork.
 
 The source FIFO VRAM consists of eighteen destructive byte FIFOs. It cannot
 reread source rows. Reusing DDR would require another memory reader & a new
@@ -111,6 +126,9 @@ python3 tests/run_tests.py
 # In Groovy, with the two adjacent forks and upstream HPS headers:
 python3 tests/run_geometry_tests.py --main ../Main_MiSTer --crt-adjust ../MiSTer-CRT-Adjust
 python3 tests/run_controller_tests.py ../reference_main
+
+# Optional RAM-shape check in the corrected CRT Adjust checkout, with Yosys:
+python3 ../MiSTer-CRT-Adjust/tests/check_storage.py
 
 # Quartus 17 project; sys/sys.tcl generates build_id.v:
 quartus_sh --flow compile Groovy
