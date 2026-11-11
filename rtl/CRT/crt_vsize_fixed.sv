@@ -40,6 +40,10 @@ module crt_vsize_fixed #(
     wire line_begin = ce_in && !hb_in && hb_d;
     wire field_begin = ce_in && vs_in && !vs_d;
     reg [15:0] wcol = 0, wrow = 0, line_no = 0;
+    // Track the exact quotient/remainder of wcol/5 on the same CE cycles.
+    // The original wcol counter is retained for pixel/window comparisons.
+    reg [AW-1:0] group_col = 0;
+    reg [2:0] pixel_lane = 0;
     reg [SW-1:0] wslot = 0;
     reg [15:0] width_q = 0, height_q = 0, out_height = 0;
     reg [5:0] delay_lines = 0;
@@ -52,8 +56,9 @@ module crt_vsize_fixed #(
     function [SW-1:0] next_slot(input [SW-1:0] s);
         next_slot = (s == RING_LINES-1) ? SW'(0) : s + 1'b1;
     endfunction
-    function [AW-1:0] address(input [SW-1:0] s, input [15:0] x);
-        address = AW'((32'(s) >> 1)*LINE_WORDS + 32'(x)/GROUP_PX);
+    function [AW-1:0] address_word(input [SW-1:0] s, input [AW-1:0] word);
+        // LINE_WORDS is constant; no pixel-clock division remains.
+        address_word = AW'((32'(s) >> 1)*LINE_WORDS + 32'(word));
     endfunction
 
     // A restoring division runs once per field, in blanking. No pixel-rate
@@ -95,6 +100,8 @@ module crt_vsize_fixed #(
                 started <= 1;
                 line_no <= line_now;
                 wcol <= 1;
+                group_col <= 0;
+                pixel_lane <= 3'd1;
                 if (!vb_in) begin
                     wrow <= row_now;
                     wslot <= write_slot;
@@ -108,7 +115,13 @@ module crt_vsize_fixed #(
                     source_row <= src_now;
                     aslot <= slot_now;
                 end
-            end else if (!hb_in && wcol < LINE_PX) wcol <= wcol + 1'b1;
+            end else if (!hb_in && wcol < LINE_PX) begin
+                wcol <= wcol + 1'b1;
+                if (pixel_lane == GROUP_PX-1) begin
+                    pixel_lane <= 0;
+                    group_col <= group_col + 1'b1;
+                end else pixel_lane <= pixel_lane + 1'b1;
+            end
             if (running && !hb_in && !vb_in && col_now < LINE_PX && col_now < width_q && col_now == width_q-1'b1)
                 complete[write_slot] <= 1;
             if (running && !hb_in && output_now && !vs_in && !pair_ready) underrun <= 1;
@@ -188,13 +201,17 @@ module crt_vsize_fixed #(
             isqrt_l=res[7:0];
         end
     endfunction
-    wire [AW-1:0] wa = address(write_slot,col_now);
-    wire [15:0] read_col = col_now < LINE_PX ? col_now : 16'd0;
-    wire [AW-1:0] ra_even = address(slot_now[0] ? bslot : slot_now,read_col);
-    wire [AW-1:0] ra_odd = address(slot_now[0] ? slot_now : bslot,read_col);
+    // line_begin makes col_now zero immediately, before the first line-edge
+    // register update. The bypasses below retain that same-cycle behavior.
+    wire [AW-1:0] word_now = line_begin ? AW'(0) : group_col;
+    wire [2:0] lane_now = line_begin ? 3'd0 : pixel_lane;
+    wire [AW-1:0] read_word = col_now < LINE_PX ? word_now : AW'(0);
+    wire [AW-1:0] wa = address_word(write_slot, word_now);
+    wire [AW-1:0] ra_even = address_word(slot_now[0] ? bslot : slot_now, read_word);
+    wire [AW-1:0] ra_odd = address_word(slot_now[0] ? slot_now : bslot, read_word);
     wire write_pixel = running && !reset && ce_in && !hb_in && !vb_in
                     && col_now < LINE_PX && col_now < width_q;
-    wire [2:0] write_lane = 3'(col_now % GROUP_PX);
+    wire [2:0] write_lane = lane_now;
     wire flush_group = write_lane == GROUP_PX-1 || col_now == width_q-1'b1;
     wire write_even = write_pixel && flush_group && !write_slot[0];
     wire write_odd  = write_pixel && flush_group &&  write_slot[0];
@@ -236,7 +253,7 @@ module crt_vsize_fixed #(
     end endgenerate
     reg [2:0] read_lane;
     always @(posedge clk) begin
-        read_lane <= 3'(read_col % GROUP_PX);
+        read_lane <= col_now < LINE_PX ? lane_now : 3'd0;
     end
     reg swap0;
     reg [7:0] alpha0, alpha1;
