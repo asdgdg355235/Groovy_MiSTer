@@ -1665,7 +1665,8 @@ wire vsize_ce, vsize_ce2, vsize_hs, vsize_vs, vsize_hb, vsize_vb;
 wire [15:0] vsize_height;
 wire [5:0] vsize_top;
 wire vsize_running, vsize_underrun;
-crt_vsize_fixed #(.LINE_PX(2560), .MAX_DELTA(7), .RING_LINES(12)) u_vsize (
+crt_vsize_fixed #(.LINE_PX(2560), .MAX_DELTA(7), .RING_LINES(12),
+    .MLAB_PARTS(2) ) u_vsize (
     .clk(clk_sys), .reset(vga_reset | vga_soft_reset | ~pll_locked),
     .ce_in(ce_pix), .ce2_in(ce_pix2), .size(vsize_lines),
     .width(PoC_H), .height(next_field_height),

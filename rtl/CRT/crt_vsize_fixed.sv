@@ -7,7 +7,8 @@
 module crt_vsize_fixed #(
     parameter LINE_PX = 2560,
     parameter MAX_DELTA = 7,
-    parameter RING_LINES = MAX_DELTA + 5
+    parameter RING_LINES = MAX_DELTA + 5,
+    parameter MLAB_PARTS = 0 // 0..3 packed lanes per bank in distributed RAM
 )(
     input clk, reset,
     input ce_in, ce2_in,
@@ -23,12 +24,16 @@ module crt_vsize_fixed #(
     output reg underrun = 0
 );
     localparam SW = $clog2(RING_LINES);
-    localparam BANK_WORDS = (RING_LINES/2)*LINE_PX;
+    // Five RGB888 pixels occupy exactly three 40-bit M10K words. Separate
+    // 40-bit lanes avoid wasting the unused bits of a 24-bit-wide RAM mode.
+    // Keep rows independently aligned so partial groups cannot cross fields.
+    localparam GROUP_PX = 5;
+    localparam GROUP_BITS = GROUP_PX*24;
+    localparam LINE_WORDS = (LINE_PX+GROUP_PX-1)/GROUP_PX;
+    localparam BANK_WORDS = (RING_LINES/2)*LINE_WORDS;
     localparam AW = $clog2(BANK_WORDS);
     // Adjacent source rows occupy different banks. Each bank needs one write
     // and one synchronous read port; the RGB store is not replicated for reads.
-    (* ramstyle = "M10K, no_rw_check" *) reg [23:0] even_mem [0:BANK_WORDS-1];
-    (* ramstyle = "M10K, no_rw_check" *) reg [23:0] odd_mem  [0:BANK_WORDS-1];
     reg [15:0] tag [0:RING_LINES-1];
     reg [RING_LINES-1:0] complete = 0;
     reg hb_d = 1, vs_d = 0, started = 0;
@@ -48,7 +53,7 @@ module crt_vsize_fixed #(
         next_slot = (s == RING_LINES-1) ? SW'(0) : s + 1'b1;
     endfunction
     function [AW-1:0] address(input [SW-1:0] s, input [15:0] x);
-        address = AW'((32'(s) >> 1)*LINE_PX + 32'(x));
+        address = AW'((32'(s) >> 1)*LINE_WORDS + 32'(x)/GROUP_PX);
     endfunction
 
     // A restoring division runs once per field, in blanking. No pixel-rate
@@ -187,19 +192,58 @@ module crt_vsize_fixed #(
     wire [15:0] read_col = col_now < LINE_PX ? col_now : 16'd0;
     wire [AW-1:0] ra_even = address(slot_now[0] ? bslot : slot_now,read_col);
     wire [AW-1:0] ra_odd = address(slot_now[0] ? slot_now : bslot,read_col);
-    reg [23:0] qe, qo;
+    wire write_pixel = running && !reset && ce_in && !hb_in && !vb_in
+                    && col_now < LINE_PX && col_now < width_q;
+    wire [2:0] write_lane = 3'(col_now % GROUP_PX);
+    wire flush_group = write_lane == GROUP_PX-1 || col_now == width_q-1'b1;
+    wire write_even = write_pixel && flush_group && !write_slot[0];
+    wire write_odd  = write_pixel && flush_group &&  write_slot[0];
+    reg [GROUP_BITS-1:0] pack_q, pack_next;
+    always @* begin
+        pack_next = write_lane == 0 ? {GROUP_BITS{1'b0}} : pack_q;
+        pack_next[write_lane*24 +: 24] = rgb_in;
+    end
+    always @(posedge clk) if(write_pixel) pack_q <= pack_next;
+    wire [GROUP_BITS-1:0] qe, qo;
+    genvar part;
+    generate for(part=0;part<3;part=part+1) begin : packed_ram
+        // Reuse the stand-alone 3072x40 synchronous RAM inference pattern.
+        // One even/odd pair per 40-bit slice; no replicated pixel storage.
+        crt_packed_ram #(
+            .BANK_WORDS(BANK_WORDS),
+            .ADDR_WIDTH(AW),
+            .USE_MLAB(part < MLAB_PARTS)
+        ) even_ram (
+            .clk(clk),
+            .we(write_even),
+            .wa(wa),
+            .ra(ra_even),
+            .d(pack_next[part*40 +: 40]),
+            .q(qe[part*40 +: 40])
+        );
+        crt_packed_ram #(
+            .BANK_WORDS(BANK_WORDS),
+            .ADDR_WIDTH(AW),
+            .USE_MLAB(part < MLAB_PARTS)
+        ) odd_ram (
+            .clk(clk),
+            .we(write_odd),
+            .wa(wa),
+            .ra(ra_odd),
+            .d(pack_next[part*40 +: 40]),
+            .q(qo[part*40 +: 40])
+        );
+    end endgenerate
+    reg [2:0] read_lane;
     always @(posedge clk) begin
-        if (running && !reset && ce_in && !hb_in && !vb_in && col_now < LINE_PX && col_now < width_q) begin
-            if(write_slot[0]) odd_mem[wa] <= rgb_in;
-            else even_mem[wa] <= rgb_in;
-        end
-        qe <= even_mem[ra_even];
-        qo <= odd_mem[ra_odd];
+        read_lane <= 3'(read_col % GROUP_PX);
     end
     reg swap0;
     reg [7:0] alpha0, alpha1;
-    wire [23:0] a = swap0 ? qo : qe;
-    wire [23:0] b = alpha0 == 0 ? a : (swap0 ? qe : qo);
+    wire [23:0] pe = qe[read_lane*24 +: 24];
+    wire [23:0] po = qo[read_lane*24 +: 24];
+    wire [23:0] a = swap0 ? po : pe;
+    wire [23:0] b = alpha0 == 0 ? a : (swap0 ? pe : po);
     reg [15:0] ar,ag,ab,br,bg,bb;
     reg [24:0] mr,mg,mb;
     wire [8:0] wa_mix = 9'd256 - {1'b0,alpha1};
@@ -232,6 +276,7 @@ module crt_vsize_fixed #(
 `ifndef SYNTHESIS
     initial begin
         if (RING_LINES < MAX_DELTA+4 || RING_LINES%2 != 0) $fatal(1,"invalid Cabinet ring depth");
+        if (MLAB_PARTS < 0 || MLAB_PARTS > 3) $fatal(1,"invalid distributed RAM allocation");
     end
 `endif
 endmodule

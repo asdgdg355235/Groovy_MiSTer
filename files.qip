@@ -18,3 +18,4 @@ set_global_assignment -name SYSTEMVERILOG_FILE Groovy.sv
 # Cabinet geometry and RGB-only overscan (MiSTer-CRT-Adjust fork).
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/CRT/crt_vsize_fixed.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/CRT/crt_edge_mask.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/CRT/crt_packed_ram.sv
