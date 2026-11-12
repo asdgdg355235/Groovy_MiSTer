@@ -15,6 +15,12 @@ def row():
  candidate=Concat(Extract(16,16,total),delta)
  reference=ZeroExt(1,Extract(31,16,p+s))-ZeroExt(1,Extract(31,16,p))
  prove('row delta: unrestricted 32-bit inputs and exact 17-bit result',candidate,reference)
+ # Negative control: an ordinary integer-step result loses the 17th borrow bit.
+ a,b=0xffff0000,0x00010000
+ wrapped=(((((a+b)&0xffffffff)>>16)-(a>>16))&0x1ffff)
+ naive=(b>>16)+(((a&0xffff)+(b&0xffff))>>16)
+ assert wrapped==0x10001 and naive==1 and wrapped!=naive
+ print('PASS: rejects naive row identity at position overflow')
  for half in range(1,5):
   mask=(1<<(half*2))-1;low=(1<<half)-1
   for a in range(mask+1):

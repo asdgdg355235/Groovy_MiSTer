@@ -16,7 +16,8 @@ def apply(root,name):
  for path in PROTECTED+CORE:
   if (root/path).read_bytes()!=baseline(path):raise ValueError('Not the required hardware baseline: '+path)
  if name in ('baseline','candidate'):return {'name':'baseline','hardware_baseline':BASE,'changes':[]}
- spec=registry()[name]; patch=ROOT/'tests/timing_experiments'/spec['patch']
+ assets=root/'tests/timing_experiments' if (root/'tests/timing_experiments/index.json').exists() else ROOT/'tests/timing_experiments'
+ spec=json.loads((assets/'index.json').read_text())[name]; patch=assets/spec['patch']
  if sha(patch.read_bytes())!=spec['patch_sha256']:raise ValueError('Patch digest mismatch')
  subprocess.run(['git','apply','--check',str(patch)],cwd=root,check=True)
  subprocess.run(['git','apply',str(patch)],cwd=root,check=True)

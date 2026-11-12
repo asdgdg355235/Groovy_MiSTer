@@ -13,6 +13,8 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--main', type=Path)
 args = parser.parse_args()
 commands = [
+    [sys.executable, 'tests/restart/language_gate.py'],
+    [sys.executable, 'tests/restart/prove.py', 'row', 'qualify', 'address', 'vga', 'sync'],
     [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_*.py'],
     [sys.executable, 'tests/check_crt_ram_extraction.py'],
     ['tclsh', 'tests/test_crt_address_duplication.tcl'],

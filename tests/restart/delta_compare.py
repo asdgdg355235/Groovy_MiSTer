@@ -10,7 +10,8 @@ from experiments import ROOT,baseline
 root=Path(sys.argv[1]); src=(root/'Groovy.sv').read_text();old=baseline('Groovy.sv').decode()
 a=src.index('// Independent experiment:');b=src.index('reg        PoC_lz4_delta_req;',a)
 select=src[a:b]
-assert src[:a]+src[b:]==old.replace('(PoC_lz4_delta_FB[PoC_lz4_delta_index])','(delta_read_value)')
+expected=old.replace('(PoC_lz4_delta_FB[PoC_lz4_delta_index])      ','(delta_read_value)')
+assert src[:a]+src[b:]==expected
 assert (root/'rtl/lz4.v').read_bytes()==baseline('rtl/lz4.v')
 task=src[src.index('task decode_pixel;'):src.index('endtask',src.index('task decode_pixel;'))+7]
 lz4=(root/'rtl/lz4.v').read_text();start=lz4.index('assign lz4_uncompressed_long[07:00]')
