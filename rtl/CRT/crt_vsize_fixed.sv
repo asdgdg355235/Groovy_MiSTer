@@ -243,6 +243,11 @@ module crt_vsize_fixed #(
     wire [GROUP_BITS-1:0] qe, qo;
     genvar part;
     generate for(part=0;part<3;part=part+1) begin : packed_ram
+        // A separate combinational mux output for each physical RAM read port.
+        // Keep only these final drivers; arithmetic, memory inference and all
+        // registers remain unchanged. Quartus must still be checked for merging.
+        (* keep = "true" *) wire [AW-1:0] local_ra_even = line_begin ? ra_even_line : ra_even_current;
+        (* keep = "true" *) wire [AW-1:0] local_ra_odd = line_begin ? ra_odd_line : ra_odd_current;
         // Reuse the stand-alone 3072x40 synchronous RAM inference pattern.
         // One even/odd pair per 40-bit slice; no replicated pixel storage.
         crt_packed_ram #(
@@ -253,7 +258,7 @@ module crt_vsize_fixed #(
             .clk(clk),
             .we(write_even),
             .wa(wa),
-            .ra(ra_even),
+            .ra(local_ra_even),
             .d(pack_next[part*40 +: 40]),
             .q(qe[part*40 +: 40])
         );
@@ -265,7 +270,7 @@ module crt_vsize_fixed #(
             .clk(clk),
             .we(write_odd),
             .wa(wa),
-            .ra(ra_odd),
+            .ra(local_ra_odd),
             .d(pack_next[part*40 +: 40]),
             .q(qo[part*40 +: 40])
         );

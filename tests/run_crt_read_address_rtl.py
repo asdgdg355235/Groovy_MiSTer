@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare read/write address experiments against the fitted counter revision."""
+"""Compare localized RAM drivers against the published pre-localization RTL."""
 import os
 from pathlib import Path
 import shlex
@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = 'fa4c2cd5c3e6772d6da99b8e9ed0dde533de0fd0'
+BASE = os.environ.get('CRT_READ_BASELINE', 'f930d43ee3e206859dafe7a6c287113a7a957585')
 
 with tempfile.TemporaryDirectory(prefix='crt-read-address-') as tmp:
     tmp = Path(tmp)

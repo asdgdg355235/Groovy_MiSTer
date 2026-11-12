@@ -28,6 +28,31 @@ module tb_crt_read_address #(parameter LINE_PX=32);
         .field_out(sync_ref[0]),.picture_height(height_ref),.picture_top(top_ref),
         .running(running_ref),.underrun(underrun_ref));
 
+    // Check the actual inputs of all six RAM instances at the capture edge.
+    // No CE qualification: synchronous reads occur during stalls and blanking.
+    genvar bank_part;
+    generate for(bank_part=0;bank_part<3;bank_part++) begin : check_ram_ports
+        always @(posedge clk) begin
+            if ({dut.packed_ram[bank_part].even_ram.ra,
+                 dut.packed_ram[bank_part].odd_ram.ra,
+                 dut.packed_ram[bank_part].even_ram.wa,
+                 dut.packed_ram[bank_part].odd_ram.wa,
+                 dut.packed_ram[bank_part].even_ram.we,
+                 dut.packed_ram[bank_part].odd_ram.we,
+                 dut.packed_ram[bank_part].even_ram.d,
+                 dut.packed_ram[bank_part].odd_ram.d} !==
+                {baseline.packed_ram[bank_part].even_ram.ra,
+                 baseline.packed_ram[bank_part].odd_ram.ra,
+                 baseline.packed_ram[bank_part].even_ram.wa,
+                 baseline.packed_ram[bank_part].odd_ram.wa,
+                 baseline.packed_ram[bank_part].even_ram.we,
+                 baseline.packed_ram[bank_part].odd_ram.we,
+                 baseline.packed_ram[bank_part].even_ram.d,
+                 baseline.packed_ram[bank_part].odd_ram.d})
+                $fatal(1,"RAM port mismatch part=%0d",bank_part);
+        end
+    end endgenerate
+
     integer cycles=0, pixels=0, writes=0, line_starts=0, stalls=0;
     integer advances[0:2]='{0,0,0};
     integer wraps=0, last_slot=0, seed=32'h193fe207, scenario_id=0;
