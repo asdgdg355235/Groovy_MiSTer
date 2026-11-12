@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 // Compare the candidate RTL against the exact pre-counter scaler revision.
-// The runner extracts the reference from commit 81490f1 without modifying it.
+// The runner extracts the reference from committed parent 9c27398 unchanged.
 module tb_crt_group_address;
     parameter integer MLAB_PARTS = 2;
     reg clk = 0;

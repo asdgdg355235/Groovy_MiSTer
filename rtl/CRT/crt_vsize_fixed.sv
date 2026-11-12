@@ -207,8 +207,22 @@ module crt_vsize_fixed #(
     wire [2:0] lane_now = line_begin ? 3'd0 : pixel_lane;
     wire [AW-1:0] read_word = col_now < LINE_PX ? word_now : AW'(0);
     wire [AW-1:0] wa = address_word(write_slot, word_now);
-    wire [AW-1:0] ra_even = address_word(slot_now[0] ? bslot : slot_now, read_word);
-    wire [AW-1:0] ra_odd = address_word(slot_now[0] ? slot_now : bslot, read_word);
+    // Calculate both address cases before the CE-qualified line-start mux.
+    // When line_begin is true, line_now is exactly this next line number,
+    // and read_word is zero. Keeping the bank wrap/selection and word add
+    // ahead of that final mux removes ce_in from their combinational cone.
+    // No register or RAM read cycle is added; blanking reads are preserved.
+    wire [15:0] read_line_no = first_source ? 16'd0 : line_no + 16'd1;
+    wire [SW-1:0] read_line_slot = read_line_no == {10'd0,delay_lines} ? SW'(0) : next_aslot;
+    wire [SW-1:0] read_line_bslot = next_slot(read_line_slot);
+    wire [SW-1:0] read_bslot = next_slot(aslot);
+    wire [AW-1:0] read_current_word = wcol < LINE_PX ? group_col : AW'(0);
+    wire [AW-1:0] ra_even_line = address_word(read_line_slot[0] ? read_line_bslot : read_line_slot, AW'(0));
+    wire [AW-1:0] ra_odd_line = address_word(read_line_slot[0] ? read_line_slot : read_line_bslot, AW'(0));
+    wire [AW-1:0] ra_even_current = address_word(aslot[0] ? read_bslot : aslot, read_current_word);
+    wire [AW-1:0] ra_odd_current = address_word(aslot[0] ? aslot : read_bslot, read_current_word);
+    wire [AW-1:0] ra_even = line_begin ? ra_even_line : ra_even_current;
+    wire [AW-1:0] ra_odd = line_begin ? ra_odd_line : ra_odd_current;
     wire write_pixel = running && !reset && ce_in && !hb_in && !vb_in
                     && col_now < LINE_PX && col_now < width_q;
     wire [2:0] write_lane = lane_now;

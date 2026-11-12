@@ -8,7 +8,7 @@ trap 'rm -rf "$TMP"' EXIT
 if [[ -n "${CRT_BASELINE_FILE:-}" ]]; then
     cp "$CRT_BASELINE_FILE" "$TMP/reference_original.sv"
 else
-    git -C "$ROOT" show "${CRT_BASELINE_REV:-81490f1}:rtl/CRT/crt_vsize_fixed.sv" > "$TMP/reference_original.sv"
+    git -C "$ROOT" show "${CRT_BASELINE_REV:-9c27398c5358a62214c910283293333099da4baf}:rtl/CRT/crt_vsize_fixed.sv" > "$TMP/reference_original.sv"
 fi
 sed 's/^module crt_vsize_fixed #(/module crt_vsize_fixed_reference #(/' \
     "$TMP/reference_original.sv" > "$TMP/reference.sv"

@@ -109,7 +109,8 @@ def main():
         compile_run(tmp,'tb_hsize',[ROOT/'tests/tb_hsize.sv',old,*sorted((ROOT/'rtl/JTFRAME').glob('jtframe_hsize.v')),
                     ROOT/'rtl/JTFRAME/jtframe_linebuf.v',ROOT/'rtl/JTFRAME/jtframe_rpwp_ram.v'])
         compile_run(tmp,'tb_video_geometry',[ROOT/'tests/tb_video_geometry.sv',ROOT/'tests/rtl_models.sv',
-                    ROOT/'rtl/vga.v',ROOT/'rtl/binary_to_bcd.v',ROOT/'rtl/CRT/crt_vsize_fixed.sv'])
+                    ROOT/'rtl/vga.v',ROOT/'rtl/binary_to_bcd.v',ROOT/'rtl/CRT/crt_vsize_fixed.sv',
+                    ROOT/'rtl/CRT/crt_packed_ram.sv'])
         old_osd=tmp/'osd_reference.v'
         old_osd.write_text(subprocess.check_output(['git','show',BASE+':sys/osd.v'],cwd=ROOT).decode().replace('module osd','module osd_reference',1))
         for macro in [False,True]:
