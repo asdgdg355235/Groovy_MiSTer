@@ -47,6 +47,14 @@ def vga():
   UGE(ZeroExt(16,cnt),ZeroExt(16,total)-1),
   (total!=0)&UGE(ZeroExt(1,cnt)+1,ZeroExt(1,total)))
 
+def sync():
+ from z3 import Function,BitVecSort,BoolSort
+ f=Bool('first_output'); slot=BitVec('continuing_slot',4); row=BitVec('continuing_row',16)
+ ready=Function('ready',BitVecSort(4),BitVecSort(16),BoolSort())
+ prove('first-row tag factoring before unchanged capture',
+  ready(If(f,BitVecVal(0,4),slot),If(f,BitVecVal(0,16),row)),
+  If(f,ready(BitVecVal(0,4),BitVecVal(0,16)),ready(slot,row)))
+
 if __name__=='__main__':
  import sys
  names=sys.argv[1:] or ['row','qualify','address','vga']
