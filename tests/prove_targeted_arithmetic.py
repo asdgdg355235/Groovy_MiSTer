@@ -50,3 +50,13 @@ slot,word=BitVec('slot',4),BitVec('word',9)
 prove('read row/column fields for every qualified word',
       (ZeroExt(8,slot)>>1)*512+ZeroExt(3,word),
       ((ZeroExt(8,slot)>>1)<<9)|ZeroExt(3,word))
+from z3 import SignExt
+v,bp,fp,vs=BitVec('V',16),BitVec('BP',8),BitVec('FP',8),BitVec('VS',8)
+parity=BitVec('adjust',1)
+blank=ZeroExt(2,bp)+ZeroExt(2,fp)+ZeroExt(2,vs)
+adjusted=ZeroExt(1,blank)-ZeroExt(10,parity)
+prove('V_total all input widths, zero blanking & parity underflow',v+SignExt(5,adjusted),v+ZeroExt(8,bp)+ZeroExt(8,fp)+ZeroExt(8,vs)-ZeroExt(15,parity))
+cnt,total=BitVec('count',16),BitVec('total',16)
+prove('vertical terminal comparison including zero/max',
+ (total!=0)&UGE(ZeroExt(1,cnt)+1,ZeroExt(1,total)),
+ UGE(ZeroExt(16,cnt),ZeroExt(16,total)-1))
