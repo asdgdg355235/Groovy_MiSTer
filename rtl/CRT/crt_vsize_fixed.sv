@@ -73,7 +73,13 @@ module crt_vsize_fixed #(
                  && height <= 1024 && requested_height >= 32;
     wire [16:0] shifted_rem = {remainder[15:0],dividend[div_bit[4:0]]};
     wire [31:0] position_next = position + step;
-    wire [16:0] advance_rows = {1'b0,position_next[31:16]} - {1'b0,position[31:16]};
+    // Low result bits need only step's integer part and fractional carry.
+    // The original 17-bit subtraction wraps by 65536 when position overflows;
+    // keep that correction explicitly, including integer_increment == 65536.
+    wire [16:0] fraction_sum = {1'b0,position[15:0]} + {1'b0,step[15:0]};
+    wire [16:0] integer_increment = {1'b0,step[31:16]} + {16'd0,fraction_sum[16]};
+    wire [16:0] integer_sum = {1'b0,position[31:16]} + integer_increment;
+    wire [16:0] advance_rows = {integer_increment[16] ^ integer_sum[16],integer_increment[15:0]};
     wire [SW-1:0] next_aslot = (advance_rows == 2) ? next_slot(next_slot(aslot))
                                              : (advance_rows == 1) ? next_slot(aslot) : aslot;
     wire first_source = !started && !vb_in;

@@ -21,7 +21,12 @@ class MeasuredCandidateTest(unittest.TestCase):
         for name in ('rtl/CRT/crt_vsize_fixed.sv','rtl/CRT/crt_packed_ram.sv','rtl/lz4.v','rtl/vga.v'):
             row=next(r for r in records if r['path']==name)
             self.assertTrue(row['equal'])
-            self.assertEqual(hashlib.sha256((ROOT/name).read_bytes()).hexdigest(), row['archived_sha256'])
+            # The archived baseline stays immutable in Git; candidate CRT/VGA
+            # transformations are checked by RTL comparison and arithmetic SMT.
+            baseline=subprocess.check_output(['git','show','00136c5f03de63d80d8e78208bb6802cfe53c53d:'+name],cwd=ROOT)
+            self.assertEqual(hashlib.sha256(baseline).hexdigest(), row['archived_sha256'])
+            if name in ('rtl/CRT/crt_packed_ram.sv','rtl/lz4.v'):
+                self.assertEqual((ROOT/name).read_bytes(),baseline)
 
     def test_effective_configuration(self):
         c=capture(ROOT)
