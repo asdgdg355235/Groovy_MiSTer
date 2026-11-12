@@ -314,3 +314,77 @@ Use the fresh-build runner from the corrected commit, with a new output
 directory. Return the output_files reports, including the pre-flow log if a
 failure occurs. The last verified physical slack remains -0.132 ns setup and
 +0.263 ns hold. This failed synthesis supplies no new timing measurement.
+
+## Upstream wa[3] isolation experiment
+
+Baseline: user-run 47ffb26, Quartus 17.0.2, Slow 1100mV/100C,
+12.081 ns video clock. Setup -0.089 ns, hold +0.245 ns, setup TNS -0.199 ns;
+32195 ALMs, 31199 registers, 553 M10Ks, 491520 MLAB bits. The fitted audit
+retains six final read drivers per low address bit. The four MLAB copies
+have fanout 3840; the two M10K copies have fanout 20.
+
+Reference basis: current `crt_vsize_fixed.sv:wa_line/wa_current/wa`,
+`read_current_word`, `ra_even_current/ra_odd_current`, `packed_ram` and
+`crt_packed_ram.sv`; the user's map/cmp TSVs and detailed setup reports;
+approved receiver `psakhis/Groovy_MiSTer/rtl/vga.v:ce_pix` field/counter block
+was inspected and is unchanged. The QSF technique is inherited from the
+physically successful final-driver duplication experiment.
+
+RTL trace: wa selects the write-slot/group address at line_begin and feeds
+all six RAM write ports. Read address generation independently uses the same
+group_col and line_begin terms. Quartus shares equivalent low-bit logic
+between these expressions. LessThan13 is the wcol/LINE_PX qualification on
+the read cone, not a sequential stage after wa. No RTL register or memory
+statement changes in this experiment.
+
+The fitted wa[3] fanout 15406 includes the write network; it is not solely
+read fanout. The failing hb_d path traverses line_begin -> wa[3] ->
+crt_read_1_odd_bit3 -> MLAB read/mux -> registered output. The old upstream
+assignment targeted the original mux, whose final fanout was subsequently
+redirected to six copies; no retained crt_read_word_bit3 appeared in the
+fitted audit. That observation motivates changing the destination stage,
+without claiming a proven explanation of Quartus's assignment processing.
+
+Change: preserve all 30 successful final-driver assignment expansions exactly.
+Replace the ineffective original-mux upstream assignment with six exact
+wa[3] -> crt_read_PART_BANK_bit3 assignments, declared after the final copies.
+Their values are crt_read_word_PART_BANK_bit3. The six destination node names
+are present in the baseline fitted audit; they are created by the preserved
+assignments and are therefore absent in the pre-fit mapped netlist.
+The preflight checks this explicit dependency instead of pretending those
+nodes already exist at map time. Fitter assignment ordering remains an
+experimental condition, not something ordinary Tcl can validate.
+
+The intent is for each read mux to use a small-fanout wa copy, while the
+original wa continues feeding all write addresses. Do not require the original
+wa's total fanout to become small: its write load remains. Check the immediate
+source on each final read bit-3 input and the copied source's fanout.
+The extended map/cmp audit emits READ_CONTROL_EDGE records with input port,
+source node ID, name and fanout. Confirm that the six final bit-3 nodes use
+crt_read_word copies instead of the original wa[3] source. Check other mux
+inputs as well; each node can have multiple fan-ins. Verify final RAM sources
+still show six independent final drivers for bits 0..4.
+
+Tests executed: 36-assignment plain Tcl checks; independent map-TSV preflight;
+exact wa and six destination names checked against the baseline fitted TSV;
+210000-clock independent model (three tests); fitter-guard tests (two);
+real build-ID callback test (one); shell syntax and diff checks. No RTL or SDC
+changed. RTL simulation/lint tools are absent in this workspace, so the earlier
+6698817-clock result is unchanged prior evidence, not a newly executed test.
+No Quartus executable was run. Physical upstream separation remains unverified.
+
+Use the existing fresh-build runner from this commit. It runs the inherited
+pre-flow callback, map, mapped audit/preflight, guarded fit, assembly, STA and
+fitted audit. Return output_files in an archive, including:
+
+- Groovy.map.rpt, Groovy.fit.rpt, Groovy.sta.rpt and their summaries
+- crt_read_address_compile.log, duplicate_fit.log and pre-flow log
+- crt_local_drivers_map.tsv and crt_local_drivers_cmp.tsv (now with input edges)
+- crt_read_address_worst_setup.txt / worst_hold.txt, ce_to_ram.txt
+- crt_upstream_wcol_setup.txt and crt_upstream_hb_setup.txt
+- all six crt_local_bank_*_setup.txt, crt_lz4_setup.txt and unconstrained report
+
+Compare against setup/hold/TNS -0.089/+0.245/-0.199 ns; worst cell/routing
+3.297/8.321 ns. Preserve the six-memory split and existing resources/clock.
+The delta-index -0.023 ns and dv_hs1 -0.017 ns paths remain untouched;
+lz4_compressed_bytes should remain nonnegative (baseline worst +0.584 ns).

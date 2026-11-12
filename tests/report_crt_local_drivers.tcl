@@ -20,6 +20,18 @@ foreach_in_collection node [get_atom_nodes] {
             puts $out "DRIVER\t$node\t$name\t$pn\t[llength $fo]"
         }
     }
+    # Export the actual upstream sources of retained read-control copies.
+    if {$local} {
+        foreach input_port [get_atom_iports -node $node] {
+            set fi [get_atom_port_info -node $node -type iport -port_id $input_port -key fanin]
+            if {[llength $fi] < 2} {continue}
+            lassign $fi src op
+            set pn [get_atom_port_info -node $node -type iport -port_id $input_port -key type]
+            set sn [get_atom_node_info -node $src -key name]
+            set n [llength [get_atom_port_info -node $src -type oport -port_id $op -key fanout]]
+            puts $out "READ_CONTROL_EDGE\t$node\t$name\t$pn\t-\t$src\t$sn\t$n"
+        }
+    }
     if {[string first "packed_ram" $name] < 0} {continue}
     foreach port [get_atom_iports -node $node] {
         set pn [get_atom_port_info -node $node -type iport -port_id $port -key type]

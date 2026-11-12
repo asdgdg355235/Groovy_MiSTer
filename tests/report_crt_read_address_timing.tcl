@@ -20,6 +20,12 @@ for {set part 0} {$part < 3} {incr part} {
         report_timing -setup -to $endpoints -detail full_path -npaths 3 -nworst 1 -show_routing -file "output_files/crt_local_bank_${part}_${bank}_setup.txt"
     }
 }
+# Export upstream launch cones even if they leave the global worst-path list.
+foreach {label pattern} {wcol {*u_vsize*wcol*} hb {*u_vsize*hb_d*}} {
+    set sources [get_registers $pattern]
+    if {[get_collection_size $sources] == 0} {error "Missing upstream source $label"}
+    report_timing -setup -from $sources -to $ram_endpoints -detail full_path -npaths 30 -nworst 1 -show_routing -file "output_files/crt_upstream_${label}_setup.txt"
+}
 # Reassess transport endpoints independently of the global top-30 list.
 set lz4_endpoints [get_registers {*lz4_compressed_bytes*}]
 if {[get_collection_size $lz4_endpoints] == 0} {error "LZ4 endpoint filter did not match"}

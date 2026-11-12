@@ -26,10 +26,11 @@ def check(path):
     for name, source, target in assignments:
         if source not in sources:
             raise ValueError(f'{name}: exact source is missing: {source}')
-        if name == 'crt_read_word_bit3':
-            if target not in sources:
-                raise ValueError(f'{name}: exact destination is missing: {target}')
-            print(f'PASS {name}: source and destination nodes exist (edge not checked)')
+        if name.startswith('crt_read_word_'):
+            created = {'emu:emu|crt_vsize_fixed:u_vsize|' + a[0] for a in assignments if re.fullmatch(r'crt_read_[012]_(even|odd)_bit3', a[0])}
+            if target not in sources and target not in created:
+                raise ValueError(f'{name}: destination is neither observed nor created: {target}')
+            print(f'PASS {name}: source exists; destination observed or created by final-driver assignment (Fitter ordering unverified)')
             continue
         match = re.fullmatch(r'crt_read_([012])_(even|odd)_bit([0-4])', name)
         if not match or not target.endswith('|*'):

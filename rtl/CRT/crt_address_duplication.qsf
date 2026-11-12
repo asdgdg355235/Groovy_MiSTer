@@ -2,12 +2,6 @@
 # Names come from the completed Candidate A map atom audit (17.0.2.602).
 # Exact -from names copied from the user's completed map audit.
 # Tcl braces/format preserve literal array brackets; no source wildcards.
-# The read bit-3 DATAA input was confirmed to be wa[3]~3. Split that
-# read-only connection before duplicating the final mux per RAM hierarchy.
-set_instance_assignment -name DUPLICATE_ATOM crt_read_word_bit3 \
-    -from {emu:emu|crt_vsize_fixed:u_vsize|wa[3]~3} \
-    -to {emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[3]~3}
-
 foreach part {0 1 2} {
     foreach bank {even odd} {
         for {set bit 0} {$bit < 5} {incr bit} {
@@ -19,3 +13,16 @@ foreach part {0 1 2} {
     }
 }
 unset part bank bit read_driver ram_destination duplicate_name
+
+# The original pre-duplication target did not isolate wa[3] in the fitted build.
+# Target the six final-driver copies AFTER declaring their duplication above.
+# These destination names are confirmed by the 47ffb26 fitted atom audit.
+foreach part {0 1 2} {
+    foreach bank {even odd} {
+        set read_sink [format {emu:emu|crt_vsize_fixed:u_vsize|crt_read_%d_%s_bit3} $part $bank]
+        set word_copy [format {crt_read_word_%d_%s_bit3} $part $bank]
+        set_instance_assignment -name DUPLICATE_ATOM $word_copy \
+            -from {emu:emu|crt_vsize_fixed:u_vsize|wa[3]~3} -to $read_sink
+    }
+}
+unset part bank read_sink word_copy
