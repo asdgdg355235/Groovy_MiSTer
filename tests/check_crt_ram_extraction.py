@@ -35,7 +35,12 @@ class ExtractionChecks(unittest.TestCase):
             # by RTL equivalence/SMT, not by a whole-prefix text comparison.
             self.assertEqual(BASELINE[BASELINE.index(START):BASELINE.index(END)],
                              NEW[NEW.index(START):NEW.index(END)])
-            self.assertEqual(BASELINE[BASELINE.index(END):], NEW[NEW.index(END):])
+            # Only the existing valid-bit input is factored across line_begin;
+            # all registers/stages and the other seven control bits stay exact.
+            pipeline=BASELINE[BASELINE.index(END):].replace(
+                'output_now && !hb_in && !vs_in && pair_ready && !dividing}',
+                'line_begin ? valid_line : valid_current}')
+            self.assertEqual(pipeline, NEW[NEW.index(END):])
         self.assertIn('wire write_even = write_pixel && flush_group && !write_slot[0];', NEW)
         self.assertIn('wire write_odd  = write_pixel && flush_group &&  write_slot[0];', NEW)
         for x in ['wa', 'ra_even', 'ra_odd', 'write_pixel', 'flush_group', 'pack_next', 'read_lane']:

@@ -109,8 +109,23 @@ module crt_vsize_fixed #(
     wire [SW-1:0] slot_now = first_output ? SW'(0) : (line_begin ? next_aslot : aslot);
     wire last_row = src_now >= height_q-1'b1;
     wire [SW-1:0] bslot = next_slot(slot_now);
-    wire pair_ready = complete[slot_now] && tag[slot_now] == src_now
-                   && (last_row || (complete[bslot] && tag[bslot] == src_now+1'b1));
+    // Select after tag lookup/comparison, instead of making late hb_d-derived
+    // line_begin select tag addresses before the valid-metadata calculation.
+    // Keep array reads explicit: simulators must see tag/complete dependencies
+    // even when slot and row inputs remain constant across a write.
+    wire [SW-1:0] current_following = next_slot(aslot);
+    wire pair_ready_current = complete[aslot] && tag[aslot] == source_row
+        && (source_row >= height_q-1'b1 ||
+            (complete[current_following] && tag[current_following] == source_row+1'b1));
+    wire [15:0] line_source_row = first_output_line ? 16'd0 : source_row + advance_rows[15:0];
+    wire [SW-1:0] line_source_slot = first_output_line ? SW'(0) : next_aslot;
+    wire [SW-1:0] line_following = next_slot(line_source_slot);
+    wire pair_ready_line = complete[line_source_slot] && tag[line_source_slot] == line_source_row
+        && (line_source_row >= height_q-1'b1 ||
+            (complete[line_following] && tag[line_following] == line_source_row+1'b1));
+    wire pair_ready = line_begin ? pair_ready_line : pair_ready_current;
+    wire valid_current = line_active && pair_ready_current && !hb_in && !vs_in && !dividing;
+    wire valid_line = output_line && pair_ready_line && !hb_in && !vs_in && !dividing;
 
     always @(posedge clk) begin
         if (ce_in) begin
@@ -320,7 +335,7 @@ module crt_vsize_fixed #(
         swap0 <= slot_now[0];
         alpha0 <= last_row ? 8'd0 : pos_now[15:8];
         control[0] <= {ce_in,ce2_in,hs_in,vs_in,hb_in,(~output_now | vs_in),field_in,
-                       output_now && !hb_in && !vs_in && pair_ready && !dividing};
+                       line_begin ? valid_line : valid_current};
         for(j=1;j<5;j=j+1) control[j] <= control[j-1];
         ar<=a[23:16]*a[23:16]; ag<=a[15:8]*a[15:8]; ab<=a[7:0]*a[7:0];
         br<=b[23:16]*b[23:16]; bg<=b[15:8]*b[15:8]; bb<=b[7:0]*b[7:0];
