@@ -151,6 +151,8 @@ CRT_READ_BUILD_DIR="$PWD/../Groovy-restart-row-increment-build" \
 
 Use a NEW build directory per invocation. The runner rejects an existing path,
 does not copy db/incremental_db/output_files & snapshots committed source.
+Historical `old-builds/` and `test-builds/` distribution bundles are excluded
+from build snapshots and listed in provenance; they are not project inputs.
 The exact project/revision is `Groovy -c Groovy`. It runs mapping, resolves
 fresh synthesized duplication sources, fits with the guarded fitter, assembles,
 runs STA, exports all eight corners & audits RAM/driver/I/O/resource coverage.

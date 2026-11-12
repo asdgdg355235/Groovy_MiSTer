@@ -1,0 +1,34 @@
+{
+  "quartus_executed": false,
+  "hardware_baseline": "c8d4b3897c4ed98165d3ee862cabbdd9ab9a4f17",
+  "default_hardware_identical": true,
+  "command": "python3 tests/run_timing_candidate_tests.py --main $MAIN_MISTER",
+  "result": "PASS",
+  "unit_tests": 27,
+  "ram_extraction_additional_tests": 3,
+  "crt_clocks_per_comparison": 6698817,
+  "group_address_clocks_per_configuration": 57000,
+  "lz4_reference_clocks": [
+    32109,
+    35008
+  ],
+  "lz4_golden_packets_per_run": 37,
+  "delta_selector_clocks_per_variant": 21737,
+  "main_reference_commit": "0272823a66cb7c601256406a2e80e8c6b2e93e13",
+  "experiments": [
+    "delta-4x32",
+    "delta-8x16",
+    "read-fields",
+    "read-late",
+    "row-enable",
+    "row-increment",
+    "sync-first-row",
+    "vga-terminal"
+  ],
+  "limits": [
+    "Arithmetic identities are SMT-proved; simulations are bounded rather than whole-design formal proof.",
+    "Frontend models and inherited waivers do not establish Quartus synthesis acceptance.",
+    "Initial concurrent jobs hit resource interruptions and a Verilator internal fault. Unchanged RTL passed focused retries and the final complete suite. Historical distribution binaries are now excluded from source snapshots.",
+    "No timing closure or CRT hardware validation is claimed."
+  ]
+}

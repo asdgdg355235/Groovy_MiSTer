@@ -1,0 +1,300 @@
++ python3 tests/restart/language_gate.py
+{
+  "project_modes": {
+    "rtl/pll.v": "VERILOG_FILE",
+    "rtl/pll/pll_0002.v": "VERILOG_FILE",
+    "sys/pll_audio.v": "VERILOG_FILE",
+    "sys/pll_audio/pll_audio_0002.v": "VERILOG_FILE",
+    "sys/pll_cfg/altera_pll_reconfig_core.v": "VERILOG_FILE",
+    "sys/pll_cfg/altera_pll_reconfig_top.v": "VERILOG_FILE",
+    "sys/pll_cfg/pll_cfg.v": "VERILOG_FILE",
+    "sys/pll_cfg/pll_cfg_hdmi.v": "VERILOG_FILE",
+    "sys/pll_hdmi.v": "VERILOG_FILE",
+    "sys/pll_hdmi/pll_hdmi_0002.v": "VERILOG_FILE",
+    "Groovy.sv": "SYSTEMVERILOG_FILE",
+    "rtl/CRT/crt_edge_mask.sv": "SYSTEMVERILOG_FILE",
+    "rtl/CRT/crt_packed_ram.sv": "SYSTEMVERILOG_FILE",
+    "rtl/CRT/crt_vsize_fixed.sv": "SYSTEMVERILOG_FILE",
+    "rtl/ddram.sv": "SYSTEMVERILOG_FILE",
+    "sys/alsa.sv": "SYSTEMVERILOG_FILE",
+    "sys/ddr_svc.sv": "SYSTEMVERILOG_FILE",
+    "sys/f2sdram_safe_terminator.sv": "SYSTEMVERILOG_FILE",
+    "sys/gamma_corr.sv": "SYSTEMVERILOG_FILE",
+    "sys/hps_io.sv": "SYSTEMVERILOG_FILE",
+    "sys/hq2x.sv": "SYSTEMVERILOG_FILE",
+    "sys/ltc2308.sv": "SYSTEMVERILOG_FILE",
+    "sys/math.sv": "SYSTEMVERILOG_FILE",
+    "sys/mcp23009.sv": "SYSTEMVERILOG_FILE",
+    "sys/mt32pi.sv": "SYSTEMVERILOG_FILE",
+    "sys/sd_card.sv": "SYSTEMVERILOG_FILE",
+    "sys/shadowmask.sv": "SYSTEMVERILOG_FILE",
+    "sys/sysmem.sv": "SYSTEMVERILOG_FILE",
+    "sys/vga_out.sv": "SYSTEMVERILOG_FILE",
+    "sys/video_cleaner.sv": "SYSTEMVERILOG_FILE",
+    "sys/video_freak.sv": "SYSTEMVERILOG_FILE",
+    "sys/video_freezer.sv": "SYSTEMVERILOG_FILE",
+    "sys/video_mixer.sv": "SYSTEMVERILOG_FILE",
+    "sys/yc_out.sv": "SYSTEMVERILOG_FILE",
+    "rtl/JTFRAME/jtframe_hsize.v": "VERILOG_FILE",
+    "rtl/JTFRAME/jtframe_linebuf.v": "VERILOG_FILE",
+    "rtl/JTFRAME/jtframe_resync.v": "VERILOG_FILE",
+    "rtl/JTFRAME/jtframe_rpwp_ram.v": "VERILOG_FILE",
+    "rtl/binary_to_bcd.v": "VERILOG_FILE",
+    "rtl/fifo_sound.v": "VERILOG_FILE",
+    "rtl/fifo_vga.v": "VERILOG_FILE",
+    "rtl/hps_ext.v": "VERILOG_FILE",
+    "rtl/lz4.v": "VERILOG_FILE",
+    "rtl/sound.v": "VERILOG_FILE",
+    "rtl/vga.v": "VERILOG_FILE",
+    "sys/arcade_video.v": "VERILOG_FILE",
+    "sys/audio_out.v": "VERILOG_FILE",
+    "sys/i2c.v": "VERILOG_FILE",
+    "sys/i2s.v": "VERILOG_FILE",
+    "sys/iir_filter.v": "VERILOG_FILE",
+    "sys/osd.v": "VERILOG_FILE",
+    "sys/scandoubler.v": "VERILOG_FILE",
+    "sys/scanlines.v": "VERILOG_FILE",
+    "sys/sigma_delta_dac.v": "VERILOG_FILE",
+    "sys/spdif.v": "VERILOG_FILE",
+    "sys/sys_top.v": "VERILOG_FILE",
+    "sys/vga_pwm.v": "VERILOG_FILE"
+  },
+  "checks": [
+    "vga Verilog-2001 parse/elaboration (missing unrelated modules ignored)",
+    "CRT SystemVerilog-2012 parse/elaboration",
+    "mixed-language emu elaboration with explicit IP/VHDL models",
+    "former sized cast rejected in Verilog, accepted in SystemVerilog"
+  ],
+  "warnings": [
+    "$REPO/rtl/vga.v:155: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "$REPO/rtl/vga.v:155: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "$REPO/rtl/vga.v:155: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "$REPO/rtl/vga.v:156: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "$REPO/rtl/vga.v:156: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "$REPO/rtl/vga.v:156: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "$REPO/rtl/vga.v:157: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "$REPO/rtl/vga.v:157: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "$REPO/rtl/vga.v:158: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "$REPO/rtl/vga.v:158: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "$REPO/rtl/vga.v:159: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning."
+  ],
+  "limits": "Independent frontends, not Quartus acceptance. Inherited VGA [size] array declarations are accepted with warnings by Icarus and unchanged."
+}
++ python3 tests/restart/prove.py row qualify address vga sync
+PASS: row delta: unrestricted 32-bit inputs and exact 17-bit result
+PASS: rejects naive row identity at position overflow
+PASS: exhaustive reduced-width arithmetic, fractional/integer/position wrap
+PASS: first-line predicate under established line_begin
+PASS: all read row/column fields
+PASS: reachable quotient/remainder invariant, CE holds and saturation
+PASS: VGA termination including zero and maximum total
+PASS: first-row tag factoring before unchanged capture
++ python3 -m unittest discover -s tests -p test_*.py
+...........................
+----------------------------------------------------------------------
+Ran 27 tests in 89.888s
+
+OK
+  cycles=210000 writes=13361 comparable_reads=261359 stalls=35114 line_starts=151 field_starts=15 saturated=6999 bank_entries=10650
++ python3 tests/check_crt_ram_extraction.py
+test_memory_synchronous_and_unreset (__main__.ExtractionChecks.test_memory_synchronous_and_unreset) ... ok
+test_ram_region_and_video_pipeline_preserved (__main__.ExtractionChecks.test_ram_region_and_video_pipeline_preserved) ... ok
+test_random_packing_and_registered_read_model (__main__.ExtractionChecks.test_random_packing_and_registered_read_model) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.101s
+
+OK
++ tclsh tests/test_crt_address_duplication.tcl
+PASS: 30 unique assignments; observed source names match; six bank targets remain disjoint
+Exact source names and literal destination prefixes only; Quartus assignment acceptance and physical duplication are unverified
++ python3 tests/run_crt_read_address_rtl.py
+PASS: read/RAM/video equivalence d=-7 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-6 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-5 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-4 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-3 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-2 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-1 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=0 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=1 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=2 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=3 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=4 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=5 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=6 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=7 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=1 h=49 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=2 h=49 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=3 h=49 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=4 h=49 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=5 h=49 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=6 h=49 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=7 w=32 h=240 CE=1 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=7 w=32 h=240 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=7 w=32 h=240 CE=4 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=7 w=32 h=240 CE=8 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=7 w=32 h=240 CE=16 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=32 h=288 CE=6 interlace=1 stalls=1 restart=1
+PASS: read/RAM/video equivalence d=3 w=16 h=241 CE=12 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=0 w=33 h=240 CE=4 interlace=0 stalls=1 restart=0
+PASS: qualifier boundary last=5354 saturated=871035 CE-stall=712674 next-line=4206
+PASS: 2111136 clocks, 164892 active pixels, 30985 writes, advances=138/5558/126 wraps=495 stalls=1675244 lines=7359
+- $REPO/tests/tb_crt_read_address.sv:172: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 21ms; walltime 3.600 s; speed 5.903 ms/s
+- Verilator: cpu 3.577 s on 1 threads; alloced 65 MB
+PASS: read/RAM/video equivalence d=7 w=2560 h=240 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=2559 h=240 CE=2 interlace=1 stalls=1 restart=0
+PASS: qualifier boundary last=1009 saturated=222473 CE-stall=84047 next-line=550
+PASS: 4587681 clocks, 2457134 active pixels, 491520 writes, advances=14/930/12 wraps=79 stalls=1851053 lines=1056
+- $REPO/tests/tb_crt_read_address.sv:172: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 46ms; walltime 7.067 s; speed 6.545 ms/s
+- Verilator: cpu 7.009 s on 1 threads; alloced 65 MB
++ bash tests/run_crt_group_address_rtl.sh
+PASS: 57000 RTL cycles, MLAB_PARTS=0
+$REPO/tests/tb_crt_group_address.sv:111: $finish called at 570006000 (1ps)
+PASS: 57000 RTL cycles, MLAB_PARTS=2
+$REPO/tests/tb_crt_group_address.sv:111: $finish called at 570006000 (1ps)
++ python3 tests/run_lz4_timing_tests.py
+PASS: LZ4 32109 clocks, 37 golden packets, all counter states/reset/stalls/rollover; delta 65536 pairs
+LZ4 visited state mask=0000ffff
+$REPO/tests/tb_lz4_timing.sv:180: $finish called at 321090000 (1ps)
+PASS: LZ4 35008 clocks, 37 golden packets, all counter states/reset/stalls/rollover; delta 65536 pairs
+LZ4 visited state mask=0000ffff
+$REPO/tests/tb_lz4_timing.sv:180: $finish called at 350080000 (1ps)
++ python3 tests/run_geometry_tests.py
+PASS: widened JTFRAME buffer matches integration-base output, bypass and all H-size steps
+- $REPO/tests/tb_hsize.sv:41: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 5ms; walltime 0.189 s; speed 24.809 ms/s
+- Verilator: cpu 0.189 s on 1 threads; alloced 65 MB
+PASS: actual Groovy vga: interlace=0 size=0 ratio=8 height=240 VS phases=25/-1
+PASS: actual Groovy vga: interlace=0 size=7 ratio=8 height=240 VS phases=25/-1
+PASS: actual Groovy vga: interlace=0 size=-7 ratio=12 height=288 VS phases=25/-1
+PASS: actual Groovy vga: interlace=1 size=0 ratio=4 height=480 VS phases=25/13
+PASS: actual Groovy vga: interlace=1 size=7 ratio=4 height=480 VS phases=25/13
+PASS: actual Groovy vga: interlace=1 size=-7 ratio=6 height=480 VS phases=25/13
+PASS: actual Groovy vga: interlace=1 size=3 ratio=8 height=481 VS phases=25/13
+PASS: original timing generator, runtime modes, reset and half-line fields
+- $REPO/tests/tb_video_geometry.sv:113: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 54ms; walltime 6.812 s; speed 7.954 ms/s
+- Verilator: cpu 6.813 s on 1 threads; alloced 65 MB
+PASS: OSD default matches integration base; optional signed anchor keeps resized/scandoubled menu centered
+- $REPO/tests/tb_osd_anchor.sv:65: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 13ms; walltime 0.703 s; speed 17.971 ms/s
+- Verilator: cpu 0.700 s on 1 threads; alloced 65 MB
+PASS: OSD default matches integration base; optional signed anchor keeps resized/scandoubled menu centered
+- $REPO/tests/tb_osd_anchor.sv:65: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 13ms; walltime 0.701 s; speed 17.950 ms/s
+- Verilator: cpu 0.701 s on 1 threads; alloced 65 MB
+PASS: OSD fields do not overlap; protocol, controller and audio sources retained; VGA/LZ4 checked separately
+PASS: complete emu RTL elaborates with explicit vendor/VHDL models and inherited frontend waivers
++ python3 tests/run_controller_tests.py $MAIN_MISTER
+Gamecontrollerdb: mapping buttons for test 
+Gamecontrollerdb: mapping analog axes for test 
+Gamecontrollerdb: mapping buttons for test 
+Gamecontrollerdb: mapping analog axes for test 
+Gamecontrollerdb: mapping buttons for test 
+Gamecontrollerdb: mapping analog axes for test 
+Gamecontrollerdb: mapping buttons for test 
+Gamecontrollerdb: mapping analog axes for test 
+joy_name[0] = Button 1
+joy_name[1] = Button 2
+joy_name[2] = Button 3
+joy_name[3] = Button 4
+joy_name[4] = Button 5
+joy_name[5] = Button 6
+joy_name[6] = Button 7
+joy_name[7] = Button 8
+joy_name[8] = Button 9
+joy_name[9] = Button 10
+joy_name[10] = L3
+joy_name[11] = R3
+
+joy_nname[0] = A
+joy_nname[1] = B
+joy_nname[2] = X
+joy_nname[3] = Y
+joy_nname[4] = L
+joy_nname[5] = R
+joy_nname[6] = L2
+joy_nname[7] = R2
+joy_nname[8] = Select
+joy_nname[9] = Start
+joy_nname[10] = L3
+joy_nname[11] = R3
+
+joy_name[0] = Button 1
+joy_name[1] = Button 2
+joy_name[2] = Button 3
+joy_name[3] = Button 4
+joy_name[4] = Button 5
+joy_name[5] = Button 6
+joy_name[6] = Button 7
+joy_name[7] = Button 8
+joy_name[8] = Button 9
+joy_name[9] = Button 10
+joy_name[10] = L3
+joy_name[11] = R3
+
+joy_nname[0] = A
+joy_nname[1] = B
+joy_nname[2] = X
+joy_nname[3] = Y
+joy_nname[4] = L
+joy_nname[5] = R
+joy_nname[6] = L2
+joy_nname[7] = R2
+joy_nname[8] = Select
+joy_nname[9] = Start
+joy_nname[10] = L3
+joy_nname[11] = R3
+
+Loaded legacy Groovy mapping Groovy_input__v3.map; existing assignments retained, empty L3/R3 slots use system mapping
+Loaded legacy Groovy mapping Groovy_input__v3.map; existing assignments retained, empty L3/R3 slots use system mapping
+Loaded legacy system mapping input__v3.map; define L2/R2/L3/R3 in Menu to save v4
+Gamecontrollerdb: mapping buttons for test 
+Gamecontrollerdb: mapping analog axes for test 
+Gamecontrollerdb: mapping buttons for test 
+Gamecontrollerdb: mapping analog axes for test 
+joy_name[0] = Button 1
+joy_name[1] = Button 2
+joy_name[2] = Button 3
+joy_name[3] = Button 4
+joy_name[4] = Button 5
+joy_name[5] = Button 6
+joy_name[6] = Button 7
+joy_name[7] = Button 8
+joy_name[8] = Button 9
+joy_name[9] = Button 10
+joy_name[10] = L3
+joy_name[11] = R3
+
+joy_nname[0] = A
+joy_nname[1] = B
+joy_nname[2] = X
+joy_nname[3] = Y
+joy_nname[4] = L
+joy_nname[5] = R
+joy_nname[6] = L2
+joy_nname[7] = R2
+joy_nname[8] = Select
+joy_nname[9] = Start
+joy_nname[10] = L3
+joy_nname[11] = R3
+
+Device  assigned to player 3
+PASS: trigger calibration, polarity, both slots, digital fallback, reset, registration and packet lengths
+PASS: database reload, Buttons 1..10, Button 2/3 independence, L3/R3 press/release, both ports, combined holds, alternate sets, analog, mapper slots, v3/v4 save/load, 28-button limit
+$REPO/hps_linux/src/menu.cpp: In function ‘char* getNet(int)’:
+$REPO/hps_linux/src/menu.cpp:630:42: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+  630 |         return spec ? (ifa ? host : 0) : (char*)netType;
+      |                                          ^~~~~~~~~~~~~~
+PASS: configuration limits, FPGA joystick word widths and JTFRAME dependencies
+PASS: full changed HPS translation units compile (host syntax check)
+PASS: candidate non-Quartus checks; physical compilation/timing/hardware pending

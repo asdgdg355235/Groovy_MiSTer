@@ -1,0 +1,6 @@
+...........................
+----------------------------------------------------------------------
+Ran 27 tests in 24.968s
+
+OK
+  cycles=210000 writes=13361 comparable_reads=261359 stalls=35114 line_starts=151 field_starts=15 saturated=6999 bank_entries=10650

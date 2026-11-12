@@ -1,12 +1,14 @@
 # USER RUN ONLY: quartus_sta -t tests/report_timing_closure.tcl
 # Quartus 17 APIs. -npaths 0 means unlimited, -nworst 1 means one worst path
 # per endpoint. Never silently substitute a top-N list for failing endpoints.
+source [file join [file dirname [info script]] restart/pulse_summary.tcl]
 project_open Groovy -revision Groovy
 create_timing_netlist
 read_sdc
 update_timing_netlist
 set root output_files/timing_closure
 file mkdir $root
+set version [open $root/report_format.txt w]; puts $version "restart-v1"; close $version
 report_clocks -file $root/clocks.txt
 report_sdc -file $root/constraints.txt
 report_sdc -ignored -file $root/ignored_constraints.txt
@@ -52,10 +54,10 @@ proc all_negative {dir corner kind summary} {
     puts $summary "$corner\t$kind\t[array size worst]\t[format %.6f $tns]\t$worst_slack"
     flush $summary
     report_timing -$kind -less_than_slack 0 -npaths 0 -nworst 1 -detail full_path -show_routing -file $dir/negative_${kind}_paths.txt
-    report_timing -$kind -npaths 30 -nworst 1 -detail full_path -show_routing -file $dir/worst_${kind}.txt
+    report_timing -$kind -npaths 8 -nworst 1 -detail full_path -show_routing -file $dir/worst_${kind}.txt
 }
 proc family {dir corner label from_pattern to_pattern filters {all_endpoints 0}} {
-    set command [list report_timing -setup -npaths [expr {$all_endpoints ? 0 : 50}] -nworst 1 -detail full_path -show_routing -file $dir/${label}_setup.txt]
+    set command [list report_timing -setup -npaths 8 -nworst 1 -detail full_path -show_routing -file $dir/${label}_setup.txt]
     set from_count ALL
     set to_count ALL
     if {$from_pattern ne ""} {
@@ -95,11 +97,7 @@ foreach_in_collection op $corners {
     set_operating_conditions $op
     update_timing_netlist
     foreach kind {setup hold recovery removal} {all_negative $dir $corner $kind $summary}
-    # At most high/low/period checks per clock per timing target. This bound
-    # covers every target-clock combination, rather than the default top one.
-    set pulse_bound [expr {4 * ([get_collection_size [get_keepers *]] + [get_collection_size [get_ports *]]) * [get_collection_size [get_clocks *]]}]
-    if {$pulse_bound < 1} {error "Empty pulse-width target/clock collections"}
-    report_min_pulse_width -nworst $pulse_bound -detail summary -file $dir/min_pulse_width.txt
+    export_pulse_checks $dir
     report_clock_transfers -file $dir/clock_transfers.txt
     family $dir $corner wcol {*u_vsize*wcol*} {*u_vsize*packed_ram*} $filters
     # Historical measured RTL intentionally has no column predicate register.

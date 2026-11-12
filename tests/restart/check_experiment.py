@@ -2,13 +2,13 @@
 """Run independent gates for one baseline-derived experiment. Never Quartus."""
 from pathlib import Path
 import argparse,json,os,subprocess,sys,tarfile,tempfile,io
-from experiments import ROOT,BASE,apply,registry,sha,PROTECTED,CORE
+from experiments import ROOT,BASE,apply,registry,sha,PROTECTED,CORE,source_archive
 from language_gate import run
 
 def check(name,output):
  with tempfile.TemporaryDirectory(prefix='groovy-independent-') as t:
   dest=Path(t)
-  data=subprocess.check_output(['git','archive',BASE],cwd=ROOT)
+  data=source_archive(ROOT,BASE)
   with tarfile.open(fileobj=io.BytesIO(data)) as archive:archive.extractall(dest,filter='data')
   spec=apply(dest,name)
   # Syntax first; no cycle test may bypass a language-mode failure.

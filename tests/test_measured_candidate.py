@@ -94,6 +94,30 @@ class MeasuredCandidateTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'count mismatch'):
                 validate(root,False)
 
+    def test_modern_pulse_certificate_and_negative_report_truncation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); corners=[]; summaries=[]
+            for n,(model,t) in enumerate(((m,t) for m in ('slow','fast') for t in ('-40','0','85','100')),1):
+                name=f'corner_{n:02d}'; folder=root/name; folder.mkdir()
+                corners.append(f'{name}\t{model}\t{t}\t1100')
+                for kind in ('setup','hold','recovery','removal'):
+                    summaries.append(f'{name}\t{kind}\t0\t0.0\t0.1')
+                    (folder/f'negative_{kind}_endpoints.tsv').write_text('to\tfrom\tslack_ns\n')
+                    (folder/f'negative_{kind}_paths.txt').write_text('no paths')
+                    (folder/f'worst_{kind}.txt').write_text('positive')
+                (folder/'min_pulse_width.txt').write_text('; 0.100 ; 0.2 ; 0.1 ; High Pulse Width ;\n')
+                (folder/'pulse_summary.tsv').write_text('requested\treturned\tfailing\twns_ns\tlast_slack_ns\tcomplete\n16\t1\t0\t0.1\t0.1\t1\n')
+                (folder/'negative_pulse_paths.txt').write_text('No failing pulse checks.\n')
+            (root/'report_format.txt').write_text('restart-v1\n')
+            (root/'corners.tsv').write_text('directory\tmodel\ttemperature\tvoltage\n'+'\n'.join(corners)+'\n')
+            (root/'endpoint_summary.tsv').write_text('corner\tcheck\tfailing_endpoints\tendpoint_TNS_ns\tworst_slack_ns\n'+'\n'.join(summaries)+'\n')
+            self.assertTrue(validate(root,False)['timing_pass'])
+            (root/'corner_01/negative_setup_paths.txt').write_text('TRUNCATED middle bytes')
+            with self.assertRaisesRegex(ValueError,'Incomplete negative'): validate(root,False)
+            (root/'corner_01/negative_setup_paths.txt').write_text('no paths')
+            (root/'corner_01/pulse_summary.tsv').write_text('requested\treturned\tfailing\twns_ns\tlast_slack_ns\tcomplete\n16\t1\t0\t0.1\t0.2\t1\n')
+            with self.assertRaisesRegex(ValueError,'sorted pulse'): validate(root,False)
+
     def test_source_manifest_hashes_actual_overridden_input(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp); source=root/'source'; build=root/'build'

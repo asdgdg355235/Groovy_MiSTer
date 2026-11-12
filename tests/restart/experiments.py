@@ -8,6 +8,13 @@ PROTECTED=('Groovy.qsf','Groovy.qpf','files.qip','Groovy.sdc','sys/sys_top.sdc',
  'sys/sys_top.v','rtl/CRT/crt_measured_hps.qsf','rtl/CRT/crt_address_duplication.qsf',
  'rtl/CRT/crt_packed_ram.sv','rtl/lz4.v','rtl/pll.v','rtl/pll/pll_0002.v')
 CORE=('Groovy.sv','rtl/CRT/crt_vsize_fixed.sv','rtl/vga.v')
+BUILD_EXCLUDE={'db','incremental_db','output_files','.git','__pycache__','old-builds','test-builds'}
+def source_archive(source,revision):
+ # Historical release bundles are not compilation inputs. Do not materialize
+ # hundreds of MiB of unrelated binaries for every independent RTL check.
+ paths=subprocess.check_output(['git','ls-tree','--name-only',revision],cwd=source,text=True).splitlines()
+ paths=[p for p in paths if p not in BUILD_EXCLUDE]
+ return subprocess.check_output(['git','archive',revision,'--',*paths],cwd=source)
 def baseline(path):return subprocess.check_output(['git','show',BASE+':'+path],cwd=ROOT)
 def sha(data):return hashlib.sha256(data).hexdigest()
 def registry():return json.loads((ROOT/'tests/timing_experiments/index.json').read_text())

@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Patch context must retain the baseline source whitespace byte for byte.
+tests/timing_experiments/*.patch whitespace=-blank-at-eol,-blank-at-eof
