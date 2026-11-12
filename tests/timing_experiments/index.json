@@ -1,1 +1,11 @@
-{}
+{
+  "row-increment": {
+    "path": "rtl/CRT/crt_vsize_fixed.sv",
+    "patch": "row-increment.patch",
+    "patch_sha256": "c703e01e8a12b1fbb620d94c7781e450299d2a0c19e0294e4d5f56bf0fefe3be",
+    "baseline_sha256": "efe58c15761e085490635049989ded292788d5dfb65ed80b153b579547df97c3",
+    "result_sha256": "46337beed6ef12edefeb0adbdda5236ad7c3f88ca8a54da6d00d67d5f07131e1",
+    "cone": "delay_lines/position -> retimed row-advance capture",
+    "proof": "row"
+  }
+}

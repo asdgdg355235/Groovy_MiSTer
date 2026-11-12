@@ -1,0 +1,16 @@
+--- a/rtl/CRT/crt_vsize_fixed.sv
++++ b/rtl/CRT/crt_vsize_fixed.sv
+@@ -73,7 +73,12 @@
+                  && height <= 1024 && requested_height >= 32;
+     wire [16:0] shifted_rem = {remainder[15:0],dividend[div_bit[4:0]]};
+     wire [31:0] position_next = position + step;
+-    wire [16:0] advance_rows = {1'b0,position_next[31:16]} - {1'b0,position[31:16]};
++    // The 16-bit integer increment deliberately wraps at 65536. The high
++    // bit of the original 17-bit difference is the borrow after that wrap.
++    wire [16:0] row_fraction = {1'b0,position[15:0]} + {1'b0,step[15:0]};
++    wire [15:0] row_delta = step[31:16] + {15'd0,row_fraction[16]};
++    wire [16:0] row_integer_next = {1'b0,position[31:16]} + {1'b0,row_delta};
++    wire [16:0] advance_rows = {row_integer_next[16],row_delta};
+     wire [SW-1:0] next_aslot = (advance_rows == 2) ? next_slot(next_slot(aslot))
+                                              : (advance_rows == 1) ? next_slot(aslot) : aslot;
+     wire first_source = !started && !vb_in;
