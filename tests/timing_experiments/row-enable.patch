@@ -1,0 +1,17 @@
+--- a/rtl/CRT/crt_vsize_fixed.sv
++++ b/rtl/CRT/crt_vsize_fixed.sv
+@@ -111,9 +111,11 @@
+                 line_active <= output_now;
+                 if(output_now && !vs_in) displayed_rows <= displayed_rows + 1'b1;
+                 if (output_now) begin
+-                    position <= pos_now;
+-                    source_row <= src_now;
+-                    aslot <= slot_now;
++                    // This existing branch establishes line_begin. Select the
++                    // state update after computing its ungated arithmetic.
++                    position <= read_line_no == {10'd0,delay_lines} ? 32'd0 : position_next;
++                    source_row <= read_line_no == {10'd0,delay_lines} ? 16'd0 : source_row + advance_rows[15:0];
++                    aslot <= read_line_no == {10'd0,delay_lines} ? SW'(0) : next_aslot;
+                 end
+             end else if (!hb_in && wcol < LINE_PX) begin
+                 wcol <= wcol + 1'b1;
