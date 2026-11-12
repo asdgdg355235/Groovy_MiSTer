@@ -1,0 +1,106 @@
+{
+  "old_head": "69562854a9055c3dc81ae90c902d724b22034572",
+  "backup_ref": "backup/crt-targeted-6956285",
+  "baseline": "c8d4b3897c4ed98165d3ee862cabbdd9ab9a4f17",
+  "baseline_ref": "baseline/crt-hps-c8d4b38",
+  "rollback": "e04ed0a1085f890e740e8f5c4be06ff7b24b5d48",
+  "verified_rollback_tree": "51e56ffb5637fdfd67bd90b3908f0e325c78f85d",
+  "reporting_revision": "a3a4d092587371312d2734dae1d0fe67398b17ce",
+  "build_rule": "Use the final reporting revision plus exactly one named variant. Introduction commits identify individual reviewable patches, not older build runners.",
+  "experiments": {
+    "row-increment": {
+      "introduction_commit": "df49a5b167d661d8548ac5341e849aab40c769fb",
+      "command": "bash tests/run_crt_read_address_quartus.sh row-increment",
+      "manifest": "results/row-increment.json"
+    },
+    "row-enable": {
+      "introduction_commit": "fa079bc6cb0e7786a878c38263355783d85011b1",
+      "command": "bash tests/run_crt_read_address_quartus.sh row-enable",
+      "manifest": "results/row-enable.json"
+    },
+    "read-fields": {
+      "introduction_commit": "be2a90b03ae517649c8bde69bb9890ab85e58017",
+      "command": "bash tests/run_crt_read_address_quartus.sh read-fields",
+      "manifest": "results/read-fields.json"
+    },
+    "read-late": {
+      "introduction_commit": "bedca9c53981be4c6bc121fdc794818cf4627001",
+      "command": "bash tests/run_crt_read_address_quartus.sh read-late",
+      "manifest": "results/read-late.json"
+    },
+    "delta-8x16": {
+      "introduction_commit": "1454600d7d0176774ddec5133c813bad7e6638e1",
+      "command": "bash tests/run_crt_read_address_quartus.sh delta-8x16",
+      "manifest": "results/delta-8x16.json"
+    },
+    "delta-4x32": {
+      "introduction_commit": "679f612b42573fb44bea708df030e59a8a64a091",
+      "command": "bash tests/run_crt_read_address_quartus.sh delta-4x32",
+      "manifest": "results/delta-4x32.json"
+    },
+    "vga-terminal": {
+      "introduction_commit": "5fa203ca42ac5068455c5d1688712262f4644847",
+      "command": "bash tests/run_crt_read_address_quartus.sh vga-terminal",
+      "manifest": "results/vga-terminal.json"
+    },
+    "sync-first-row": {
+      "introduction_commit": "b1704fa704cac24764d676b88d5bb9c79762be7e",
+      "command": "bash tests/run_crt_read_address_quartus.sh sync-first-row",
+      "manifest": "results/sync-first-row.json"
+    }
+  },
+  "commits": [
+    {
+      "sha": "6d0bd8d9bd6c03cf3e5f570602c3179a67ef06af",
+      "subject": "Rebuild language-mode gates and independent c8d4b38 experiment harness"
+    },
+    {
+      "sha": "a54dd229fb1d131e2a4d23ea439e341eb38b03fa",
+      "subject": "Add mixed-language emu elaboration and isolated cycle-comparison gates"
+    },
+    {
+      "sha": "6e5f3a9ba927e9a9a296dbfc7efcdece841a3947",
+      "subject": "Record c8d4b38 physical paths and preserve isolated experiment inputs"
+    },
+    {
+      "sha": "df49a5b167d661d8548ac5341e849aab40c769fb",
+      "subject": "Add isolated finite-width CRT row-increment experiment"
+    },
+    {
+      "sha": "fa079bc6cb0e7786a878c38263355783d85011b1",
+      "subject": "Add isolated CRT first-output state-enable experiment"
+    },
+    {
+      "sha": "be2a90b03ae517649c8bde69bb9890ab85e58017",
+      "subject": "Add isolated CRT read-address field experiment"
+    },
+    {
+      "sha": "bedca9c53981be4c6bc121fdc794818cf4627001",
+      "subject": "Add alternative late CRT address-qualification experiment"
+    },
+    {
+      "sha": "1454600d7d0176774ddec5133c813bad7e6638e1",
+      "subject": "Add isolated eight-by-sixteen delta-selector experiment"
+    },
+    {
+      "sha": "679f612b42573fb44bea708df030e59a8a64a091",
+      "subject": "Add four-by-thirty-two delta-selector comparison"
+    },
+    {
+      "sha": "5fa203ca42ac5068455c5d1688712262f4644847",
+      "subject": "Add Verilog-compatible VGA terminal-comparison experiment"
+    },
+    {
+      "sha": "b1704fa704cac24764d676b88d5bb9c79762be7e",
+      "subject": "Add isolated first-row readiness experiment without sync latency changes"
+    },
+    {
+      "sha": "3d9e4ecfb0afad82f4d4d693b3263210484169bd",
+      "subject": "Rebuild fresh compilation provenance and lossless capped timing archives"
+    },
+    {
+      "sha": "a3a4d092587371312d2734dae1d0fe67398b17ce",
+      "subject": "Normalize captured regression log whitespace"
+    }
+  ]
+}
