@@ -1,4 +1,4 @@
 # The three additional effective calls in the measured +0.177 ns QSF.
-set_hps_location_assignment HPSINTERFACEPERIPHERALI2C_X52_Y60_N111 -to hdmi_i2c
-set_hps_location_assignment HPSINTERFACEPERIPHERALSPIMASTER_X52_Y72_N111 -to spi
-set_hps_location_assignment HPSINTERFACEPERIPHERALUART_X52_Y67_N111 -to uart
+set_instance_assignment -name HPS_LOCATION HPSINTERFACEPERIPHERALI2C_X52_Y60_N111 -entity sys_top -to hdmi_i2c
+set_instance_assignment -name HPS_LOCATION HPSINTERFACEPERIPHERALSPIMASTER_X52_Y72_N111 -entity sys_top -to spi
+set_instance_assignment -name HPS_LOCATION HPSINTERFACEPERIPHERALUART_X52_Y67_N111 -entity sys_top -to uart
