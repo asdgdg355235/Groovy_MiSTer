@@ -16,5 +16,14 @@
     "result_sha256": "a8836ce2d3e8be020d1db3b81a0234b144a2da47f77935b8e15e98940bb72a61",
     "cone": "delay_lines first-output selection -> existing position/source/aslot updates",
     "proof": "qualify"
+  },
+  "read-fields": {
+    "path": "rtl/CRT/crt_vsize_fixed.sv",
+    "patch": "read-fields.patch",
+    "patch_sha256": "4c1f3461efb78ff92a7698f911d6a085138294fd1b24a62422ffeae9ff1883f2",
+    "baseline_sha256": "efe58c15761e085490635049989ded292788d5dfb65ed80b153b579547df97c3",
+    "result_sha256": "958c9d17b9da31578f6805c721b76cf3d34a08cebc8489eefdae6adfe8c188c7",
+    "cone": "wcol/current row base -> six final read-address muxes",
+    "proof": "address"
   }
 }
