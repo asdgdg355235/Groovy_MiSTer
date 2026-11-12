@@ -34,3 +34,19 @@ old=If(line,(started|first)&UGE(now,ZeroExt(10,d))&ULT(ZeroExt(1,now),ZeroExt(1,
 new=If(line,(started|first)&UGE(read,ZeroExt(10,d))&ULT(ZeroExt(1,read),ZeroExt(1,out)+ZeroExt(11,d)),Bool('line_active'))
 prove('upcoming-line qualification including 16-bit wrap',old,new)
 prove('first-output qualification',line&(now==ZeroExt(10,d)),line&(read==ZeroExt(10,d)))
+# Every reachable production column state, including saturated blanking reads.
+# Field/reset/CE holds leave these counters unchanged. Line starts assign 1/0/1.
+for col in range(2561):
+ group,lane=divmod(col,5)
+ next_col=col+1 if col<2560 else col
+ next_group=group+(lane==4) if col<2560 else group
+ next_lane=(0 if lane==4 else lane+1) if col<2560 else lane
+ assert (next_group,next_lane)==divmod(next_col,5)
+ word=group if col<2560 else 0
+ for slot in range(16):
+  assert (((slot>>1)*512+word)&4095)==((((slot>>1)<<9)|(word&511))&4095)
+print('PASS: all production column transitions, saturation & all 4-bit slot values')
+slot,word=BitVec('slot',4),BitVec('word',9)
+prove('read row/column fields for every qualified word',
+      (ZeroExt(8,slot)>>1)*512+ZeroExt(3,word),
+      ((ZeroExt(8,slot)>>1)<<9)|ZeroExt(3,word))

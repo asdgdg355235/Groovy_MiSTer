@@ -60,7 +60,15 @@ module crt_vsize_fixed #(
         // LINE_WORDS is constant; no pixel-clock division remains.
         address_word = AW'((32'(s) >> 1)*LINE_WORDS + 32'(word));
     endfunction
-
+    function [AW-1:0] read_address_word(input [SW-1:0] s, input [AW-1:0] word);
+        // Production reads use qualified floor(wcol/5), hence 0..511.
+        // Saturated columns are zero; line-start reads also supply zero.
+        // Row and column fields cannot carry into one another. Keep the
+        // generic implementation for all other parameter configurations.
+        if (LINE_PX == 2560 && LINE_WORDS == 512 && AW == 12)
+            read_address_word = AW'((32'(s) >> 1) << 9) | AW'(word[8:0]);
+        else read_address_word = address_word(s,word);
+    endfunction
 
     // A restoring division runs once per field, in blanking. No pixel-rate
     // divider. Q16 error is less than one source line / 65536 per output row.
@@ -235,10 +243,10 @@ module crt_vsize_fixed #(
     wire [SW-1:0] read_line_bslot = next_slot(read_line_slot);
     wire [SW-1:0] read_bslot = next_slot(aslot);
     wire [AW-1:0] read_current_word = wcol < LINE_PX ? group_col : AW'(0);
-    wire [AW-1:0] ra_even_line = address_word(read_line_slot[0] ? read_line_bslot : read_line_slot, AW'(0));
-    wire [AW-1:0] ra_odd_line = address_word(read_line_slot[0] ? read_line_slot : read_line_bslot, AW'(0));
-    wire [AW-1:0] ra_even_current = address_word(aslot[0] ? read_bslot : aslot, read_current_word);
-    wire [AW-1:0] ra_odd_current = address_word(aslot[0] ? aslot : read_bslot, read_current_word);
+    wire [AW-1:0] ra_even_line = read_address_word(read_line_slot[0] ? read_line_bslot : read_line_slot, AW'(0));
+    wire [AW-1:0] ra_odd_line = read_address_word(read_line_slot[0] ? read_line_slot : read_line_bslot, AW'(0));
+    wire [AW-1:0] ra_even_current = read_address_word(aslot[0] ? read_bslot : aslot, read_current_word);
+    wire [AW-1:0] ra_odd_current = read_address_word(aslot[0] ? aslot : read_bslot, read_current_word);
     wire [AW-1:0] ra_even = line_begin ? ra_even_line : ra_even_current;
     wire [AW-1:0] ra_odd = line_begin ? ra_odd_line : ra_odd_current;
     wire write_pixel = running && !reset && ce_in && !hb_in && !vb_in
