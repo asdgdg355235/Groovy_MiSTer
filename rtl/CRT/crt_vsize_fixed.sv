@@ -60,15 +60,6 @@ module crt_vsize_fixed #(
         // LINE_WORDS is constant; no pixel-clock division remains.
         address_word = AW'((32'(s) >> 1)*LINE_WORDS + 32'(word));
     endfunction
-    function [AW-1:0] read_address_word(input [SW-1:0] s, input [AW-1:0] word);
-        // Production reads use qualified floor(wcol/5), hence 0..511.
-        // Saturated columns are zero; line-start reads also supply zero.
-        // Row and column fields cannot carry into one another. Keep the
-        // generic implementation for all other parameter configurations.
-        if (LINE_PX == 2560 && LINE_WORDS == 512 && AW == 12)
-            read_address_word = AW'((32'(s) >> 1) << 9) | AW'(word[8:0]);
-        else read_address_word = address_word(s,word);
-    endfunction
 
     // A restoring division runs once per field, in blanking. No pixel-rate
     // divider. Q16 error is less than one source line / 65536 per output row.
@@ -82,50 +73,24 @@ module crt_vsize_fixed #(
                  && height <= 1024 && requested_height >= 32;
     wire [16:0] shifted_rem = {remainder[15:0],dividend[div_bit[4:0]]};
     wire [31:0] position_next = position + step;
-    // Low result bits need only step's integer part and fractional carry.
-    // The original 17-bit subtraction wraps by 65536 when position overflows;
-    // keep that correction explicitly, including integer_increment == 65536.
-    wire [16:0] fraction_sum = {1'b0,position[15:0]} + {1'b0,step[15:0]};
-    wire [16:0] integer_increment = {1'b0,step[31:16]} + {16'd0,fraction_sum[16]};
-    wire [16:0] integer_sum = {1'b0,position[31:16]} + integer_increment;
-    wire [16:0] advance_rows = {integer_increment[16] ^ integer_sum[16],integer_increment[15:0]};
+    wire [16:0] advance_rows = {1'b0,position_next[31:16]} - {1'b0,position[31:16]};
     wire [SW-1:0] next_aslot = (advance_rows == 2) ? next_slot(next_slot(aslot))
                                              : (advance_rows == 1) ? next_slot(aslot) : aslot;
     wire first_source = !started && !vb_in;
-    // Qualify the upcoming line independently of the late line-begin mux.
-    // Use 16-bit addition here, matching line_now's original wrap behavior.
-    wire [15:0] read_line_no = first_source ? 16'd0 : line_no + 16'd1;
-    wire [15:0] line_now = line_begin ? read_line_no : line_no;
+    wire [15:0] line_now = line_begin ? (first_source ? 16'd0 : line_no + 1'b1) : line_no;
     wire [15:0] row_now = line_begin && !vb_in ? (first_source ? 16'd0 : wrow + 1'b1) : wrow;
     wire [SW-1:0] write_slot = line_begin && !vb_in ? (first_source ? SW'(0) : next_slot(wslot)) : wslot;
     wire [15:0] col_now = line_begin ? 16'd0 : wcol;
-    wire first_output_line = read_line_no == {10'd0,delay_lines};
-    wire first_output = line_begin && first_output_line;
-    wire output_line = (started || first_source) && read_line_no >= {10'd0,delay_lines}
-                    && {1'b0,read_line_no} < {1'b0,out_height}+{11'd0,delay_lines};
-    wire output_now = line_begin ? output_line : line_active;
+    wire first_output = line_begin && line_now == {10'd0,delay_lines};
+    wire output_now = line_begin ? ((started || first_source) && line_now >= {10'd0,delay_lines}
+                               && {1'b0,line_now} < {1'b0,out_height}+{11'd0,delay_lines}) : line_active;
     wire [31:0] pos_now = line_begin ? (first_output ? 32'd0 : position_next) : position;
     wire [15:0] src_now = first_output ? 16'd0 : (line_begin ? source_row + advance_rows[15:0] : source_row);
     wire [SW-1:0] slot_now = first_output ? SW'(0) : (line_begin ? next_aslot : aslot);
     wire last_row = src_now >= height_q-1'b1;
     wire [SW-1:0] bslot = next_slot(slot_now);
-    // Select after tag lookup/comparison, instead of making late hb_d-derived
-    // line_begin select tag addresses before the valid-metadata calculation.
-    // Keep array reads explicit: simulators must see tag/complete dependencies
-    // even when slot and row inputs remain constant across a write.
-    wire [SW-1:0] current_following = next_slot(aslot);
-    wire pair_ready_current = complete[aslot] && tag[aslot] == source_row
-        && (source_row >= height_q-1'b1 ||
-            (complete[current_following] && tag[current_following] == source_row+1'b1));
-    wire [15:0] line_source_row = first_output_line ? 16'd0 : source_row + advance_rows[15:0];
-    wire [SW-1:0] line_source_slot = first_output_line ? SW'(0) : next_aslot;
-    wire [SW-1:0] line_following = next_slot(line_source_slot);
-    wire pair_ready_line = complete[line_source_slot] && tag[line_source_slot] == line_source_row
-        && (line_source_row >= height_q-1'b1 ||
-            (complete[line_following] && tag[line_following] == line_source_row+1'b1));
-    wire pair_ready = line_begin ? pair_ready_line : pair_ready_current;
-    wire valid_current = line_active && pair_ready_current && !hb_in && !vs_in && !dividing;
-    wire valid_line = output_line && pair_ready_line && !hb_in && !vs_in && !dividing;
+    wire pair_ready = complete[slot_now] && tag[slot_now] == src_now
+                   && (last_row || (complete[bslot] && tag[bslot] == src_now+1'b1));
 
     always @(posedge clk) begin
         if (ce_in) begin
@@ -146,11 +111,9 @@ module crt_vsize_fixed #(
                 line_active <= output_now;
                 if(output_now && !vs_in) displayed_rows <= displayed_rows + 1'b1;
                 if (output_now) begin
-                    // This branch already proves line_begin; do not repeat
-                    // that mux in front of these existing state updates.
-                    position <= first_output_line ? 32'd0 : position_next;
-                    source_row <= first_output_line ? 16'd0 : source_row + advance_rows[15:0];
-                    aslot <= first_output_line ? SW'(0) : next_aslot;
+                    position <= pos_now;
+                    source_row <= src_now;
+                    aslot <= slot_now;
                 end
             end else if (!hb_in && wcol < LINE_PX) begin
                 wcol <= wcol + 1'b1;
@@ -254,14 +217,15 @@ module crt_vsize_fixed #(
     // and read_word is zero. Keeping the bank wrap/selection and word add
     // ahead of that final mux removes ce_in from their combinational cone.
     // No register or RAM read cycle is added; blanking reads are preserved.
+    wire [15:0] read_line_no = first_source ? 16'd0 : line_no + 16'd1;
     wire [SW-1:0] read_line_slot = read_line_no == {10'd0,delay_lines} ? SW'(0) : next_aslot;
     wire [SW-1:0] read_line_bslot = next_slot(read_line_slot);
     wire [SW-1:0] read_bslot = next_slot(aslot);
     wire [AW-1:0] read_current_word = wcol < LINE_PX ? group_col : AW'(0);
-    wire [AW-1:0] ra_even_line = read_address_word(read_line_slot[0] ? read_line_bslot : read_line_slot, AW'(0));
-    wire [AW-1:0] ra_odd_line = read_address_word(read_line_slot[0] ? read_line_slot : read_line_bslot, AW'(0));
-    wire [AW-1:0] ra_even_current = read_address_word(aslot[0] ? read_bslot : aslot, read_current_word);
-    wire [AW-1:0] ra_odd_current = read_address_word(aslot[0] ? aslot : read_bslot, read_current_word);
+    wire [AW-1:0] ra_even_line = address_word(read_line_slot[0] ? read_line_bslot : read_line_slot, AW'(0));
+    wire [AW-1:0] ra_odd_line = address_word(read_line_slot[0] ? read_line_slot : read_line_bslot, AW'(0));
+    wire [AW-1:0] ra_even_current = address_word(aslot[0] ? read_bslot : aslot, read_current_word);
+    wire [AW-1:0] ra_odd_current = address_word(aslot[0] ? aslot : read_bslot, read_current_word);
     wire [AW-1:0] ra_even = line_begin ? ra_even_line : ra_even_current;
     wire [AW-1:0] ra_odd = line_begin ? ra_odd_line : ra_odd_current;
     wire write_pixel = running && !reset && ce_in && !hb_in && !vb_in
@@ -335,7 +299,7 @@ module crt_vsize_fixed #(
         swap0 <= slot_now[0];
         alpha0 <= last_row ? 8'd0 : pos_now[15:8];
         control[0] <= {ce_in,ce2_in,hs_in,vs_in,hb_in,(~output_now | vs_in),field_in,
-                       line_begin ? valid_line : valid_current};
+                       output_now && !hb_in && !vs_in && pair_ready && !dividing};
         for(j=1;j<5;j=j+1) control[j] <= control[j-1];
         ar<=a[23:16]*a[23:16]; ag<=a[15:8]*a[15:8]; ab<=a[7:0]*a[7:0];
         br<=b[23:16]*b[23:16]; bg<=b[15:8]*b[15:8]; bb<=b[7:0]*b[7:0];

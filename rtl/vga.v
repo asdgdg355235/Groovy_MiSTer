@@ -106,14 +106,7 @@ wire[15:0] V_pulse_start;
 wire[15:0] V_pulse_end;
 
 assign H_pulse_start = (interlaced && field) ? (H+HFP) >> 1 : H+HFP;
-// Prepare the small blanking/parity term independently of V. Sign extension
-// preserves the blanking==0, alternate-field subtraction (V-1 modulo 65536).
-wire [9:0] V_blank = {2'b0,VBP} + {2'b0,VFP} + {2'b0,VS};
-wire signed [10:0] V_blank_adjusted = $signed({1'b0,V_blank}) - 11'(interlaced && field);
-assign V_total = V + {{5{V_blank_adjusted[10]}},V_blank_adjusted};
-// The inherited unsized V_total-1 never terminates when V_total is zero.
-wire [16:0] v_count_next = {1'b0,v_cnt} + 17'd1;
-wire v_at_end = V_total != 0 && v_count_next >= {1'b0,V_total};
+assign V_total       = (interlaced && field) ? V+VBP+VFP+VS - 1'b1 : V+VBP+VFP+VS;
 assign V_pulse_start = (interlaced && field) ? V+VFP + 1'b1 : V+VFP;
 assign V_pulse_end   = (interlaced && field) ? V+VFP+VS + 1'b1 : V+VFP+VS;
 
@@ -727,7 +720,7 @@ always@(posedge clk_sys) begin
                                                          
    // the vertical counter is processed at the begin of each hsync
    if (h_cnt == H+HFP) begin
-     if (v_at_end) begin // Same counter cycles, including V_total == 0.
+     if (v_cnt >= V_total-1) begin                             //V_total changes on interlaced field by 1             
        v_cnt <= (interlaced && !field) ? 1'b1 : 1'b0;          //vcount depends on field
      end else begin 
        v_cnt <= interlaced ? v_cnt + 10'd2 : v_cnt + 10'd1;    //interlaced alternate 2 lines according to field                         

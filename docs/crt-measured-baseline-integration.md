@@ -1,5 +1,3 @@
-Historical baseline integration. The next implementation is documented in [targeted corrections](crt-targeted-corrections.md).
-
 # Measured +0.177 ns baseline integration
 
 This candidate restores the source snapshot in `Groovy_closure_plus0177_evidence.zip`.
