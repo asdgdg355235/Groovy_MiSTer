@@ -679,6 +679,12 @@ wire  [23:0] hdmi_data;
 wire         hdmi_vs, hdmi_hs, hdmi_de, hdmi_vbl, hdmi_brd;
 wire         freeze;
 
+// With ascal absent, retain the mapped inactive value explicitly. The palette
+// edge detector must not consume an undriven net. HDMI remains disabled.
+`ifdef MISTER_DEBUG_NOHDMI
+assign hdmi_vs = 1'b0;
+`endif
+
 `ifndef MISTER_DEBUG_NOHDMI
 	wire clk_hdmi  = hdmi_clk_out;
 

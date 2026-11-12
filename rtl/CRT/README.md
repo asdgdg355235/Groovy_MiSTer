@@ -1,6 +1,6 @@
 # CRT geometry RTL
 
-The following files are copied without modification from
+The following files were originally imported from
 [`asdgdg355235/MiSTer-CRT-Adjust`](https://github.com/asdgdg355235/MiSTer-CRT-Adjust),
 commit [`04be786998d04769238b09190df1e36279f6e84a`](https://github.com/asdgdg355235/MiSTer-CRT-Adjust/commit/04be786998d04769238b09190df1e36279f6e84a):
 
@@ -9,6 +9,10 @@ commit [`04be786998d04769238b09190df1e36279f6e84a`](https://github.com/asdgdg355
 | `crt_vsize_fixed.sv` | `rtl/crt_vsize_fixed.sv` |
 | `crt_edge_mask.sv` | `rtl/crt_edge_mask.sv` |
 | `COPYING` | `LICENSE` |
+
+`crt_vsize_fixed.sv` now contains local memory/address timing changes. See
+[`docs/crt-integrated-timing-candidate.md`](../../docs/crt-integrated-timing-candidate.md)
+for the current source changes, reference tests & pending FPGA checks.
 
 `crt_vsize_fixed` derives its gamma-2 two-tap filter & square-root encoder
 from rmonic79's `crt_vsize.sv`. Its field-local storage & parallel pipeline

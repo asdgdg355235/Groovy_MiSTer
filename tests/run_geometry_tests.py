@@ -94,6 +94,15 @@ def main():
         inherited=subprocess.check_output(['git','show',BASE+':'+path],cwd=ROOT)
         assert (ROOT/path).read_bytes()==inherited, 'unexpected protocol/controller/audio/timing change: '+path
     framework=(ROOT/'sys/sys_top.v').read_text()
+    inactive_hdmi = '''// With ascal absent, retain the mapped inactive value explicitly. The palette
+// edge detector must not consume an undriven net. HDMI remains disabled.
+`ifdef MISTER_DEBUG_NOHDMI
+assign hdmi_vs = 1'b0;
+`endif
+
+'''
+    assert framework.count(inactive_hdmi) == 1
+    framework = framework.replace(inactive_hdmi, '')
     without_anchor=re.sub(r'`ifdef GROOVY_CRT_GEOMETRY\n.*?`endif\n','',framework,flags=re.S)
     original_framework=subprocess.check_output(['git','show',BASE+':sys/sys_top.v'],cwd=ROOT).decode()
     assert without_anchor==original_framework, 'unexpected framework change for unrelated cores'
