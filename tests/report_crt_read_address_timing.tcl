@@ -26,6 +26,10 @@ foreach {label pattern} {wcol {*u_vsize*wcol*} hb {*u_vsize*hb_d*}} {
     if {[get_collection_size $sources] == 0} {error "Missing upstream source $label"}
     report_timing -setup -from $sources -to $ram_endpoints -detail full_path -npaths 30 -nworst 1 -show_routing -file "output_files/crt_upstream_${label}_setup.txt"
 }
+# Trace PoC_V independently, including compiler-created capture registers.
+set poc_sources [get_registers {*|PoC_V*}]
+if {[get_collection_size $poc_sources] == 0} {error "Missing PoC_V timing sources"}
+report_timing -setup -from $poc_sources -detail full_path -npaths 30 -nworst 1 -show_routing -file output_files/crt_poc_v_setup.txt
 # Reassess transport endpoints independently of the global top-30 list.
 set lz4_endpoints [get_registers {*lz4_compressed_bytes*}]
 if {[get_collection_size $lz4_endpoints] == 0} {error "LZ4 endpoint filter did not match"}

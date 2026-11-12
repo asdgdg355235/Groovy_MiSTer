@@ -16,16 +16,32 @@ def check(path):
     assignments = [line.split('\t')[1:] for line in dump.splitlines() if line.startswith('ASSIGN\t')]
     sources = set()
     rows = []
-    for row in csv.reader(Path(path).open(), delimiter='\t'):
-        if row[0] == 'DRIVER':
-            sources.add(row[2])
-        elif row[0] == 'RAM_ADDRESS':
-            sources.add(row[6])
-            if row[3] == 'PORTBADDR' and int(row[4]) < 5:
-                rows.append(row)
+    with Path(path).open() as audit:
+        for row in csv.reader(audit, delimiter='\t'):
+            if row[0] == 'DRIVER':
+                sources.add(row[2])
+            elif row[0] in ('RAM_ADDRESS', 'READ_CONTROL_EDGE'):
+                sources.add(row[6])
+                if row[0] == 'RAM_ADDRESS' and row[3] == 'PORTBADDR' and int(row[4]) < 5:
+                    rows.append(row)
     for name, source, target in assignments:
         if source not in sources:
             raise ValueError(f'{name}: exact source is missing: {source}')
+        if name.startswith('crt_read_qual_'):
+            match = re.fullmatch(r'crt_read_qual_([012])_(even|odd)', name)
+            if not match:
+                raise ValueError(f'Invalid qualification copy: {name}')
+            part, bank = match.groups()
+            expected = f'emu:emu|crt_vsize_fixed:u_vsize|crt_read_{part}_{bank}_bit'
+            if target != expected + '*':
+                raise ValueError(f'{name}: invalid destination prefix: {target}')
+            created = {'emu:emu|crt_vsize_fixed:u_vsize|' + a[0] for a in assignments
+                       if re.fullmatch(r'crt_read_[012]_(even|odd)_bit[0-4]', a[0])}
+            selected = {n for n in created if n.startswith(expected)}
+            if selected != {expected + str(bit) for bit in range(5)}:
+                raise ValueError(f'{name}: expected five final-driver destinations')
+            print(f'PASS {name}: exact comparator exists; five final targets created by preserved assignments (Fitter ordering unverified)')
+            continue
         if name.startswith('crt_read_word_'):
             created = {'emu:emu|crt_vsize_fixed:u_vsize|' + a[0] for a in assignments if re.fullmatch(r'crt_read_[012]_(even|odd)_bit3', a[0])}
             if target not in sources and target not in created:

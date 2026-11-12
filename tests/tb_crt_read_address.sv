@@ -56,6 +56,8 @@ module tb_crt_read_address #(parameter LINE_PX=32);
     integer cycles=0, pixels=0, writes=0, line_starts=0, stalls=0;
     integer advances[0:2]='{0,0,0};
     integer wraps=0, last_slot=0, seed=32'h193fe207, scenario_id=0;
+    integer qual_last=0, qual_saturated=0, qual_saturated_stall=0, qual_restart=0;
+    reg was_saturated=0;
     reg fault=0;
     task automatic compare_addresses;
         begin
@@ -71,6 +73,16 @@ module tb_crt_read_address #(parameter LINE_PX=32);
         begin
             @(negedge clk); #1;
             compare_addresses();
+            // Require real threshold crossings, held false qualification under
+            // CE gaps, and the next line's same-cycle address bypass. All six
+            // captured RAM ports/data and registered video are compared below.
+            if (dut.wcol == LINE_PX-1 && ce && !hb) qual_last++;
+            if (dut.wcol == LINE_PX) begin
+                qual_saturated++;
+                if (!ce) qual_saturated_stall++;
+            end
+            if (was_saturated && dut.line_begin) qual_restart++;
+            was_saturated = dut.wcol == LINE_PX;
             if (dut.line_begin && dut.output_now && !dut.first_output) begin
                 if (dut.advance_rows <= 2) advances[dut.advance_rows]++;
                 if (dut.slot_now < last_slot) wraps++;
@@ -150,6 +162,11 @@ module tb_crt_read_address #(parameter LINE_PX=32);
         end
         if(advances[0]==0 || advances[1]==0 || advances[2]==0 || wraps==0)
             $fatal(1,"missing source-step or ring-wrap coverage");
+        if (qual_last==0 || qual_saturated==0 || qual_saturated_stall==0 || qual_restart==0)
+            $fatal(1,"missing qualification boundary coverage: %0d/%0d/%0d/%0d",
+                qual_last,qual_saturated,qual_saturated_stall,qual_restart);
+        $display("PASS: qualifier boundary last=%0d saturated=%0d CE-stall=%0d next-line=%0d",
+            qual_last,qual_saturated,qual_saturated_stall,qual_restart);
         $display("PASS: %0d clocks, %0d active pixels, %0d writes, advances=%0d/%0d/%0d wraps=%0d stalls=%0d lines=%0d",
                  cycles,pixels,writes,advances[0],advances[1],advances[2],wraps,stalls,line_starts);
         $finish;

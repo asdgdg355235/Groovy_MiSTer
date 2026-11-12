@@ -25,6 +25,7 @@ quartus_sh -t sys/build_id.tcl pre_flow Groovy Groovy 2>&1 | tee output_files/cr
 }
 quartus_map Groovy -c Groovy 2>&1 | tee output_files/crt_read_address_compile.log
 quartus_cdb -t tests/report_crt_local_drivers.tcl map 2>&1 | tee output_files/crt_local_drivers_map.log
+python3 tests/summarize_crt_local_drivers.py output_files/crt_local_drivers_map.tsv > output_files/crt_local_drivers_map.json
 # Audit exact sources before fitting; stop on the first missing-node warning.
 python3 tests/run_crt_duplicate_fit.py 2>&1 | tee -a output_files/crt_read_address_compile.log
 quartus_asm Groovy -c Groovy 2>&1 | tee -a output_files/crt_read_address_compile.log
@@ -42,5 +43,6 @@ quartus_sta -t tests/report_crt_read_address_timing.tcl 2>&1 | tee output_files/
 for stage in cmp; do
     quartus_cdb -t tests/report_crt_local_drivers.tcl "$stage" 2>&1 | tee "output_files/crt_local_drivers_${stage}.log"
 done
+python3 tests/summarize_crt_local_drivers.py output_files/crt_local_drivers_cmp.tsv > output_files/crt_local_drivers_cmp.json
 echo "Results: $OUT/output_files"
 echo 'Review setup/hold slack even when the compilation exit status is successful.'

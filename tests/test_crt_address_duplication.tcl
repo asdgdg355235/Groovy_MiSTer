@@ -8,7 +8,7 @@ proc set_instance_assignment {args} {
     lappend assignments $args
 }
 source $root/rtl/CRT/crt_address_duplication.qsf
-if {[llength $assignments] != 36} {error "Expected 36 targeted assignments"}
+if {[llength $assignments] != 42} {error "Expected 42 targeted assignments"}
 set names {}
 foreach a $assignments {
     lassign $a flag type name from source to sink
@@ -17,6 +17,9 @@ foreach a $assignments {
     if {[regexp {^crt_read_word_([012])_(even|odd)_bit3$} $name -> part bank]} {
         set observed_source {emu:emu|crt_vsize_fixed:u_vsize|wa[3]~3}
         set observed_sink [format {emu:emu|crt_vsize_fixed:u_vsize|crt_read_%d_%s_bit3} $part $bank]
+    } elseif {[regexp {^crt_read_qual_([012])_(even|odd)$} $name -> part bank]} {
+        set observed_source {emu:emu|crt_vsize_fixed:u_vsize|LessThan13~1}
+        set observed_sink [format {emu:emu|crt_vsize_fixed:u_vsize|crt_read_%d_%s_bit*} $part $bank]
     } else {
         if {![regexp {^crt_read_([012])_(even|odd)_bit([0-4])$} $name -> part bank bit]} {error $name}
         set observed_source [format {emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[%d]~%d} $bit $bit]
@@ -32,7 +35,7 @@ foreach a $assignments {
     }
     if {$source ne $observed_source || ![expr {$sink eq $observed_sink || ([string index $sink end] eq "*" && [string first [string range $sink 0 end-1] $observed_sink] == 0)}]} {error "Nonmatching target: $a"}
 }
-puts "PASS: 36 unique assignments; observed source names match; six bank targets remain disjoint"
+puts "PASS: 42 unique assignments; observed source names match; six bank targets remain disjoint"
 puts "Exact source names and literal destination prefixes only; Quartus assignment acceptance and physical duplication are unverified"
 
 if {[llength $argv] && [lindex $argv 0] eq "--dump"} {

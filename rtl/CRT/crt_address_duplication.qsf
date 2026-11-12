@@ -26,3 +26,16 @@ foreach part {0 1 2} {
     }
 }
 unset part bank read_sink word_copy
+
+# Localize only the wcol < LINE_PX read qualification feeding final bits 0..4.
+# Exact comparator name and downstream groups are observed in 42ec0b2's audit.
+# Original comparator keeps its other consumers; all previous copies stay intact.
+foreach part {0 1 2} {
+    foreach bank {even odd} {
+        set qual_sink [format {emu:emu|crt_vsize_fixed:u_vsize|crt_read_%d_%s_bit*} $part $bank]
+        set qual_copy [format {crt_read_qual_%d_%s} $part $bank]
+        set_instance_assignment -name DUPLICATE_ATOM $qual_copy \
+            -from {emu:emu|crt_vsize_fixed:u_vsize|LessThan13~1} -to $qual_sink
+    }
+}
+unset part bank qual_sink qual_copy

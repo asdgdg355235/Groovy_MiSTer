@@ -15,7 +15,7 @@ foreach_in_collection node [get_atom_nodes] {
     if {$local} {incr local_nodes}
     foreach port [get_atom_oports -node $node] {
         set fo [get_atom_port_info -node $node -type oport -port_id $port -key fanout]
-        if {$local || [llength $fo] >= 1000} {
+        if {$local || [string first "LessThan13" $name] >= 0 || [llength $fo] >= 1000} {
             set pn [get_atom_port_info -node $node -type oport -port_id $port -key type]
             puts $out "DRIVER\t$node\t$name\t$pn\t[llength $fo]"
         }
