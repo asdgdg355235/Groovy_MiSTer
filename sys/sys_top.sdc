@@ -75,3 +75,8 @@ set_false_path -from {ascal|o_hsize* ascal|o_vsize*}
 
 set_false_path -from {mcp23009|flg_*}
 set_false_path -to   {sysmem|fpga_interfaces|clocks_resets*}
+
+# Onboard LED[2] is a status indicator (sys_top LED assignment, PIN_V16 in
+# sys/sys.tcl); no external clocked receiver samples this display-only pin.
+# This does not exempt VGA, audio, I2C, SD or USER_IO paths.
+set_false_path -to [get_ports {LED[2]}]

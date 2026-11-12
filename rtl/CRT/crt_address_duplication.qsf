@@ -1,24 +1,9 @@
-# Retain the successful six-way final read-driver split from 47ffb26.
-# Retain the best measured final-driver assignment set; retire later wa[3] and
-# comparator copies. Those builds had worse global timing; the new RTL removes
-# the read comparator dependency instead of adding another copy.
-# The user-run flow resolves these sources from its fresh map before fitting.
+# No speculative synthesis-name fallback. Mapping does not apply Fitter
+# DUPLICATE_ATOMs. The staged user-run flow resolves exact map sources before
+# fitting. A direct Fitter settings read without that file is rejected.
+# Only the staged runner is supported for a measured candidate build.
 if {[file exists output_files/crt_address_duplication_resolved.qsf]} {
     source output_files/crt_address_duplication_resolved.qsf
-} else {
-    # Names come from the completed Candidate A map atom audit (17.0.2.602).
-    # Exact -from names copied from the user's completed map audit.
-    # Tcl braces/format preserve literal array brackets; no source wildcards.
-    foreach part {0 1 2} {
-        foreach bank {even odd} {
-            for {set bit 0} {$bit < 5} {incr bit} {
-                set read_driver [format {emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[%d]~%d} $bit $bit]
-                set ram_destination [format {emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[%d].%s_ram|*} $part $bank]
-                set duplicate_name [format {crt_read_%d_%s_bit%d} $part $bank $bit]
-                set_instance_assignment -name DUPLICATE_ATOM $duplicate_name -from $read_driver -to $ram_destination
-            }
-        }
-    }
-    unset part bank bit read_driver ram_destination duplicate_name
-
+} elseif {[info exists quartus(nameofexecutable)] && [string match *quartus_fit* $quartus(nameofexecutable)]} {
+    error "Run tests/run_crt_read_address_quartus.sh to resolve fresh map targets before fitting"
 }

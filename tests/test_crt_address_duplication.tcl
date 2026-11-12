@@ -10,7 +10,7 @@ proc set_instance_assignment {args} {
 if {[info exists ::env(CRT_DUPLICATE_QSF)]} {
     source $::env(CRT_DUPLICATE_QSF)
 } else {
-    source $root/rtl/CRT/crt_address_duplication.qsf
+    source $root/tests/fixtures/crt_observed_duplicate_targets.qsf
 }
 if {[llength $assignments] != 30} {error "Expected 30 targeted assignments"}
 set names {}

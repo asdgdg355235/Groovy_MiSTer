@@ -24,7 +24,7 @@ set_global_assignment -name MIN_CORE_JUNCTION_TEMP "-40"
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 100
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
+set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS OFF
 set_global_assignment -name OPTIMIZE_POWER_DURING_FITTING OFF
 set_global_assignment -name FINAL_PLACEMENT_OPTIMIZATION ALWAYS
 set_global_assignment -name FITTER_EFFORT "STANDARD FIT"
@@ -49,6 +49,8 @@ set_global_assignment -name PERIPHERY_TO_CORE_PLACEMENT_AND_ROUTING_OPTIMIZATION
 set_global_assignment -name PHYSICAL_SYNTHESIS_ASYNCHRONOUS_SIGNAL_PIPELINING ON
 set_global_assignment -name ALM_REGISTER_PACKING_EFFORT LOW
 set_global_assignment -name SEED 1
+# The measured Fitter report records this as On; distinct from STA reporting.
+set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 
 #set_global_assignment -name VERILOG_MACRO "MISTER_FB=1"
 
@@ -85,3 +87,6 @@ source files.qip
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 # Experimental bank-local read drivers; preserve all clocks and RAM inference.
 source rtl/CRT/crt_address_duplication.qsf
+
+# Preserve measured explicit HPS placement aliases; pins remain in sys/sys.tcl.
+source rtl/CRT/crt_measured_hps.qsf

@@ -1,0 +1,12 @@
+# Historical observed map names, offline test fixture ONLY.
+foreach part {0 1 2} {
+    foreach bank {even odd} {
+        for {set bit 0} {$bit < 5} {incr bit} {
+            set read_driver [format {emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[%d]~%d} $bit $bit]
+            set ram_destination [format {emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[%d].%s_ram|*} $part $bank]
+            set duplicate_name [format {crt_read_%d_%s_bit%d} $part $bank $bit]
+            set_instance_assignment -name DUPLICATE_ATOM $duplicate_name -from $read_driver -to $ram_destination
+        }
+    }
+}
+unset part bank bit read_driver ram_destination duplicate_name

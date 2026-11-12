@@ -41,5 +41,8 @@ def run(command, log):
 
 if __name__ == '__main__':
     resolved = Path('output_files/crt_address_duplication_resolved.qsf')
-    check('output_files/crt_local_drivers_map.tsv', resolved if resolved.exists() else None)
+    if os.environ.get('CRT_DUPLICATION_DISABLED') != '1':
+        if not resolved.exists():
+            raise SystemExit('Missing fresh resolved QSF; use staged build runner')
+        check('output_files/crt_local_drivers_map.tsv', resolved)
     raise SystemExit(run(['quartus_fit', 'Groovy', '-c', 'Groovy'], 'output_files/duplicate_fit.log'))
