@@ -17,7 +17,7 @@ def baseline_source():
     if path:
         return Path(path).read_text()
     try:
-        return subprocess.check_output(['git', 'show', 'HEAD:rtl/CRT/crt_vsize_fixed.sv'],
+        return subprocess.check_output(['git', 'show', '00136c5f03de63d80d8e78208bb6802cfe53c53d:rtl/CRT/crt_vsize_fixed.sv'],
                                        cwd=ROOT, stderr=subprocess.DEVNULL, text=True)
     except (OSError, subprocess.CalledProcessError):
         return None
@@ -35,10 +35,7 @@ class ExtractionChecks(unittest.TestCase):
             # by RTL equivalence/SMT, not by a whole-prefix text comparison.
             self.assertEqual(BASELINE[BASELINE.index(START):BASELINE.index(END)],
                              NEW[NEW.index(START):NEW.index(END)])
-            expected_pipeline = BASELINE[BASELINE.index(END):].replace(
-                "read_lane <= col_now < LINE_PX ? lane_now : 3'd0;",
-                "read_lane <= read_column_in_range ? lane_now : 3'd0;")
-            self.assertEqual(expected_pipeline, NEW[NEW.index(END):])
+            self.assertEqual(BASELINE[BASELINE.index(END):], NEW[NEW.index(END):])
         self.assertIn('wire write_even = write_pixel && flush_group && !write_slot[0];', NEW)
         self.assertIn('wire write_odd  = write_pixel && flush_group &&  write_slot[0];', NEW)
         for x in ['wa', 'ra_even', 'ra_odd', 'write_pixel', 'flush_group', 'pack_next', 'read_lane']:

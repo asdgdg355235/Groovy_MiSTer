@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = os.environ.get('CRT_READ_BASELINE', 'f930d43ee3e206859dafe7a6c287113a7a957585')
+BASE = os.environ.get('CRT_READ_BASELINE', '00136c5f03de63d80d8e78208bb6802cfe53c53d')
 
 with tempfile.TemporaryDirectory(prefix='crt-read-address-') as tmp:
     tmp = Path(tmp)

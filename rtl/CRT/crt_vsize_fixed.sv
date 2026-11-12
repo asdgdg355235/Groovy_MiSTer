@@ -40,10 +40,6 @@ module crt_vsize_fixed #(
     wire line_begin = ce_in && !hb_in && hb_d;
     wire field_begin = ce_in && vs_in && !vs_d;
     reg [15:0] wcol = 0, wrow = 0, line_no = 0;
-    // Redundant state, not an address pipeline: always equals wcol < LINE_PX.
-    // Update on precisely the wcol assignments, including during reset. wcol
-    // itself is not reset, so resetting this flag separately would be wrong.
-    reg column_in_range = (16'd0 < LINE_PX);
     // Track the exact quotient/remainder of wcol/5 on the same CE cycles.
     // The original wcol counter is retained for pixel/window comparisons.
     reg [AW-1:0] group_col = 0;
@@ -76,27 +72,18 @@ module crt_vsize_fixed #(
                  && width != 0 && width <= LINE_PX && height >= 32
                  && height <= 1024 && requested_height >= 32;
     wire [16:0] shifted_rem = {remainder[15:0],dividend[div_bit[4:0]]};
-    // The row advance is step's integer part plus the fractional carry. Avoid
-    // subtracting position again after a full 32-bit addition. Preserve the
-    // original 17-bit subtraction at position wrap by toggling bit 16.
-    wire [16:0] fraction_sum = {1'b0,position[15:0]} + {1'b0,step[15:0]};
-    wire [16:0] row_increment = {1'b0,step[31:16]} + {16'd0,fraction_sum[16]};
-    // Keep position on one carry chain; only expose its overflow for wrap.
-    wire [32:0] position_sum = {1'b0,position} + {1'b0,step};
-    wire [31:0] position_next = position_sum[31:0];
-    wire [16:0] advance_rows = row_increment ^ {position_sum[32],16'd0};
+    wire [31:0] position_next = position + step;
+    wire [16:0] advance_rows = {1'b0,position_next[31:16]} - {1'b0,position[31:16]};
     wire [SW-1:0] next_aslot = (advance_rows == 2) ? next_slot(next_slot(aslot))
                                              : (advance_rows == 1) ? next_slot(aslot) : aslot;
     wire first_source = !started && !vb_in;
-    wire [15:0] read_line_no = first_source ? 16'd0 : line_no + 16'd1;
-    wire [15:0] line_now = line_begin ? read_line_no : line_no;
+    wire [15:0] line_now = line_begin ? (first_source ? 16'd0 : line_no + 1'b1) : line_no;
     wire [15:0] row_now = line_begin && !vb_in ? (first_source ? 16'd0 : wrow + 1'b1) : wrow;
     wire [SW-1:0] write_slot = line_begin && !vb_in ? (first_source ? SW'(0) : next_slot(wslot)) : wslot;
     wire [15:0] col_now = line_begin ? 16'd0 : wcol;
-    wire first_output = line_begin && read_line_no == {10'd0,delay_lines};
-    wire output_line = (started || first_source) && read_line_no >= {10'd0,delay_lines}
-                    && {1'b0,read_line_no} < {1'b0,out_height}+{11'd0,delay_lines};
-    wire output_now = line_begin ? output_line : line_active;
+    wire first_output = line_begin && line_now == {10'd0,delay_lines};
+    wire output_now = line_begin ? ((started || first_source) && line_now >= {10'd0,delay_lines}
+                               && {1'b0,line_now} < {1'b0,out_height}+{11'd0,delay_lines}) : line_active;
     wire [31:0] pos_now = line_begin ? (first_output ? 32'd0 : position_next) : position;
     wire [15:0] src_now = first_output ? 16'd0 : (line_begin ? source_row + advance_rows[15:0] : source_row);
     wire [SW-1:0] slot_now = first_output ? SW'(0) : (line_begin ? next_aslot : aslot);
@@ -113,7 +100,6 @@ module crt_vsize_fixed #(
                 started <= 1;
                 line_no <= line_now;
                 wcol <= 1;
-                column_in_range <= (16'd1 < LINE_PX);
                 group_col <= 0;
                 pixel_lane <= 3'd1;
                 if (!vb_in) begin
@@ -125,17 +111,12 @@ module crt_vsize_fixed #(
                 line_active <= output_now;
                 if(output_now && !vs_in) displayed_rows <= displayed_rows + 1'b1;
                 if (output_now) begin
-                    // This branch already establishes line_begin. Do not put
-                    // its late hb/CE-dependent mux in front of the arithmetic.
-                    position <= first_output ? 32'd0 : position_next;
-                    source_row <= first_output ? 16'd0 : source_row + advance_rows[15:0];
-                    aslot <= first_output ? SW'(0) : next_aslot;
+                    position <= pos_now;
+                    source_row <= src_now;
+                    aslot <= slot_now;
                 end
             end else if (!hb_in && wcol < LINE_PX) begin
                 wcol <= wcol + 1'b1;
-                // This branch already proves wcol < LINE_PX. Detect the
-                // last valid column without adding another counter carry chain.
-                column_in_range <= (LINE_PX >= 65536) || (wcol != 16'(LINE_PX-1));
                 if (pixel_lane == GROUP_PX-1) begin
                     pixel_lane <= 0;
                     group_col <= group_col + 1'b1;
@@ -224,8 +205,7 @@ module crt_vsize_fixed #(
     // register update. The bypasses below retain that same-cycle behavior.
     wire [AW-1:0] word_now = line_begin ? AW'(0) : group_col;
     wire [2:0] lane_now = line_begin ? 3'd0 : pixel_lane;
-    wire read_column_in_range = line_begin ? (16'd0 < LINE_PX) : column_in_range;
-    wire [AW-1:0] read_word = read_column_in_range ? word_now : AW'(0);
+    wire [AW-1:0] read_word = col_now < LINE_PX ? word_now : AW'(0);
     // Precompute the write-slot and word-add cases before line_begin as well.
     // Keep the ungated current word, including non-writing saturated columns.
     wire [SW-1:0] write_line_slot = vb_in ? wslot : (first_source ? SW'(0) : next_slot(wslot));
@@ -237,10 +217,11 @@ module crt_vsize_fixed #(
     // and read_word is zero. Keeping the bank wrap/selection and word add
     // ahead of that final mux removes ce_in from their combinational cone.
     // No register or RAM read cycle is added; blanking reads are preserved.
+    wire [15:0] read_line_no = first_source ? 16'd0 : line_no + 16'd1;
     wire [SW-1:0] read_line_slot = read_line_no == {10'd0,delay_lines} ? SW'(0) : next_aslot;
     wire [SW-1:0] read_line_bslot = next_slot(read_line_slot);
     wire [SW-1:0] read_bslot = next_slot(aslot);
-    wire [AW-1:0] read_current_word = column_in_range ? group_col : AW'(0);
+    wire [AW-1:0] read_current_word = wcol < LINE_PX ? group_col : AW'(0);
     wire [AW-1:0] ra_even_line = address_word(read_line_slot[0] ? read_line_bslot : read_line_slot, AW'(0));
     wire [AW-1:0] ra_odd_line = address_word(read_line_slot[0] ? read_line_slot : read_line_bslot, AW'(0));
     wire [AW-1:0] ra_even_current = address_word(aslot[0] ? read_bslot : aslot, read_current_word);
@@ -296,7 +277,7 @@ module crt_vsize_fixed #(
     end endgenerate
     reg [2:0] read_lane;
     always @(posedge clk) begin
-        read_lane <= read_column_in_range ? lane_now : 3'd0;
+        read_lane <= col_now < LINE_PX ? lane_now : 3'd0;
     end
     reg swap0;
     reg [7:0] alpha0, alpha1;
