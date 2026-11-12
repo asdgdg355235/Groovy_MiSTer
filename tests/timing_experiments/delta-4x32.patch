@@ -1,0 +1,26 @@
+--- a/Groovy.sv
++++ b/Groovy.sv
+@@ -797,6 +797,14 @@
+ reg        PoC_lz4_delta = 1'b0;
+ reg [6:0]  PoC_lz4_delta_index = 7'd0;
+ reg [63:0] PoC_lz4_delta_FB[128];
++// Independent experiment: 4 groups of 32 existing delta words.
++wire [63:0] delta_read_groups[0:3];
++genvar delta_bank;
++generate for(delta_bank=0;delta_bank<4;delta_bank=delta_bank+1) begin : delta_lookup
++    (* keep = "true" *) wire [63:0] group_value = PoC_lz4_delta_FB[{2'(delta_bank),PoC_lz4_delta_index[4:0]}];
++    assign delta_read_groups[delta_bank] = group_value;
++end endgenerate
++wire [63:0] delta_read_value = delta_read_groups[PoC_lz4_delta_index[6:5]];
+ reg        PoC_lz4_delta_req;
+ reg [27:0] PoC_lz4_delta_bytes = 28'd0;
+ 
+@@ -1875,7 +1883,7 @@
+  .lz4_writed_bytes       (lz4_writed_bytes),
+  .lz4_readed_bytes       (lz4_readed_bytes),
+  .lz4_read_ready         (lz4_read_ready),
+- .lz4_delta_long         (PoC_lz4_delta_FB[PoC_lz4_delta_index])      
++ .lz4_delta_long         (delta_read_value)
+ );   
+ 
+ 

@@ -43,5 +43,14 @@
     "result_sha256": "ea5c07459b051e95f207fe4c3c4db8cda06fd7815b22128c8e8c315ed23f5445",
     "cone": "delta index -> grouped existing buffer read -> unchanged byte additions/decode",
     "proof": "delta"
+  },
+  "delta-4x32": {
+    "path": "Groovy.sv",
+    "patch": "delta-4x32.patch",
+    "patch_sha256": "6baf8aaff7865805aa17f21be1722aade976c4810da3e9ecf6eeaaa21a830539",
+    "baseline_sha256": "62e0e7bdf221f7060340a4a1a7a9942baf0ea3482f4469c088b01626998139ca",
+    "result_sha256": "34b829ff56180999930a8043321043f0c2c936d10f00c7ceca2ce8b55821fa0f",
+    "cone": "delta index -> grouped existing buffer read -> unchanged byte additions/decode",
+    "proof": "delta"
   }
 }
