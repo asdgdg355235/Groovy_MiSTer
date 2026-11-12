@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare Experiment A against the exact, fitted counter revision."""
+"""Compare read/write address experiments against the fitted counter revision."""
 import os
 from pathlib import Path
 import shlex

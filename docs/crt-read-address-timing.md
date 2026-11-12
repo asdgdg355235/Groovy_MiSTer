@@ -1,12 +1,12 @@
 # CRT read-address timing experiment
 
-## Diagnosis and reference basis
+## Diagnosis & reference basis
 
 Baseline: `fa4c2cd5c3e6772d6da99b8e9ed0dde533de0fd0` on
 `experimental/crt-geometry-mlab-timing`. The supplied counter reports show
 `ce_pix` feeding `line_now`, the first-output comparison, source-slot/bank
 selection & an address adder before the distributed RAM read mux. The adder
-output has fanout 1301. Worst setup is -0.921 ns at a 12.081 ns period;
+output has fanout 1301. Worst setup is -0.921 ns at a 12.081 ns period.
 The report lists 3.473 ns cell delay & 8.855 ns routing, with a -0.002 ns
 interconnect correction, for 12.326 ns data delay.
 
@@ -76,9 +76,10 @@ read ports, four marked MLAB & two M10K. This is separate from Quartus mapping.
 
 ## FPGA measurements
 
-Experiment A ran fresh synthesis, fitting, assembly & TimeQuest with Quartus
+Experiments A & C ran fresh synthesis, fitting, assembly & TimeQuest with Quartus
 17.0.2 Lite, the existing seed/options & 12.081 ns clock. Every stage executed;
-the runner completed successfully. The supplied four-second counter compile
+both runners completed successfully. Compilation success does not imply
+setup timing closure. The supplied four-second counter compile
 log used smart recompilation, so the counter baseline comes from its full fit
 & STA reports rather than that log's elapsed time.
 
@@ -87,7 +88,7 @@ log used smart recompilation, so the counter baseline comes from its full fit
 | Original divider, request history | -9.197 ns | +0.250 ns | Not supplied | Divider to MLAB address | Earlier report | Historical result | Reported passed |
 | Counter, supplied reports | -0.921 ns | +0.247 ns | -23.800 ns | `ce_pix` to MLAB read mux | 553 M10Ks / 491520 MLAB bits | Rerun passed | Passed |
 | Read-address Experiment A, `3d63b96` | -0.380 ns | +0.254 ns | -60.463 ns | `hb_d` to MLAB write decoder | 553 M10Ks / 491520 MLAB bits | Passed | Passed |
-| Write-address Experiment C | Pending | Pending | Pending | Pending | Pending | Passed | Pending |
+| Write-address Experiment C, `4390a9c` | -0.132 ns | +0.263 ns | -0.267 ns | `vga|hb` to MLAB read mux | 553 M10Ks / 491520 MLAB bits | Passed | Passed |
 
 The original `ce_pix`-to-RAM cone now passes with +0.012 ns slack, 11.383 ns
 data delay & six logic levels. Its reported cell/routing delays are
@@ -114,6 +115,73 @@ Experiment C precomputes the two write-address cases before the same final
 saturated non-writing columns. It changes neither write enables/data nor
 storage, and adds no register. The same cycle-by-cycle RTL comparison runs
 against the fitted counter baseline before a separate fresh C build.
+
+## Experiment C results & remaining constraint
+
+C retains the read change from A & passes the same 6698817-clock comparison,
+including registered RAM data & every video output. The fitted RTL revision
+is `4390a9c7707ae645289ba4c9777e5c55a859e8e0`. Fresh compilation finishes
+with 32947 ALMs, 31418 fitted registers, 21 DSPs, 553 M10Ks & 491520 MLAB
+bits. All six 3072x40 RAMs retain their original four-MLAB/two-M10K mapping;
+the RAM helper, QSF, SDCs, native VGA, controllers & transport are unchanged.
+
+Worst setup is -0.132 ns, hold +0.263 ns & setup TNS -0.267 ns. Fmax is
+81.88 MHz against the unchanged 82.77 MHz target. The worst path has six
+logic levels & 11.493 ns data delay: 2.834 ns cell, 8.657 ns routing &
+0.002 ns interconnect correction. Clock skew is -0.520 ns. The exact path is:
+
+- Launch: `emu:emu|vga:vga|hb`.
+- Logic: `u_vsize|line_begin~0_Duplicate` (fanout 375), `wa[3]~3`
+  (15401), `ra_odd[3]~3` (15400), MLAB LUTRAM output & two read-mux levels.
+- Capture: `emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[39]_OTERM2535`.
+
+The generated `wa[3]` name is synthesis naming within a shared address cone;
+the endpoint & LUTRAM read-mux chain identify this as a read path. The old
+source-slot selection/adder chain no longer appears on this worst path.
+The remaining constraint is address broadcast & MLAB read-mux routing, with
+15400 fanout on the address bit. The targeted `ce_pix`-to-RAM path is
+-0.021 ns, with 11.382 ns data delay, six levels & 2.718/8.663 ns cell/routing
+delay plus 0.001 ns interconnect correction. It passed narrowly in A but
+fails in C's different physical placement; the CE path has shortened, not
+been eliminated.
+
+The 30-path report contains five failing endpoints: two odd-bank read
+registers at -0.132/-0.123 ns & three `state[0]` to
+`lz4_compressed_bytes[29]`, `[30]` & `[29]~DUPLICATE` paths at -0.004 ns.
+The first LZ4 path has six levels, 11.522 ns data delay, 3.060 ns cell delay,
+8.463 ns routing & -0.001 ns interconnect correction. This transport logic
+has not been changed. Worst hold is `u_edge_mask|x[10]~DUPLICATE` to
+`u_edge_mask|x[10]`, +0.263 ns.
+
+This revision does not close setup. The next measured candidate is bank-local
+copies of the final address mux/control, followed by inspection that Quartus
+has retained separate drivers instead of merging the address broadcast.
+Such a trial must preserve the same clock-edge addresses & synchronous RAM
+latency, repeat these RTL tests & obtain another full physical build.
+No local-driver duplication has been implemented or measured in this revision.
+The -0.004 ns transport paths must also pass before declaring closure.
+
+## Constraints & inherited warnings
+
+TimeQuest reports zero unconstrained or illegal clocks. It still reports
+three unconstrained input ports / 13 paths & 48 output ports / 66 paths,
+matching the supplied baseline. Inputs are `HDMI_I2C_SDA`, `IO_SDA` &
+`SDCD_SPDIF`; outputs include HDMI, shared audio & expansion pins. These
+board I/O paths need interface-specific review; internal clock coverage does
+not prove those external interfaces meet timing.
+
+Unmatched filters include removed HDMI PLL clocks, `spi|sclk_out`, `VSET`,
+`hcalc`, `wcalc`, HDMI dimensions & scaler fields absent from this CRT-only
+netlist. These warnings do not exempt the active CRT clock: its setup paths
+are constrained & reported as failing. No false paths, multicycle exceptions,
+clock periods or SDC assignments were added or weakened.
+
+`hdmi_vs` remains undriven in the HDMI-disabled build (map warnings 10858 &
+10030 at `sys_top.v:679`). Ignored fitter assignments include unused HDMI /
+SDRAM fast I/O registers, removed HDMI PLL settings & the absent SPI HPS
+location. These inherited warnings are separate from the RTL timing change.
+
+## Reproduction
 
 Run `bash tests/run_crt_read_address_quartus.sh` with Quartus 17.0.2 on PATH.
 The runner copies the source into a new build directory without prior DBs,
