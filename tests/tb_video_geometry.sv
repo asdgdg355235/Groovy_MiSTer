@@ -27,6 +27,33 @@ module tb_video_geometry;
         .cmd_blit_vsync(1'b0),.vsync_skip(1'b0),.vsync_overlay(1'b0),
         .hsync(hs),.vsync(vs),.hblank(hb),.vblank(vb),.vga_f1(field),
         .r(r),.g(g),.b(b),.vcount(vcount));
+`ifdef TIMING_REFERENCE
+    wire ref_hs,ref_vs,ref_hb,ref_vb,ref_field;
+    wire [7:0] ref_r,ref_g,ref_b;
+    wire [15:0] ref_vcount;
+    vga_reference reference_video (
+        .clk_sys(clk),.ce_pix(ce),.vga_reset(reset),.vga_frame_reset(reset),
+        .vga_soft_reset(1'b0),.vga_wait_vblank(1'b0),
+        .H(width),.HFP(8'd8),.HS(8'd8),.HBP(8'd16),
+        .V(height),.VFP(8'd4),.VS(8'd6),.VBP(8'd34),
+        .interlaced(interlace),.FB_interlaced(interlace),
+        .vram_active(1'b0),.vram_reset(reset),
+        .vram_wren1(1'b0),.vram_wren2(1'b0),.vram_wren3(1'b0),.vram_wren4(1'b0),
+        .r_vram_in1(8'd0),.g_vram_in1(8'd0),.b_vram_in1(8'd0),
+        .r_vram_in2(8'd0),.g_vram_in2(8'd0),.b_vram_in2(8'd0),
+        .r_vram_in3(8'd0),.g_vram_in3(8'd0),.b_vram_in3(8'd0),
+        .r_vram_in4(8'd0),.g_vram_in4(8'd0),.b_vram_in4(8'd0),
+        .r_in(ref_vcount[7:0]),.g_in(8'h81),.b_in(8'h35),
+        .cmd_blit_vsync(1'b0),.vsync_skip(1'b0),.vsync_overlay(1'b0),
+        .hsync(ref_hs),.vsync(ref_vs),.hblank(ref_hb),.vblank(ref_vb),.vga_f1(ref_field),
+        .r(ref_r),.g(ref_g),.b(ref_b),.vcount(ref_vcount));
+    always @(posedge clk) begin
+        #2;
+        if ({hs,vs,hb,vb,field,r,g,b,vcount,native_video.h_cnt,native_video.vga_frame}
+            !== {ref_hs,ref_vs,ref_hb,ref_vb,ref_field,ref_r,ref_g,ref_b,ref_vcount,reference_video.h_cnt,reference_video.vga_frame})
+            $fatal(1,"video timing/reference mismatch");
+    end
+`endif
     wire [23:0] color;
     wire co,c2o,ho,vo,hbo,vbo,fo,running,underrun;
     wire [15:0] pic_height;

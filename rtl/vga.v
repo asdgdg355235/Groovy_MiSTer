@@ -106,7 +106,16 @@ wire[15:0] V_pulse_start;
 wire[15:0] V_pulse_end;
 
 assign H_pulse_start = (interlaced && field) ? (H+HFP) >> 1 : H+HFP;
-assign V_total       = (interlaced && field) ? V+VBP+VFP+VS - 1'b1 : V+VBP+VFP+VS;
+// Balance the modeline sum before the field adjustment. Each result retains
+// the original 16-bit wrap; no modeline or counter register is retimed in RTL.
+wire [15:0] V_active_back = V + {8'd0,VBP};
+wire [8:0] V_front_sync = {1'b0,VFP} + {1'b0,VS};
+wire [15:0] V_frame_total = V_active_back + {7'd0,V_front_sync};
+assign V_total = V_frame_total - {15'd0,(interlaced && field)};
+// V_total-1 used an unsized integer, so V_total==0 must NEVER terminate.
+// Move the increment to the counter side of the compare, keeping its carry.
+wire [16:0] v_count_next = {1'b0,v_cnt} + 17'd1;
+wire v_at_end = V_total != 0 && v_count_next >= {1'b0,V_total};
 assign V_pulse_start = (interlaced && field) ? V+VFP + 1'b1 : V+VFP;
 assign V_pulse_end   = (interlaced && field) ? V+VFP+VS + 1'b1 : V+VFP+VS;
 
@@ -720,7 +729,7 @@ always@(posedge clk_sys) begin
                                                          
    // the vertical counter is processed at the begin of each hsync
    if (h_cnt == H+HFP) begin
-     if (v_cnt >= V_total-1) begin                             //V_total changes on interlaced field by 1             
+     if (v_at_end) begin // V_total changes by one on the alternate field
        v_cnt <= (interlaced && !field) ? 1'b1 : 1'b0;          //vcount depends on field
      end else begin 
        v_cnt <= interlaced ? v_cnt + 10'd2 : v_cnt + 10'd1;    //interlaced alternate 2 lines according to field                         

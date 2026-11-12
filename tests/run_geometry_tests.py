@@ -88,8 +88,8 @@ def main():
         bits=set(range(start,end+1))
         assert not occupied & bits, ('OSD status overlap', bits & occupied)
         occupied |= bits
-    # LZ4 timing changes have the complete decoder reference regression.
-    for path in ['rtl/vga.v','rtl/hps_ext.v','rtl/sound.v',
+    # VGA arithmetic and LZ4 counter/delta changes have dedicated reference tests.
+    for path in ['rtl/hps_ext.v','rtl/sound.v',
                  'hps_linux/src/input.cpp','hps_linux/src/support/groovy/groovy.cpp']:
         inherited=subprocess.check_output(['git','show',BASE+':'+path],cwd=ROOT)
         assert (ROOT/path).read_bytes()==inherited, 'unexpected protocol/controller/audio/timing change: '+path
@@ -100,7 +100,7 @@ def main():
     qip=(ROOT/'files.qip').read_text()
     for name in ['crt_vsize_fixed','crt_edge_mask']:
         assert 'rtl/CRT/'+name+'.sv' in qip
-    print('PASS: OSD fields do not overlap; original video timing, protocol, controller and audio sources retained')
+    print('PASS: OSD fields do not overlap; protocol, controller and audio sources retained; VGA/LZ4 checked separately')
     with tempfile.TemporaryDirectory(prefix='groovy-geometry-') as temp:
         tmp=Path(temp)
         if args.main: status_test(tmp,args.main.resolve())
@@ -109,9 +109,13 @@ def main():
         old.write_text(original.replace('module jtframe_hsize','module jtframe_hsize_reference'))
         compile_run(tmp,'tb_hsize',[ROOT/'tests/tb_hsize.sv',old,*sorted((ROOT/'rtl/JTFRAME').glob('jtframe_hsize.v')),
                     ROOT/'rtl/JTFRAME/jtframe_linebuf.v',ROOT/'rtl/JTFRAME/jtframe_rpwp_ram.v'])
+        video_reference = tmp/'vga_reference.v'
+        video_reference.write_text(subprocess.check_output(
+            ['git', 'show', '47ffb265f7b9fa3358afb80048b70fa9bf093081:rtl/vga.v'], cwd=ROOT, text=True)
+            .replace('module vga (', 'module vga_reference (', 1))
         compile_run(tmp,'tb_video_geometry',[ROOT/'tests/tb_video_geometry.sv',ROOT/'tests/rtl_models.sv',
                     ROOT/'rtl/vga.v',ROOT/'rtl/binary_to_bcd.v',ROOT/'rtl/CRT/crt_vsize_fixed.sv',
-                    ROOT/'rtl/CRT/crt_packed_ram.sv'])
+                    ROOT/'rtl/CRT/crt_packed_ram.sv',video_reference], ['-DTIMING_REFERENCE'])
         old_osd=tmp/'osd_reference.v'
         old_osd.write_text(subprocess.check_output(['git','show',BASE+':sys/osd.v'],cwd=ROOT).decode().replace('module osd','module osd_reference',1))
         for macro in [False,True]:
