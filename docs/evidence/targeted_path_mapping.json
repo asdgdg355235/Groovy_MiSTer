@@ -68,7 +68,9 @@
         "location": "FF_X48_Y54_N31",
         "element": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[0].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[11]_OTERM1091"
       }
-    ]
+    ],
+    "logic_levels": 6,
+    "launch_fanout": 2
   },
   {
     "corner": "corner_01",
@@ -139,7 +141,9 @@
         "location": "FF_X40_Y24_N31",
         "element": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[38]_OTERM905"
       }
-    ]
+    ],
+    "logic_levels": 6,
+    "launch_fanout": 2
   },
   {
     "corner": "corner_01",
@@ -222,7 +226,9 @@
         "location": "FF_X36_Y46_N38",
         "element": "emu:emu|r_vram_in2[2]"
       }
-    ]
+    ],
+    "logic_levels": 6,
+    "launch_fanout": 914
   },
   {
     "corner": "corner_01",
@@ -311,7 +317,9 @@
         "location": "M10K_X49_Y18_N0",
         "element": "altshift_taps:dv_hs1_rtl_0|shift_taps_quu:auto_generated|altsyncram_fr91:altsyncram5|ram_block6a0~porta_datain_reg7"
       }
-    ]
+    ],
+    "logic_levels": 9,
+    "launch_fanout": 2
   },
   {
     "corner": "corner_02",
@@ -484,7 +492,9 @@
         "location": "FF_X42_Y20_N59",
         "element": "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[1]~61_OTERM4407"
       }
-    ]
+    ],
+    "logic_levels": 8,
+    "launch_fanout": 6
   },
   {
     "corner": "corner_02",
@@ -567,7 +577,9 @@
         "location": "FF_X36_Y46_N38",
         "element": "emu:emu|r_vram_in2[2]"
       }
-    ]
+    ],
+    "logic_levels": 6,
+    "launch_fanout": 914
   },
   {
     "corner": "corner_02",
@@ -758,7 +770,9 @@
         "location": "FF_X42_Y20_N49",
         "element": "emu:emu|crt_vsize_fixed:u_vsize|Add2~1_OTERM4415"
       }
-    ]
+    ],
+    "logic_levels": 8,
+    "launch_fanout": 6
   },
   {
     "corner": "corner_02",
@@ -913,7 +927,9 @@
         "location": "FF_X60_Y24_N50",
         "element": "emu:emu|Add17~5_OTERM2885DUPLICATE"
       }
-    ]
+    ],
+    "logic_levels": 9,
+    "launch_fanout": 11
   },
   {
     "corner": "corner_02",
@@ -1068,7 +1084,9 @@
         "location": "FF_X60_Y24_N49",
         "element": "emu:emu|Add17~5_OTERM2885"
       }
-    ]
+    ],
+    "logic_levels": 9,
+    "launch_fanout": 11
   },
   {
     "corner": "corner_02",
@@ -1247,7 +1265,9 @@
         "location": "FF_X42_Y20_N44",
         "element": "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[14]~49_OTERM4413"
       }
-    ]
+    ],
+    "logic_levels": 8,
+    "launch_fanout": 6
   },
   {
     "corner": "corner_03",
@@ -1318,7 +1338,9 @@
         "location": "FF_X48_Y54_N31",
         "element": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[0].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[11]_OTERM1091"
       }
-    ]
+    ],
+    "logic_levels": 6,
+    "launch_fanout": 2
   },
   {
     "corner": "corner_03",
@@ -1389,7 +1411,9 @@
         "location": "FF_X40_Y24_N31",
         "element": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[38]_OTERM905"
       }
-    ]
+    ],
+    "logic_levels": 6,
+    "launch_fanout": 2
   },
   {
     "corner": "corner_04",
@@ -1472,6 +1496,8 @@
         "location": "FF_X36_Y46_N38",
         "element": "emu:emu|r_vram_in2[2]"
       }
-    ]
+    ],
+    "logic_levels": 6,
+    "launch_fanout": 914
   }
 ]

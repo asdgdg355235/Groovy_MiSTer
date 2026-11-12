@@ -60,3 +60,12 @@ cnt,total=BitVec('count',16),BitVec('total',16)
 prove('vertical terminal comparison including zero/max',
  (total!=0)&UGE(ZeroExt(1,cnt)+1,ZeroExt(1,total)),
  UGE(ZeroExt(16,cnt),ZeroExt(16,total)-1))
+from z3 import Function, BitVecSort, BoolSort
+ready=Function('ready',BitVecSort(4),BitVecSort(16),BoolSort())
+cur_slot,next_slot=BitVec('cur_slot',4),BitVec('next_slot',4)
+cur_row,next_row=BitVec('cur_row',16),BitVec('next_row',16)
+first_line=Bool('first_line')
+old_slot=If(line,If(first_line,BitVecVal(0,4),next_slot),cur_slot)
+old_row=If(line&first_line,BitVecVal(0,16),If(line,next_row,cur_row))
+ready_line=ready(If(first_line,BitVecVal(0,4),next_slot),If(first_line,BitVecVal(0,16),next_row))
+prove('move complete/tag lookup before line selection',ready(old_slot,old_row),If(line,ready_line,ready(cur_slot,cur_row)))

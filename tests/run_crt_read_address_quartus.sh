@@ -20,6 +20,13 @@ python3 "$ROOT/tests/configure_timing_variant.py" "$ROOT" "$OUT" "$VARIANT"
 CANDIDATE_REV="$(git -C "$ROOT" rev-parse HEAD)"
 cd "$OUT"
 mkdir -p output_files
+# Preserve partial diagnostics too if a vendor stage or acceptance export fails.
+package_results() {
+    result=$?
+    printf '%s\n' "$result" > output_files/build_runner_exit_status.txt
+    tar -czf "${OUT}-reports.tar.gz" --exclude='*.sof' --exclude='*.rbf' -C "$OUT" output_files
+}
+trap package_results EXIT
 printf '%s\n' "$CANDIDATE_REV" > output_files/timing_candidate_commit.txt
 printf '%s\n' "$VARIANT" > output_files/build_variant.txt
 python3 tests/project_assignments.py . > output_files/project_calls_before_map.json
@@ -70,7 +77,6 @@ fi
 python3 tests/report_io_coverage.py output_files/timing_closure/unconstrained.txt output_files/timing_closure/io_coverage.json
 python3 tests/validate_timing_exports.py output_files/timing_closure
 python3 tests/validate_fitted_resources.py output_files
-# Package after completed reports, regardless of whether measured timing passed.
-tar -czf "${OUT}-reports.tar.gz" --exclude='*.sof' --exclude='*.rbf' -C "$OUT" output_files
+# EXIT trap packages reports whether timing passes, fails or a stage errors.
 echo "Results: $OUT/output_files"
 echo 'Review setup/hold slack even when the compilation exit status is successful.'

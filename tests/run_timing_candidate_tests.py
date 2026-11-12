@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Non-Quartus regression entry point. Requires Verilator, Icarus, g++, Tcl.
+"""Non-Quartus regression entry point. Requires Verilator, Icarus, g++, Tcl, z3-solver.
 
 Pass --main /path/to/Main_MiSTer to also run the existing HPS controller suite.
 """
@@ -13,9 +13,12 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--main', type=Path)
 args = parser.parse_args()
 commands = [
+    [sys.executable, 'tests/prove_targeted_arithmetic.py'],
     [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_*.py'],
     [sys.executable, 'tests/check_crt_ram_extraction.py'],
     ['tclsh', 'tests/test_crt_address_duplication.tcl'],
+    [sys.executable, 'tests/run_targeted_arithmetic_rtl.py'],
+    [sys.executable, 'tests/run_delta_selection_tests.py'],
     [sys.executable, 'tests/run_crt_read_address_rtl.py'],
     ['bash', 'tests/run_crt_group_address_rtl.sh'],
     [sys.executable, 'tests/run_lz4_timing_tests.py'],

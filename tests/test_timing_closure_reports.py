@@ -17,7 +17,7 @@ proc project_close {} {}
 proc post_message {args} {error "Unexpected unmatched filter: $args"}
 proc get_available_operating_conditions {args} {
     if {$args ne {-all}} {error "corner coverage"}
-    return {slow_hot slow_cold fast_cold}
+    return {slow_hot slow_cold slow_warm slow_zero fast_cold fast_zero fast_warm fast_hot}
 }
 proc foreach_in_collection {var collection body} {
     upvar 1 $var item
@@ -53,7 +53,15 @@ proc report {name args} {
     puts $::calls "$name $args"
     set ix [lsearch -exact $args -file]
     if {$ix<0} {error "missing report filename"}
-    set f [open [lindex $args [expr {$ix+1}]] w]; puts $f "$name $args"; close $f
+    set f [open [lindex $args [expr {$ix+1}]] w]
+    if {$name eq "report_min_pulse_width"} {
+        set count [lindex $args [expr {[lsearch -exact $args -nworst]+1}]]
+        # More failures than the initial bound: require adaptive expansion.
+        for {set i 0} {$i < min($count,75)} {incr i} {
+            puts $f "; [expr {$i<70 ? -0.1 : 0.1}] ; 1.0 ; 1.1 ; High Pulse Width ;"
+        }
+    } else {puts $f "$name $args"}
+    close $f
 }
 foreach name {report_clocks report_sdc check_timing report_ucp report_timing report_min_pulse_width report_clock_transfers} {
     proc $name {args} [format {eval [linsert $args 0 report %s]} $name]
@@ -73,17 +81,30 @@ class ReportFlowTest(unittest.TestCase):
                            cwd=tmp, check=True, capture_output=True, text=True)
             root = tmp/'output_files/timing_closure'
             summary = (root/'endpoint_summary.tsv').read_text().splitlines()
-            self.assertEqual(len(summary), 13)
-            self.assertEqual(sum('\tsetup\t45\t-4.500000\t' in row for row in summary), 3)
-            for corner in ('corner_01', 'corner_02', 'corner_03'):
+            self.assertEqual(len(summary), 33)
+            self.assertEqual(sum('\tsetup\t45\t-4.500000\t' in row for row in summary), 8)
+            for corner in (f'corner_{n:02d}' for n in range(1,9)):
                 self.assertEqual(len((root/corner/'negative_setup_endpoints.tsv').read_text().splitlines()), 46)
                 for kind in ('setup', 'hold', 'recovery', 'removal'):
                     self.assertIn('-npaths 0', (root/corner/f'negative_{kind}_paths.txt').read_text())
                 for family in ('wcol', 'column_flag', 'hb', 'poc_v', 'delta_index', 'lz4_compressed', 'lz4_counters'):
                     self.assertTrue((root/corner/f'{family}_setup.txt').exists())
-            self.assertEqual((tmp/'calls.txt').read_text().count('CORNER '), 3)
+                self.assertIn('\t70\t-0.1\t1', (root/corner/'min_pulse_coverage.tsv').read_text())
+                self.assertEqual((root/corner/'negative_min_pulse_paths.txt').read_text().count('; -0.1 ;'),70)
+                self.assertIn('-npaths 10',(root/corner/'lz4_counter_launch_setup.txt').read_text())
+            self.assertEqual((tmp/'calls.txt').read_text().count('CORNER '), 8)
             self.assertIn('pll_cross_check', (root/'check_timing.txt').read_text())
-            self.assertEqual(len((root/'corners.tsv').read_text().splitlines()), 4)
+            self.assertEqual(len((root/'corners.tsv').read_text().splitlines()), 9)
+
+    def test_pulse_parser_rejects_truncation_and_unsorted_rows(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp=Path(tmp)
+            for text in ('; 0.1 ;\nTRUNCATED\n','; 0.1 ;\n; -0.1 ;\n','no checks'):
+                (tmp/'pulse.txt').write_text(text)
+                script=f'source {{{ROOT}/tests/compact_pulse_report.tcl}}\npulse_slacks {{{tmp}/pulse.txt}}\n'
+                (tmp/'test.tcl').write_text(script)
+                p=subprocess.run(['tclsh',str(tmp/'test.tcl')],capture_output=True)
+                self.assertNotEqual(p.returncode,0)
 
 
 if __name__ == '__main__':

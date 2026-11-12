@@ -34,9 +34,13 @@ class MeasuredCandidateTest(unittest.TestCase):
         self.assertIn(['global','-name','OPTIMIZE_MULTI_CORNER_TIMING','ON'],c['unique'])
         self.assertIn(['global','-name','DEVICE','5CSEBA6U23I7'],c['unique'])
         self.assertFalse(any('DUPLICATE_ATOM' in x for x in c['events']))
-        self.assertEqual(sum(x[0]=='hps_location' for x in c['events']),3)
+        self.assertEqual(len({tuple(x) for x in c['events'] if 'HPS_LOCATION' in x}),3)
         evidence=json.loads((ROOT/'docs/evidence/measured_plus0177_comparison.json').read_text())
-        measured={tuple(row['assignment']) for row in evidence['archived_project_calls']['calls'] if 'DUPLICATE_ATOM' not in row['assignment']}
+        def canonical(row):
+            if row[0]=='hps_location':
+                return ('instance','-name','HPS_LOCATION',row[1],'-entity','sys_top',*row[2:])
+            return tuple(row)
+        measured={canonical(row['assignment']) for row in evidence['archived_project_calls']['calls'] if 'DUPLICATE_ATOM' not in row['assignment']}
         current={tuple(row) for row in c['unique'] if 'DUPLICATE_ATOM' not in row}
         self.assertEqual(measured-current,set())
         self.assertEqual(current-measured,{('global','-name','OPTIMIZE_MULTI_CORNER_TIMING','ON')})
@@ -49,13 +53,16 @@ class MeasuredCandidateTest(unittest.TestCase):
                 (dest/'sys').mkdir()
                 shutil.copyfile(ROOT/'Groovy.qsf',dest/'Groovy.qsf')
                 shutil.copyfile(ROOT/'sys/sys_top.v',dest/'sys/sys_top.v')
-                for name in ('rtl/CRT/crt_vsize_fixed.sv','rtl/lz4.v','rtl/vga.v'):
+                for name in ('Groovy.sv','rtl/CRT/crt_vsize_fixed.sv','rtl/lz4.v','rtl/vga.v'):
                     (dest/name).parent.mkdir(parents=True,exist_ok=True)
                     shutil.copyfile(ROOT/name,dest/name)
                 before={str(p.relative_to(dest)):p.read_bytes() for p in dest.rglob('*') if p.is_file()}
                 configure(ROOT,dest,variant)
                 changed={n for n,b in before.items() if (dest/n).read_bytes()!=b}
-                expected={'candidate':set(),'dup-off':set(),'crt-new':{'rtl/CRT/crt_vsize_fixed.sv'},
+                expected={'candidate':set(),'baseline':{'Groovy.sv','rtl/CRT/crt_vsize_fixed.sv','rtl/vga.v'},
+                    'read-add':{'rtl/CRT/crt_vsize_fixed.sv'},'delta-flat':{'Groovy.sv'},
+                    'ready-shared':{'rtl/CRT/crt_vsize_fixed.sv'},'vga-old':{'rtl/vga.v'},
+                    'dup-off':set(),'crt-new':{'rtl/CRT/crt_vsize_fixed.sv'},
                     'transport-new':{'rtl/lz4.v','rtl/vga.v'},'hdmi-old':{'sys/sys_top.v'},
                     'analysis-on':{'Groovy.qsf'},'fitter-slow':{'Groovy.qsf'}}[variant]
                 self.assertEqual(changed,expected)
@@ -91,6 +98,15 @@ class MeasuredCandidateTest(unittest.TestCase):
             (root/'corners.tsv').write_text('directory\tmodel\ttemperature\tvoltage\n'+'\n'.join(corners)+'\n')
             (root/'endpoint_summary.tsv').write_text('corner\tcheck\tfailing_endpoints\tendpoint_TNS_ns\tworst_slack_ns\n'+'\n'.join(summaries)+'\n')
             self.assertTrue(validate(root,False)['timing_pass'])
+            (root/'report_format.txt').write_text('compact-v2\n')
+            for c in range(1,9):
+                folder=root/f'corner_{c:02d}'
+                (folder/'min_pulse_coverage.tsv').write_text('exported_checks\tnegative_checks\tworst_slack_ns\tcomplete_negative_inventory\n1\t0\t0.1\t1\n')
+                (folder/'negative_min_pulse_paths.txt').write_text('No negative checks.')
+            self.assertTrue(validate(root,False)['timing_pass'])
+            (root/'corner_01/min_pulse_coverage.tsv').unlink()
+            with self.assertRaisesRegex(ValueError,'Missing pulse coverage'): validate(root,False)
+            (root/'corner_01/min_pulse_coverage.tsv').write_text('exported_checks\tnegative_checks\tworst_slack_ns\tcomplete_negative_inventory\n1\t1\t-0.1\t1\n')
             (root/'corner_01/min_pulse_width.txt').write_text('; -0.100 ; 0.1 ; 0.2 ; High Pulse Width ;\n')
             self.assertFalse(validate(root,False)['timing_pass'])
             (root/'corner_02/negative_hold_endpoints.tsv').write_text('to\tfrom\tslack_ns\nsink\tlaunch\t-1\n')

@@ -1,3 +1,5 @@
+Current candidate: [targeted eight-corner corrections](../../docs/crt-targeted-corrections.md). Physical timing is pending user measurement.
+
 # CRT geometry RTL
 
 The following files were originally imported from
