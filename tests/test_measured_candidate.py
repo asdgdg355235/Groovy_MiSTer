@@ -29,9 +29,11 @@ class MeasuredCandidateTest(unittest.TestCase):
         self.assertIn(['global','-name','OPTIMIZE_MULTI_CORNER_TIMING','ON'],c['unique'])
         self.assertIn(['global','-name','DEVICE','5CSEBA6U23I7'],c['unique'])
         self.assertFalse(any('DUPLICATE_ATOM' in x for x in c['events']))
-        self.assertEqual(sum(x[0]=='hps_location' for x in c['events']),3)
+        self.assertEqual(len({tuple(x) for x in c['events'] if 'HPS_LOCATION' in x}),3)
         evidence=json.loads((ROOT/'docs/evidence/measured_plus0177_comparison.json').read_text())
-        measured={tuple(row['assignment']) for row in evidence['archived_project_calls']['calls'] if 'DUPLICATE_ATOM' not in row['assignment']}
+        def canonical(row):
+            return ('instance','-name','HPS_LOCATION',row[1],'-entity','sys_top',*row[2:]) if row[0]=='hps_location' else tuple(row)
+        measured={canonical(row['assignment']) for row in evidence['archived_project_calls']['calls'] if 'DUPLICATE_ATOM' not in row['assignment']}
         current={tuple(row) for row in c['unique'] if 'DUPLICATE_ATOM' not in row}
         self.assertEqual(measured-current,set())
         self.assertEqual(current-measured,{('global','-name','OPTIMIZE_MULTI_CORNER_TIMING','ON')})
