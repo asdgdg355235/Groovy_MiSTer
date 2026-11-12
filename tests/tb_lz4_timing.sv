@@ -129,10 +129,12 @@ module tb_lz4_timing;
         for(i=0;i<128;i=i+1) begin dut.blocks[i]=0; baseline.blocks[i]=0; end
         dut.window_data=0; baseline.window_data=0;
         repeat(2) tick();
-        // Exhaust all input pairs in the actual new byte-adder function.
+        // Exhaust all modulo-256 input pairs through the actual output assignments.
         for(i=0;i<256;i=i+1) for(j=0;j<256;j=j+1) begin
             expected_sum=i+j;
-            if(dut.delta_add(i,j)!==expected_sum) $fatal(1,"delta arithmetic %0d/%0d",i,j);
+            dut.uncompressed_long={8{i[7:0]}}; baseline.uncompressed_long={8{i[7:0]}};
+            delta={8{j[7:0]}}; #1;
+            if(long_out!=={8{expected_sum}}) $fatal(1,"delta arithmetic %0d/%0d",i,j);
         end
         for(m=0;m<2;m=m+1) begin
             mode64=m;

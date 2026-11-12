@@ -148,45 +148,7 @@ task fetch_long;
   end
 endtask
 
-// Decode the increment independently of input readiness. In particular, the
-// block_read_total comparisons must only enable the final counter update, not
-// select a chain of state/mode-dependent arithmetic results.
-reg [3:0] count_increment;
-reg count_literal;
-always @* begin
-  count_increment = 4'd0;
-  count_literal = 1'b0;
-  case (state)
-    S_Read_Literals: begin
-      count_literal = 1'b1;
-      if (LL != 0)
-        count_increment = !lz4_mode_64 ? 4'd1 : (window_addr3 == 7 ? 4'd8 : 4'd0);
-    end
-    S_Copy_Matches:
-      count_increment = !lz4_mode_64 ? 4'd1 : (window_addr3 == 7 ? 4'd8 : 4'd0);
-`ifndef MISTER_LZ4_DISABLE_64B
-    S_Read_Literals_64: begin
-      count_literal = 1'b1;
-      count_increment = 4'd8;
-    end
-    S_Copy_Matches_64, S_Copy_Matches_64_8: count_increment = 4'd8;
-`endif
-    S_Done: if (lz4_mode_64) count_increment = {1'b0,window_addr3};
-    default: ;
-  endcase
-end
-wire [31:0] count_next = uncompressed_bytes + {28'd0,count_increment};
-wire count_enable = lz4_run && (!long_valid || !lz4_stop)
-                 && count_increment != 0
-                 && (!count_literal || read_ready || blocks_readed);
-always @(posedge lz4_clk) begin
-  if (lz4_reset) uncompressed_bytes <= 32'd0;
-  // The inherited FSM executes even when reset is asserted. Its emitting
-  // states override reset with OLD counter + increment. Keep that priority.
-  if (count_enable) uncompressed_bytes <= count_next;
-end
-
-//read bytes
+//read bytes 
 always @(posedge lz4_clk) begin
 
        if (lz4_reset) begin
@@ -198,6 +160,7 @@ always @(posedge lz4_clk) begin
          window_addr        <= 16'd0;  
          window_addr3       <= 3'd0;
          window_addr13      <= 13'd0;
+         uncompressed_bytes <= 16'd0;                              
          block_read_addr    <= 7'd0; 
          block_read_index   <= 3'd0;                    
          block_read_total   <= 32'd0;       
@@ -273,8 +236,10 @@ always @(posedge lz4_clk) begin
                          {uncompressed_byte, window_data[8*window_addr3 +:8]} <= {2{data}};                 
                          if (!lz4_mode_64) begin                          
                            byte_valid                    <= 1'b1;                           
+                           uncompressed_bytes            <= uncompressed_bytes + 32'd1;
                          end          
                          if (window_addr3 == 7) begin
+                           if (lz4_mode_64) uncompressed_bytes <= uncompressed_bytes + 32'd8;                           
                            long_valid                          <= 1'b1;
                            uncompressed_long                   <= {data, window_data[00 +: 56]};       
                            window[window_addr13]               <= {data, window_data[00 +: 56]};
@@ -306,6 +271,7 @@ always @(posedge lz4_clk) begin
                        long_valid         <= 1'b1;
                        window_addr        <= window_addr + 16'd8; 
                        window_addr13      <= window_addr13 + 1'b1;
+                       uncompressed_bytes <= uncompressed_bytes + 32'd8;
                        case (window_addr3)
                          0: begin 
                               window_data                                 <= data_64;
@@ -379,6 +345,7 @@ always @(posedge lz4_clk) begin
                    begin                     
                      if (lz4_mode_64 && window_addr3 != 0) begin                                    
                        long_valid         <= 1'b1;     
+                       uncompressed_bytes <= uncompressed_bytes + window_addr3;
                        uncompressed_long  <= window_data;                      
                        state              <= S_Done_64;
                      end else begin
@@ -434,9 +401,11 @@ always @(posedge lz4_clk) begin
                      {uncompressed_byte, window_data[8*window_addr3 +:8]} <= window_addr3 >= offset ? {2{window_data[8*MP3 +: 8]}} : {2{window[MP13][8*MP3 +: 8]}};                                                                                                                                                                                                                                                                   
                      if (!lz4_mode_64) begin                      
                        byte_valid                    <= 1'b1;
+                       uncompressed_bytes            <= uncompressed_bytes + 32'd1;
                      end
                      if (window_addr3 == 7) begin                       
                        long_valid                                 <= 1'b1;
+                       if (lz4_mode_64) uncompressed_bytes        <= uncompressed_bytes + 32'd8;  
                        {uncompressed_long, window[window_addr13]} <= {2{window_addr3 >= offset ? window_data[8*MP3 +: 8] : window[MP13][8*MP3 +: 8], window_data[00 +: 56]}};                                                                                                                                                                       
                        window_addr13                              <= window_addr13 + 1'b1;  
                      end
@@ -463,6 +432,7 @@ always @(posedge lz4_clk) begin
                      long_valid         <= 1'b1;
                      window_addr        <= window_addr + 16'd8; 
                      window_addr13      <= window_addr13 + 1'b1;
+                     uncompressed_bytes <= uncompressed_bytes + 32'd8;
                      case (window_addr3)
                        0: begin 
                             window_data                                <= window[MP13];
@@ -512,6 +482,7 @@ always @(posedge lz4_clk) begin
                      long_valid         <= 1'b1;
                      window_addr        <= window_addr + 16'd8; 
                      window_addr13      <= window_addr13 + 1'b1;
+                     uncompressed_bytes <= uncompressed_bytes + 32'd8;
                      case (offset)
                        1: begin    
                             window_data           <= {8{window_data[56 +: 08]}};                      
@@ -578,25 +549,14 @@ assign lz4_write_ready = (block_write_total - block_read_total) < BLOCKS_SIZE <<
 assign lz4_uncompressed_byte = uncompressed_byte;
 assign lz4_byte_valid = byte_valid;
 //assign lz4_uncompressed_long = uncompressed_long; 
-// The delta-buffer read mux precedes this arithmetic on the measured index
-// path. Compute both upper-nibble sums in parallel, then select one using
-// the lower nibble carry. No state, byte carry between lanes, or cycle added.
-function [7:0] delta_add;
-  input [7:0] value, delta;
-  reg [4:0] low_sum;
-  reg [3:0] high_zero, high_one;
-  begin
-    low_sum = {1'b0,value[3:0]} + {1'b0,delta[3:0]};
-    high_zero = value[7:4] + delta[7:4];
-    high_one = value[7:4] + delta[7:4] + 4'd1;
-    delta_add = {low_sum[4] ? high_one : high_zero, low_sum[3:0]};
-  end
-endfunction
-genvar delta_byte;
-generate for (delta_byte=0; delta_byte<8; delta_byte=delta_byte+1) begin : delta_output
-  assign lz4_uncompressed_long[delta_byte*8 +: 8] =
-    delta_add(uncompressed_long[delta_byte*8 +: 8], lz4_delta_long[delta_byte*8 +: 8]);
-end endgenerate
+assign lz4_uncompressed_long[07:00] = uncompressed_long[07:00] + lz4_delta_long[07:00],
+       lz4_uncompressed_long[15:08] = uncompressed_long[15:08] + lz4_delta_long[15:08],  
+		 lz4_uncompressed_long[23:16] = uncompressed_long[23:16] + lz4_delta_long[23:16],  
+		 lz4_uncompressed_long[31:24] = uncompressed_long[31:24] + lz4_delta_long[31:24],  
+		 lz4_uncompressed_long[39:32] = uncompressed_long[39:32] + lz4_delta_long[39:32],  
+		 lz4_uncompressed_long[47:40] = uncompressed_long[47:40] + lz4_delta_long[47:40],  
+		 lz4_uncompressed_long[55:48] = uncompressed_long[55:48] + lz4_delta_long[55:48],  
+		 lz4_uncompressed_long[63:56] = uncompressed_long[63:56] + lz4_delta_long[63:56];		 
 assign lz4_long_valid = long_valid;
 assign lz4_uncompressed_bytes = uncompressed_bytes;
 assign lz4_paused = paused;

@@ -120,7 +120,7 @@ assign hdmi_vs = 1'b0;
                     ROOT/'rtl/JTFRAME/jtframe_linebuf.v',ROOT/'rtl/JTFRAME/jtframe_rpwp_ram.v'])
         video_reference = tmp/'vga_reference.v'
         video_reference.write_text(subprocess.check_output(
-            ['git', 'show', '47ffb265f7b9fa3358afb80048b70fa9bf093081:rtl/vga.v'], cwd=ROOT, text=True)
+            ['git', 'show', '00136c5f03de63d80d8e78208bb6802cfe53c53d:rtl/vga.v'], cwd=ROOT, text=True)
             .replace('module vga (', 'module vga_reference (', 1))
         compile_run(tmp,'tb_video_geometry',[ROOT/'tests/tb_video_geometry.sv',ROOT/'tests/rtl_models.sv',
                     ROOT/'rtl/vga.v',ROOT/'rtl/binary_to_bcd.v',ROOT/'rtl/CRT/crt_vsize_fixed.sv',

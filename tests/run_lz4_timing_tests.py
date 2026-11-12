@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = '47ffb265f7b9fa3358afb80048b70fa9bf093081'
+BASE = '00136c5f03de63d80d8e78208bb6802cfe53c53d'
 with tempfile.TemporaryDirectory(prefix='lz4-timing-') as tmp:
     tmp = Path(tmp)
     reference = tmp/'reference.v'
