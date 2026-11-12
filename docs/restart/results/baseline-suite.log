@@ -195,14 +195,14 @@ PASS: OSD default matches integration base; optional signed anchor keeps resized
 PASS: OSD fields do not overlap; protocol, controller and audio sources retained; VGA/LZ4 checked separately
 PASS: complete emu RTL elaborates with explicit vendor/VHDL models and inherited frontend waivers
 + python3 tests/run_controller_tests.py $MAIN_MISTER
-Gamecontrollerdb: mapping buttons for test 
-Gamecontrollerdb: mapping analog axes for test 
-Gamecontrollerdb: mapping buttons for test 
-Gamecontrollerdb: mapping analog axes for test 
-Gamecontrollerdb: mapping buttons for test 
-Gamecontrollerdb: mapping analog axes for test 
-Gamecontrollerdb: mapping buttons for test 
-Gamecontrollerdb: mapping analog axes for test 
+Gamecontrollerdb: mapping buttons for test
+Gamecontrollerdb: mapping analog axes for test
+Gamecontrollerdb: mapping buttons for test
+Gamecontrollerdb: mapping analog axes for test
+Gamecontrollerdb: mapping buttons for test
+Gamecontrollerdb: mapping analog axes for test
+Gamecontrollerdb: mapping buttons for test
+Gamecontrollerdb: mapping analog axes for test
 joy_name[0] = Button 1
 joy_name[1] = Button 2
 joy_name[2] = Button 3
@@ -258,10 +258,10 @@ joy_nname[11] = R3
 Loaded legacy Groovy mapping Groovy_input__v3.map; existing assignments retained, empty L3/R3 slots use system mapping
 Loaded legacy Groovy mapping Groovy_input__v3.map; existing assignments retained, empty L3/R3 slots use system mapping
 Loaded legacy system mapping input__v3.map; define L2/R2/L3/R3 in Menu to save v4
-Gamecontrollerdb: mapping buttons for test 
-Gamecontrollerdb: mapping analog axes for test 
-Gamecontrollerdb: mapping buttons for test 
-Gamecontrollerdb: mapping analog axes for test 
+Gamecontrollerdb: mapping buttons for test
+Gamecontrollerdb: mapping analog axes for test
+Gamecontrollerdb: mapping buttons for test
+Gamecontrollerdb: mapping analog axes for test
 joy_name[0] = Button 1
 joy_name[1] = Button 2
 joy_name[2] = Button 3
