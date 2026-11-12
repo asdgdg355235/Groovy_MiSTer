@@ -3,7 +3,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="${CRT_READ_BUILD_DIR:-"$ROOT/../crt-read-address-build-$(date -u +%Y%m%d-%H%M%S)"}"
-for tool in quartus_sh quartus_sta; do
+for tool in quartus_sh quartus_sta quartus_cdb; do
     command -v "$tool" >/dev/null || { echo "ERROR: missing $tool" >&2; exit 127; }
 done
 if [[ -e "$OUT" ]]; then
@@ -28,5 +28,8 @@ if grep -Ei '(skipp|not required|up.to.date).*(synthesis|fitter|assembler)|(synt
     echo 'ERROR: a required compilation stage was skipped' >&2; exit 1
 fi
 quartus_sta -t tests/report_crt_read_address_timing.tcl 2>&1 | tee output_files/crt_read_address_sta.log
+for stage in map cmp; do
+    quartus_cdb -t tests/report_crt_local_drivers.tcl "$stage" 2>&1 | tee "output_files/crt_local_drivers_${stage}.log"
+done
 echo "Results: $OUT/output_files"
 echo 'Review setup/hold slack even when the compilation exit status is successful.'

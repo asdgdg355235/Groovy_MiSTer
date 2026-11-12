@@ -12,6 +12,14 @@ if {[get_collection_size $ce_source] == 0 || [get_collection_size $ram_endpoints
     error "CRT CE/RAM timing filters did not match the compiled design"
 }
 report_timing -setup -from $ce_source -to $ram_endpoints -detail full_path -npaths 30 -nworst 1 -show_routing -file output_files/crt_read_address_ce_to_ram.txt
+# Query each physical RAM hierarchy separately, including both M10K instances.
+for {set part 0} {$part < 3} {incr part} {
+    foreach bank {even odd} {
+        set endpoints [get_keepers "*packed_ram?${part}?.${bank}_ram*"]
+        if {[get_collection_size $endpoints] == 0} {error "Missing RAM $part/$bank"}
+        report_timing -setup -to $endpoints -detail full_path -npaths 3 -nworst 1 -show_routing -file "output_files/crt_local_bank_${part}_${bank}_setup.txt"
+    }
+}
 report_ucp -file output_files/crt_read_address_unconstrained.txt
 delete_timing_netlist
 project_close
