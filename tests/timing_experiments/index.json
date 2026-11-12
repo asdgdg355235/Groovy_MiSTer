@@ -61,5 +61,14 @@
     "result_sha256": "eaaa3be7285397988cd40b31e0e110bf95b0128e3fc697fbd2aa4c910650e857",
     "cone": "PoC_V -> VGA total/comparison -> retimed root Add17; ultimate source mapping remains partial",
     "proof": "vga"
+  },
+  "sync-first-row": {
+    "path": "rtl/CRT/crt_vsize_fixed.sv",
+    "patch": "sync-first-row.patch",
+    "patch_sha256": "e7aed19d9dd69f28d34a8b6f4e5bad7ba3b31a44c11a3e626b0d2a37508534f1",
+    "baseline_sha256": "efe58c15761e085490635049989ded292788d5dfb65ed80b153b579547df97c3",
+    "result_sha256": "f849f8b74a6f3c1f02486433f4d9e3e123c59f0ce09c9ec1989743ab4969e2bf",
+    "cone": "hb_d -> first-output tag selection -> valid metadata -> packed delay RAM",
+    "proof": "sync"
   }
 }

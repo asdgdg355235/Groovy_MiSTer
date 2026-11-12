@@ -1,0 +1,22 @@
+--- a/rtl/CRT/crt_vsize_fixed.sv
++++ b/rtl/CRT/crt_vsize_fixed.sv
+@@ -89,8 +89,17 @@
+     wire [SW-1:0] slot_now = first_output ? SW'(0) : (line_begin ? next_aslot : aslot);
+     wire last_row = src_now >= height_q-1'b1;
+     wire [SW-1:0] bslot = next_slot(slot_now);
+-    wire pair_ready = complete[slot_now] && tag[slot_now] == src_now
+-                   && (last_row || (complete[bslot] && tag[bslot] == src_now+1'b1));
++    // Select the first-row special case AFTER lookup/comparison. Unlike a
++    // whole current/next-line split, this adds only constant tag[0]/tag[1] taps.
++    wire [SW-1:0] continuing_slot = line_begin ? next_aslot : aslot;
++    wire [15:0] continuing_row = line_begin ? source_row + advance_rows[15:0] : source_row;
++    wire [SW-1:0] continuing_next = next_slot(continuing_slot);
++    wire continuing_ready = complete[continuing_slot] && tag[continuing_slot] == continuing_row
++        && (continuing_row >= height_q-1'b1 ||
++            (complete[continuing_next] && tag[continuing_next] == continuing_row+1'b1));
++    wire initial_ready = complete[0] && tag[0] == 16'd0
++        && (16'd0 >= height_q-1'b1 || (complete[1] && tag[1] == 16'd1));
++    wire pair_ready = first_output ? initial_ready : continuing_ready;
+ 
+     always @(posedge clk) begin
+         if (ce_in) begin
