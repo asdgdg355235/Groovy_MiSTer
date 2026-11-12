@@ -76,14 +76,44 @@ read ports, four marked MLAB & two M10K. This is separate from Quartus mapping.
 
 ## FPGA measurements
 
-Pending the fresh Quartus run. Do not treat simulation or generic inference
-as evidence of placement, timing closure or physical CRT behavior.
+Experiment A ran fresh synthesis, fitting, assembly & TimeQuest with Quartus
+17.0.2 Lite, the existing seed/options & 12.081 ns clock. Every stage executed;
+the runner completed successfully. The supplied four-second counter compile
+log used smart recompilation, so the counter baseline comes from its full fit
+& STA reports rather than that log's elapsed time.
 
 | Revision | Worst setup | Worst hold | Setup TNS | Critical path | Memory | Functional result | Fit |
 |---|---:|---:|---:|---|---|---|---|
 | Original divider, request history | -9.197 ns | +0.250 ns | Not supplied | Divider to MLAB address | Earlier report | Historical result | Reported passed |
 | Counter, supplied reports | -0.921 ns | +0.247 ns | -23.800 ns | `ce_pix` to MLAB read mux | 553 M10Ks / 491520 MLAB bits | Rerun passed | Passed |
-| Read-address Experiment A | Pending | Pending | Pending | Pending | Pending | Passed | Pending |
+| Read-address Experiment A, `3d63b96` | -0.380 ns | +0.254 ns | -60.463 ns | `hb_d` to MLAB write decoder | 553 M10Ks / 491520 MLAB bits | Passed | Passed |
+| Write-address Experiment C | Pending | Pending | Pending | Pending | Pending | Passed | Pending |
+
+The original `ce_pix`-to-RAM cone now passes with +0.012 ns slack, 11.383 ns
+data delay & six logic levels. Its reported cell/routing delays are
+2.475/8.909 ns, with a -0.001 ns interconnect correction. The read cone is
+shorter, but the complete design still fails setup. Worst-path setup improved
+by 0.541 ns while global setup TNS worsened; it is not a timing-clean build.
+
+All 30 worst A paths reach MLAB write endpoints. The worst is
+`hb_d~0_OTERM3604DUPLICATE` through `line_begin` (fanout 393), `comb~5`
+(232), `write_slot[0]`, `write_slot[2]`, `Add22` & the write decoder into
+`packed_ram[1].odd_ram/.../lutrama2315~OBSERVABLEVIRTUALREGOUT0`.
+Data delay is 11.286 ns: 2.922 ns cell, 8.360 ns routing & 0.004 ns
+interconnect correction, with eight logic levels. Hold is +0.254 ns on
+`vga|m_vcnt[2]~DUPLICATE` to `vga|m_vcnt[1]`. Fmax is 80.25 MHz.
+
+Experiment A fits 33257 ALMs, 31281 registers, 21 DSPs, 553 M10Ks & 491520
+MLAB bits. Synthesis retains 29111 registers, matching the counter baseline;
+fitter duplication accounts for the different fitted register counts.
+Quartus confirms all six 3072x40 RAMs with the original storage types.
+
+Experiment B is skipped: the measured remaining top paths are writes.
+Experiment C precomputes the two write-address cases before the same final
+`line_begin` mux. It preserves the original write address even on blanking &
+saturated non-writing columns. It changes neither write enables/data nor
+storage, and adds no register. The same cycle-by-cycle RTL comparison runs
+against the fitted counter baseline before a separate fresh C build.
 
 Run `bash tests/run_crt_read_address_quartus.sh` with Quartus 17.0.2 on PATH.
 The runner copies the source into a new build directory without prior DBs,

@@ -206,7 +206,12 @@ module crt_vsize_fixed #(
     wire [AW-1:0] word_now = line_begin ? AW'(0) : group_col;
     wire [2:0] lane_now = line_begin ? 3'd0 : pixel_lane;
     wire [AW-1:0] read_word = col_now < LINE_PX ? word_now : AW'(0);
-    wire [AW-1:0] wa = address_word(write_slot, word_now);
+    // Precompute the write-slot and word-add cases before line_begin as well.
+    // Keep the ungated current word, including non-writing saturated columns.
+    wire [SW-1:0] write_line_slot = vb_in ? wslot : (first_source ? SW'(0) : next_slot(wslot));
+    wire [AW-1:0] wa_line = address_word(write_line_slot, AW'(0));
+    wire [AW-1:0] wa_current = address_word(wslot, group_col);
+    wire [AW-1:0] wa = line_begin ? wa_line : wa_current;
     // Calculate both address cases before the CE-qualified line-start mux.
     // When line_begin is true, line_now is exactly this next line number,
     // and read_word is zero. Keeping the bank wrap/selection and word add
