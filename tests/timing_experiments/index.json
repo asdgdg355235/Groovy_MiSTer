@@ -52,5 +52,14 @@
     "result_sha256": "34b829ff56180999930a8043321043f0c2c936d10f00c7ceca2ce8b55821fa0f",
     "cone": "delta index -> grouped existing buffer read -> unchanged byte additions/decode",
     "proof": "delta"
+  },
+  "vga-terminal": {
+    "path": "rtl/vga.v",
+    "patch": "vga-terminal.patch",
+    "patch_sha256": "d070ff307f7f22594e5ece3598157f8d3e45f93291069be7208cddb630d5eeb9",
+    "baseline_sha256": "7a3da33eb3543d7fdd497bcfed6a1866918d9b15785fd35f450a6af9552d0502",
+    "result_sha256": "eaaa3be7285397988cd40b31e0e110bf95b0128e3fc697fbd2aa4c910650e857",
+    "cone": "PoC_V -> VGA total/comparison -> retimed root Add17; ultimate source mapping remains partial",
+    "proof": "vga"
   }
 }
