@@ -10,8 +10,8 @@ array set fanout_count {}
 array set source_name {}
 foreach_in_collection node [get_atom_nodes] {
     set name [get_atom_node_info -node $node -key name]
-    if {[string first "u_vsize" $name] < 0} {continue}
-    set local [expr {[string first "local_ra_" $name] >= 0}]
+    if {[string first "u_vsize" $name] < 0 && [string first "crt_read_" $name] < 0} {continue}
+    set local [expr {[string first "local_ra_" $name] >= 0 || [string first "crt_read_" $name] >= 0}]
     if {$local} {incr local_nodes}
     foreach port [get_atom_oports -node $node] {
         set fo [get_atom_port_info -node $node -type oport -port_id $port -key fanout]
