@@ -17,6 +17,12 @@ tar -C "$ROOT" --exclude='./.git' --exclude='./db' --exclude='./incremental_db' 
 cd "$OUT"
 mkdir -p output_files
 quartus_sh --version > output_files/crt_read_address_tool_version.txt
+# Individual stage executables do not run the project's PRE_FLOW_SCRIPT_FILE.
+# Match sys/sys.tcl and the callback's {stage project revision} argument layout.
+quartus_sh -t sys/build_id.tcl pre_flow Groovy Groovy 2>&1 | tee output_files/crt_read_address_pre_flow.log
+[[ -s build_id.v && -s jtag.cdf ]] || {
+    echo 'ERROR: pre-flow did not generate build_id.v and jtag.cdf' >&2; exit 1;
+}
 quartus_map Groovy -c Groovy 2>&1 | tee output_files/crt_read_address_compile.log
 quartus_cdb -t tests/report_crt_local_drivers.tcl map 2>&1 | tee output_files/crt_local_drivers_map.log
 # Audit exact sources before fitting; stop on the first missing-node warning.

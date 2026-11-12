@@ -137,6 +137,7 @@ Project and revision are both `Groovy`. With Quartus 17.0.2 on PATH, run:
 set -euo pipefail
 mkdir -p output_files
 quartus_sh --version | tee output_files/crt_read_address_tool_version.txt
+quartus_sh -t sys/build_id.tcl pre_flow Groovy Groovy 2>&1 | tee output_files/crt_read_address_pre_flow.log
 quartus_map Groovy -c Groovy 2>&1 | tee output_files/duplicate_map.log
 quartus_cdb -t tests/report_crt_local_drivers.tcl map 2>&1 | tee output_files/crt_local_drivers_map.log
 python3 tests/summarize_crt_local_drivers.py output_files/crt_local_drivers_map.tsv > output_files/crt_local_drivers_map.json
@@ -273,3 +274,43 @@ memory blocks. Its RAM summary lists that buffer as AUTO; the geometry scaler
 still has four MLAB and two M10K 3072x40 memories. No M9K-related change is
 included in this correction. Last verified physical slack remains
 -0.132 ns setup / +0.263 ns hold; LZ4 RTL remains unchanged.
+
+## Clean-worktree build-ID correction
+
+The user-run `crt-duplicate-972d027-reports.tar.gz` stops in Analysis &
+Synthesis with Error 10054 at `Groovy.sv:211`: `build_id.v` cannot be opened.
+The following undefined `BUILD_DATE` warning and ignored `emu` entity are
+consequences of that missing generated include. No fitter or TimeQuest result
+was produced by this run.
+
+Diagnosis: changing the runner from `quartus_sh --flow compile` to individual
+`quartus_map` / `quartus_fit` stages omitted the project's pre-flow callback.
+`sys/sys.tcl` assigns `quartus_sh:sys/build_id.tcl` to PRE_FLOW_SCRIPT_FILE.
+`build_id.v` is ignored by Git and therefore absent in the fresh worktree.
+The old checkout could contain it from an earlier full-flow build.
+
+Reference basis: target `Groovy.sv` include and `CONF_STR`, `.gitignore`,
+`sys/sys.tcl:PRE_FLOW_SCRIPT_FILE` and `sys/build_id.tcl:generateBuildID_Verilog`
+plus `generateCDF`; approved `psakhis/Groovy_MiSTer` uses the same callback
+and pre-flow assignment in `sys/build_id.tcl` and `sys/sys.tcl`.
+
+Correction: before mapping, the isolated runner explicitly executes
+`quartus_sh -t sys/build_id.tcl pre_flow Groovy Groovy`, passing the callback's
+stage/project/revision argument layout. It checks that both `build_id.v` and
+`jtag.cdf` were generated and retains `crt_read_address_pre_flow.log`.
+The existing callback, RTL, duplication assignments, memory architecture,
+SDCs and Quartus options are unchanged.
+
+Validation: `python3 tests/test_crt_pre_flow.py` runs the real callback with
+plain Tcl project-API stand-ins in an empty temporary directory. It checks
+the current BUILD_DATE macro, device/revision/path in the generated CDF and
+that repeating the callback preserves the existing identical build-ID file.
+The two fitter-guard tests, 31-assignment Tcl checks, Bash syntax and diff
+checks also pass. No Quartus executable or RTL simulation was run for this
+runner-only correction. Successful callback testing does not establish a
+successful Quartus build or timing closure.
+
+Use the fresh-build runner from the corrected commit, with a new output
+directory. Return the output_files reports, including the pre-flow log if a
+failure occurs. The last verified physical slack remains -0.132 ns setup and
++0.263 ns hold. This failed synthesis supplies no new timing measurement.
