@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""SMT checks of fixed-width identities, not a proof of the complete design.
+"""SMT checks for optional crt-new/transport-new experiments, not the restored candidate RTL.
 
 Requires z3-solver. All operands are unrestricted, including wrap/underflow.
 """

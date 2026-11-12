@@ -102,12 +102,21 @@ foreach_in_collection op $corners {
     report_min_pulse_width -nworst $pulse_bound -detail summary -file $dir/min_pulse_width.txt
     report_clock_transfers -file $dir/clock_transfers.txt
     family $dir $corner wcol {*u_vsize*wcol*} {*u_vsize*packed_ram*} $filters
-    family $dir $corner column_flag {*u_vsize*column_in_range*} {*u_vsize*packed_ram*} $filters
+    # Historical measured RTL intentionally has no column predicate register.
+    if {[get_collection_size [get_registers {*u_vsize*column_in_range*}]] > 0} {
+        family $dir $corner column_flag {*u_vsize*column_in_range*} {*u_vsize*packed_ram*} $filters
+    } else {
+        puts $filters "$corner\tcolumn_flag_absent_in_measured_rtl\t0\tALL"
+    }
     family $dir $corner hb {*vga*hb* *u_vsize*hb_d*} {} $filters
     family $dir $corner poc_v {*|PoC_V*} {} $filters
+    family $dir $corner vga {*vga*v_cnt* *|PoC_V*} {} $filters
+    family $dir $corner delta_framebuffer {*PoC_lz4_delta_FB*} {} $filters
     family $dir $corner delta_index {*PoC_lz4_delta_index*} {} $filters
     family $dir $corner lz4_compressed {} {*lz4_compressed_bytes*} $filters 1
     family $dir $corner lz4_counters {} {*lz4*block_read_total* *lz4*block_write_total* *lz4*uncompressed_bytes* *lz4*LL* *lz4*ML* *lz4*window_addr* *lz4*MP*} $filters 1
+    # Counter-to-state paths are independent of paths captured by counters.
+    family $dir $corner lz4_counter_launch {*lz4*block_read_total* *lz4*block_write_total* *lz4*uncompressed_bytes* *lz4*LL* *lz4*ML* *lz4*window_addr* *lz4*MP*} {} $filters 1
     foreach part {0 1 2} {
         foreach bank {even odd} {
             family $dir $corner bank_${part}_${bank} {} "*u_vsize*packed_ram?${part}?.${bank}_ram*" $filters

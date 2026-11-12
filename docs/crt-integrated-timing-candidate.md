@@ -1,3 +1,5 @@
+> Historical 5d28cda experiment. The current measured-source candidate is documented in [crt-measured-baseline-integration.md](crt-measured-baseline-integration.md).
+
 # Integrated CRT timing candidate
 
 This revision is a source candidate for the next user-run Quartus build. No

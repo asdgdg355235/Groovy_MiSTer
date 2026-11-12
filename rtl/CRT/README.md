@@ -11,7 +11,7 @@ commit [`04be786998d04769238b09190df1e36279f6e84a`](https://github.com/asdgdg355
 | `COPYING` | `LICENSE` |
 
 `crt_vsize_fixed.sv` now contains local memory/address timing changes. See
-[`docs/crt-integrated-timing-candidate.md`](../../docs/crt-integrated-timing-candidate.md)
+[`docs/crt-measured-baseline-integration.md`](../../docs/crt-measured-baseline-integration.md)
 for the current source changes, reference tests & pending FPGA checks.
 
 `crt_vsize_fixed` derives its gamma-2 two-tap filter & square-root encoder
