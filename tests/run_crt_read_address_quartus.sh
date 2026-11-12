@@ -14,8 +14,10 @@ mkdir -p "$OUT"
 OUT="$(cd "$OUT" && pwd)"
 tar -C "$ROOT" --exclude='./.git' --exclude='./db' --exclude='./incremental_db' \
     --exclude='./output_files' -cf - . | tar -C "$OUT" -xf -
+CANDIDATE_REV="$(git -C "$ROOT" rev-parse HEAD)"
 cd "$OUT"
 mkdir -p output_files
+printf '%s\n' "$CANDIDATE_REV" > output_files/timing_candidate_commit.txt
 quartus_sh --version > output_files/crt_read_address_tool_version.txt
 # Individual stage executables do not run the project's PRE_FLOW_SCRIPT_FILE.
 # Match sys/sys.tcl and the callback's {stage project revision} argument layout.
@@ -26,6 +28,9 @@ quartus_sh -t sys/build_id.tcl pre_flow Groovy Groovy 2>&1 | tee output_files/cr
 quartus_map Groovy -c Groovy 2>&1 | tee output_files/crt_read_address_compile.log
 quartus_cdb -t tests/report_crt_local_drivers.tcl map 2>&1 | tee output_files/crt_local_drivers_map.log
 python3 tests/summarize_crt_local_drivers.py output_files/crt_local_drivers_map.tsv > output_files/crt_local_drivers_map.json
+# Resolve synthesis-generated names after the RTL change, before Fitter reads
+# its QSF. The historical fallback remains useful for the measured old RTL.
+python3 tests/resolve_crt_duplicate_sources.py output_files/crt_local_drivers_map.tsv output_files/crt_address_duplication_resolved.qsf
 # Audit exact sources before fitting; stop on the first missing-node warning.
 python3 tests/run_crt_duplicate_fit.py 2>&1 | tee -a output_files/crt_read_address_compile.log
 quartus_asm Groovy -c Groovy 2>&1 | tee -a output_files/crt_read_address_compile.log
@@ -39,10 +44,10 @@ if grep -Ei '(skipp|not required|up.to.date).*(synthesis|fitter|assembler)|(synt
     output_files/crt_read_address_compile.log; then
     echo 'ERROR: a required compilation stage was skipped' >&2; exit 1
 fi
-quartus_sta -t tests/report_crt_read_address_timing.tcl 2>&1 | tee output_files/crt_read_address_sta.log
+quartus_sta -t tests/report_timing_closure.tcl 2>&1 | tee output_files/crt_read_address_sta.log
 for stage in cmp; do
     quartus_cdb -t tests/report_crt_local_drivers.tcl "$stage" 2>&1 | tee "output_files/crt_local_drivers_${stage}.log"
 done
-python3 tests/summarize_crt_local_drivers.py output_files/crt_local_drivers_cmp.tsv > output_files/crt_local_drivers_cmp.json
+python3 tests/summarize_crt_local_drivers.py output_files/crt_local_drivers_cmp.tsv --require-local > output_files/crt_local_drivers_cmp.json
 echo "Results: $OUT/output_files"
 echo 'Review setup/hold slack even when the compilation exit status is successful.'

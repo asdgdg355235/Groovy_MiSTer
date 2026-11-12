@@ -105,7 +105,7 @@ class CRTGroupAddressTest(unittest.TestCase):
         self.assertEqual(SRC.count(".USE_MLAB(part < MLAB_PARTS)"), 2)
         self.assertIn(".wa(wa)", SRC)
         self.assertEqual(SRC.count(".wa(wa)"), 2)
-        self.assertIn("read_lane <= col_now < LINE_PX ? lane_now : 3'd0;", SRC)
+        self.assertIn("read_lane <= read_column_in_range ? lane_now : 3'd0;", SRC)
         no_comments = "\n".join(x.split('//')[0] for x in SRC.splitlines())
         self.assertNotRegex(no_comments, r"(?<!\w)(?:wcol|col_now|read_col)\s*[/%]")
         self.assertEqual(len(re.findall(r"/\s*GROUP_PX", no_comments)), 1)  # constant LINE_WORDS only

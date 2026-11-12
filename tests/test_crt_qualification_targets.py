@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exercise qualification preflight acceptance and stale/cross-bank rejection."""
+"""Exercise final-driver resolution and stale/cross-bank rejection."""
 import contextlib
 import io
 from pathlib import Path
@@ -28,20 +28,35 @@ class QualificationTargetsTest(unittest.TestCase):
             path.write_text('\n'.join(rows)+'\n')
             check(path)
 
-    def test_accepts_six_qualification_groups(self):
+    def test_accepts_final_groups(self):
         self.run_check(self.rows, self.dump)
 
-    def test_rejects_missing_comparator(self):
+    def test_rejects_missing_source(self):
         with self.assertRaisesRegex(ValueError, 'exact source is missing'):
-            self.run_check([row for row in self.rows if row != self.qual_row], self.dump)
+            self.run_check([r for r in self.rows if not ('local_ra_odd[0]' in r)], self.dump)
 
-    def test_rejects_cross_bank_qualification(self):
-        prefix = 'emu:emu|crt_vsize_fixed:u_vsize|'
-        bad = self.dump.replace(prefix+'LessThan13~1\t'+prefix+'crt_read_0_even_bit*',
-                                prefix+'LessThan13~1\t'+prefix+'crt_read_1_even_bit*', 1)
-        self.assertNotEqual(bad, self.dump)
-        with self.assertRaisesRegex(ValueError, 'invalid destination prefix'):
+    def test_rejects_cross_bank_source(self):
+        bad = self.dump.replace('local_ra_odd[0]~0', 'local_ra_odd[1]~1', 1)
+        with self.assertRaisesRegex(ValueError, 'missing destinations or a different address source'):
             self.run_check(self.rows, bad)
+
+    def test_resolves_renamed_synthesis_sources(self):
+        from resolve_crt_duplicate_sources import resolve
+        rows = [r.replace('local_ra_odd[', 'renamed_read[') for r in self.rows]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)/'map.tsv'
+            path.write_text('\n'.join(rows)+'\n')
+            output = Path(tmp)/'resolved.qsf'
+            output.write_text(resolve(path))
+            with contextlib.redirect_stdout(io.StringIO()):
+                check(path, output)
+            self.assertEqual(output.read_text().count('DUPLICATE_ATOM'), 30)
+            path.write_text('\n'.join(r+'\tREGOUT' if r.startswith('RAM_ADDRESS') else r for r in rows))
+            with self.assertRaisesRegex(ValueError, 'non-combinational source'):
+                resolve(path)
+            path.write_text('\n'.join(r for r in rows if '.odd_ram|' not in r))
+            with self.assertRaisesRegex(ValueError, 'expected one observed source'):
+                resolve(path)
 
 
 if __name__ == '__main__':

@@ -1,41 +1,24 @@
-# Quartus 17 DUPLICATE_ATOM experiment; no sequential RTL or SDC changes.
-# Names come from the completed Candidate A map atom audit (17.0.2.602).
-# Exact -from names copied from the user's completed map audit.
-# Tcl braces/format preserve literal array brackets; no source wildcards.
-foreach part {0 1 2} {
-    foreach bank {even odd} {
-        for {set bit 0} {$bit < 5} {incr bit} {
-            set read_driver [format {emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[%d]~%d} $bit $bit]
-            set ram_destination [format {emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[%d].%s_ram|*} $part $bank]
-            set duplicate_name [format {crt_read_%d_%s_bit%d} $part $bank $bit]
-            set_instance_assignment -name DUPLICATE_ATOM $duplicate_name -from $read_driver -to $ram_destination
+# Retain the successful six-way final read-driver split from 47ffb26.
+# Retain the best measured final-driver assignment set; retire later wa[3] and
+# comparator copies. Those builds had worse global timing; the new RTL removes
+# the read comparator dependency instead of adding another copy.
+# The user-run flow resolves these sources from its fresh map before fitting.
+if {[file exists output_files/crt_address_duplication_resolved.qsf]} {
+    source output_files/crt_address_duplication_resolved.qsf
+} else {
+    # Names come from the completed Candidate A map atom audit (17.0.2.602).
+    # Exact -from names copied from the user's completed map audit.
+    # Tcl braces/format preserve literal array brackets; no source wildcards.
+    foreach part {0 1 2} {
+        foreach bank {even odd} {
+            for {set bit 0} {$bit < 5} {incr bit} {
+                set read_driver [format {emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[%d]~%d} $bit $bit]
+                set ram_destination [format {emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[%d].%s_ram|*} $part $bank]
+                set duplicate_name [format {crt_read_%d_%s_bit%d} $part $bank $bit]
+                set_instance_assignment -name DUPLICATE_ATOM $duplicate_name -from $read_driver -to $ram_destination
+            }
         }
     }
-}
-unset part bank bit read_driver ram_destination duplicate_name
+    unset part bank bit read_driver ram_destination duplicate_name
 
-# The original pre-duplication target did not isolate wa[3] in the fitted build.
-# Target the six final-driver copies AFTER declaring their duplication above.
-# These destination names are confirmed by the 47ffb26 fitted atom audit.
-foreach part {0 1 2} {
-    foreach bank {even odd} {
-        set read_sink [format {emu:emu|crt_vsize_fixed:u_vsize|crt_read_%d_%s_bit3} $part $bank]
-        set word_copy [format {crt_read_word_%d_%s_bit3} $part $bank]
-        set_instance_assignment -name DUPLICATE_ATOM $word_copy \
-            -from {emu:emu|crt_vsize_fixed:u_vsize|wa[3]~3} -to $read_sink
-    }
 }
-unset part bank read_sink word_copy
-
-# Localize only the wcol < LINE_PX read qualification feeding final bits 0..4.
-# Exact comparator name and downstream groups are observed in 42ec0b2's audit.
-# Original comparator keeps its other consumers; all previous copies stay intact.
-foreach part {0 1 2} {
-    foreach bank {even odd} {
-        set qual_sink [format {emu:emu|crt_vsize_fixed:u_vsize|crt_read_%d_%s_bit*} $part $bank]
-        set qual_copy [format {crt_read_qual_%d_%s} $part $bank]
-        set_instance_assignment -name DUPLICATE_ATOM $qual_copy \
-            -from {emu:emu|crt_vsize_fixed:u_vsize|LessThan13~1} -to $qual_sink
-    }
-}
-unset part bank qual_sink qual_copy

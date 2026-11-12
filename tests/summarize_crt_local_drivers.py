@@ -18,7 +18,7 @@ with path.open() as source:
         if row[0] == 'READ_CONTROL_EDGE':
             controls.setdefault(row[2], []).append({'port': row[3], 'source_id': row[5],
                                                     'source_name': row[6], 'fanout': int(row[7])})
-        if row[0] == 'DRIVER' and ('LessThan13' in row[2] or 'crt_read_qual_' in row[2]):
+        if row[0] == 'DRIVER' and ('LessThan13' in row[2] or 'crt_read_qual_' in row[2] or 'column_in_range' in row[2]):
             qualification_drivers.append({'id': row[1], 'name': row[2], 'fanout': int(row[4])})
         if row[0] != 'RAM_ADDRESS' or row[3] != 'PORTBADDR':
             continue
@@ -41,6 +41,10 @@ for bit in range(5):
         for sid, entry in bits.get(str(bit), {}).items():
             sources.setdefault(sid, {'name': entry['source_name'], 'fanout': entry['fanout'], 'banks': []})['banks'].append(bank)
     shared[str(bit)] = list(sources.values())
+if '--require-local' in sys.argv[2:]:
+    for bit, entries in shared.items():
+        if len(entries) != 6 or any(len(entry['banks']) != 1 for entry in entries):
+            raise SystemExit(f'Physical final-driver separation failed for bit {bit}: {entries}')
 print(json.dumps({'audit': str(path), 'local_named_atom_count': local_nodes,
                   'low_read_address_bits': shared, 'banks': banks,
                   'read_control_inputs': controls, 'qualification_drivers': qualification_drivers}, indent=2))

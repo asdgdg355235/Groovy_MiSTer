@@ -40,5 +40,6 @@ def run(command, log):
 
 
 if __name__ == '__main__':
-    check('output_files/crt_local_drivers_map.tsv')
+    resolved = Path('output_files/crt_address_duplication_resolved.qsf')
+    check('output_files/crt_local_drivers_map.tsv', resolved if resolved.exists() else None)
     raise SystemExit(run(['quartus_fit', 'Groovy', '-c', 'Groovy'], 'output_files/duplicate_fit.log'))

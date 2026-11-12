@@ -7,35 +7,31 @@ proc set_instance_assignment {args} {
         [lindex $args 3] ne "-from" || [lindex $args 5] ne "-to"} {error "Unexpected assignment: $args"}
     lappend assignments $args
 }
-source $root/rtl/CRT/crt_address_duplication.qsf
-if {[llength $assignments] != 42} {error "Expected 42 targeted assignments"}
+if {[info exists ::env(CRT_DUPLICATE_QSF)]} {
+    source $::env(CRT_DUPLICATE_QSF)
+} else {
+    source $root/rtl/CRT/crt_address_duplication.qsf
+}
+if {[llength $assignments] != 30} {error "Expected 30 targeted assignments"}
 set names {}
 foreach a $assignments {
     lassign $a flag type name from source to sink
     if {$name in $names} {error "Duplicate name $name"}
     lappend names $name
-    if {[regexp {^crt_read_word_([012])_(even|odd)_bit3$} $name -> part bank]} {
-        set observed_source {emu:emu|crt_vsize_fixed:u_vsize|wa[3]~3}
-        set observed_sink [format {emu:emu|crt_vsize_fixed:u_vsize|crt_read_%d_%s_bit3} $part $bank]
-    } elseif {[regexp {^crt_read_qual_([012])_(even|odd)$} $name -> part bank]} {
-        set observed_source {emu:emu|crt_vsize_fixed:u_vsize|LessThan13~1}
-        set observed_sink [format {emu:emu|crt_vsize_fixed:u_vsize|crt_read_%d_%s_bit*} $part $bank]
-    } else {
-        if {![regexp {^crt_read_([012])_(even|odd)_bit([0-4])$} $name -> part bank bit]} {error $name}
-        set observed_source [format {emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[%d]~%d} $bit $bit]
-        set observed_sink [format {emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[%d].%s_ram|} $part $bank]
-        # Hierarchies/leaf forms recorded in Candidate A's map audit.
-        if {$part < 2} {append observed_sink {altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|lutrama16}} else {append observed_sink {altsyncram:block_ram.mem_rtl_0|altsyncram_jpk1:auto_generated|ram_block1a8}}
-        foreach p {0 1 2} {
-            foreach b {even odd} {
-                set other [format {emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[%d].%s_ram|mem~0} $p $b]
-                if {[expr {[string first [string range $sink 0 end-1] $other] == 0}] != ($p == $part && $b eq $bank)} {error "Cross-bank target $sink"}
-            }
+    if {![regexp {^crt_read_([012])_(even|odd)_bit([0-4])$} $name -> part bank bit]} {error $name}
+    set observed_source [format {emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[%d]~%d} $bit $bit]
+    set observed_sink [format {emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[%d].%s_ram|} $part $bank]
+    # Hierarchies/leaf forms recorded in Candidate A's map audit.
+    if {$part < 2} {append observed_sink {altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|lutrama16}} else {append observed_sink {altsyncram:block_ram.mem_rtl_0|altsyncram_jpk1:auto_generated|ram_block1a8}}
+    foreach p {0 1 2} {
+        foreach b {even odd} {
+            set other [format {emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[%d].%s_ram|mem~0} $p $b]
+            if {[expr {[string first [string range $sink 0 end-1] $other] == 0}] != ($p == $part && $b eq $bank)} {error "Cross-bank target $sink"}
         }
     }
-    if {$source ne $observed_source || ![expr {$sink eq $observed_sink || ([string index $sink end] eq "*" && [string first [string range $sink 0 end-1] $observed_sink] == 0)}]} {error "Nonmatching target: $a"}
+    if {(![info exists ::env(CRT_DUPLICATE_QSF)] && $source ne $observed_source) || ![expr {$sink eq $observed_sink || ([string index $sink end] eq "*" && [string first [string range $sink 0 end-1] $observed_sink] == 0)}]} {error "Nonmatching target: $a"}
 }
-puts "PASS: 42 unique assignments; observed source names match; six bank targets remain disjoint"
+puts "PASS: 30 unique assignments; observed source names match; six bank targets remain disjoint"
 puts "Exact source names and literal destination prefixes only; Quartus assignment acceptance and physical duplication are unverified"
 
 if {[llength $argv] && [lindex $argv 0] eq "--dump"} {

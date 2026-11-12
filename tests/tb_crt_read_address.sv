@@ -61,6 +61,8 @@ module tb_crt_read_address #(parameter LINE_PX=32);
     reg fault=0;
     task automatic compare_addresses;
         begin
+            if (dut.column_in_range !== (dut.wcol < LINE_PX))
+                $fatal(1,"column predicate invariant failed cycle=%0d",cycles);
             if ({dut.wa,dut.ra_even,dut.ra_odd,dut.write_even,dut.write_odd,
                  dut.write_pixel,dut.flush_group,dut.write_lane,dut.pack_next} !==
                 {baseline.wa,baseline.ra_even,baseline.ra_odd,baseline.write_even,baseline.write_odd,

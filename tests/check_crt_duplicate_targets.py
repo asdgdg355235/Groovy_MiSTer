@@ -4,6 +4,7 @@
 Uses plain Tcl and Python only. Does not validate Quartus assignment acceptance.
 """
 import csv
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -11,8 +12,11 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 
-def check(path):
-    dump = subprocess.check_output(['tclsh', str(ROOT/'tests/test_crt_address_duplication.tcl'), '--dump'], text=True)
+def check(path, assignments_path=None):
+    env = dict(os.environ)
+    if assignments_path is not None:
+        env['CRT_DUPLICATE_QSF'] = str(Path(assignments_path).resolve())
+    dump = subprocess.check_output(['tclsh', str(ROOT/'tests/test_crt_address_duplication.tcl'), '--dump'], text=True, env=env)
     assignments = [line.split('\t')[1:] for line in dump.splitlines() if line.startswith('ASSIGN\t')]
     sources = set()
     rows = []
@@ -27,27 +31,6 @@ def check(path):
     for name, source, target in assignments:
         if source not in sources:
             raise ValueError(f'{name}: exact source is missing: {source}')
-        if name.startswith('crt_read_qual_'):
-            match = re.fullmatch(r'crt_read_qual_([012])_(even|odd)', name)
-            if not match:
-                raise ValueError(f'Invalid qualification copy: {name}')
-            part, bank = match.groups()
-            expected = f'emu:emu|crt_vsize_fixed:u_vsize|crt_read_{part}_{bank}_bit'
-            if target != expected + '*':
-                raise ValueError(f'{name}: invalid destination prefix: {target}')
-            created = {'emu:emu|crt_vsize_fixed:u_vsize|' + a[0] for a in assignments
-                       if re.fullmatch(r'crt_read_[012]_(even|odd)_bit[0-4]', a[0])}
-            selected = {n for n in created if n.startswith(expected)}
-            if selected != {expected + str(bit) for bit in range(5)}:
-                raise ValueError(f'{name}: expected five final-driver destinations')
-            print(f'PASS {name}: exact comparator exists; five final targets created by preserved assignments (Fitter ordering unverified)')
-            continue
-        if name.startswith('crt_read_word_'):
-            created = {'emu:emu|crt_vsize_fixed:u_vsize|' + a[0] for a in assignments if re.fullmatch(r'crt_read_[012]_(even|odd)_bit3', a[0])}
-            if target not in sources and target not in created:
-                raise ValueError(f'{name}: destination is neither observed nor created: {target}')
-            print(f'PASS {name}: source exists; destination observed or created by final-driver assignment (Fitter ordering unverified)')
-            continue
         match = re.fullmatch(r'crt_read_([012])_(even|odd)_bit([0-4])', name)
         if not match or not target.endswith('|*'):
             raise ValueError(f'Unexpected target group: {name}: {target}')
@@ -64,6 +47,6 @@ def check(path):
 
 if __name__ == '__main__':
     try:
-        check(sys.argv[1])
+        check(sys.argv[1], sys.argv[2] if len(sys.argv)>2 else None)
     except (ValueError, IndexError) as error:
         raise SystemExit(str(error))
