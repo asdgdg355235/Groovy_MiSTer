@@ -142,7 +142,7 @@ quartus_cdb -t tests/report_crt_local_drivers.tcl map 2>&1 | tee output_files/cr
 python3 tests/summarize_crt_local_drivers.py output_files/crt_local_drivers_map.tsv > output_files/crt_local_drivers_map.json
 # Review warnings here, then continue through fitting to evaluate Fitter assignments.
 rg -ni 'duplicate|ignored|unmatched|not found|Warning|Error' output_files/duplicate_map.log || true
-quartus_fit Groovy -c Groovy 2>&1 | tee output_files/duplicate_fit.log
+python3 tests/run_crt_duplicate_fit.py
 quartus_cdb -t tests/report_crt_local_drivers.tcl cmp 2>&1 | tee output_files/crt_local_drivers_cmp.log
 python3 tests/summarize_crt_local_drivers.py output_files/crt_local_drivers_cmp.tsv > output_files/crt_local_drivers_cmp.json
 quartus_asm Groovy -c Groovy 2>&1 | tee output_files/duplicate_asm.log
@@ -196,3 +196,80 @@ The expected lack of RTL behavior changes follows from that source comparison;
 simulation is coverage, not exhaustive formal proof. Quartus acceptance,
 assignment ordering, driver retention, fit/resources and timing remain untested.
 The last verified physical results remain -0.132 ns setup and +0.263 ns hold.
+
+## Correction after the user-run missing-source loop
+
+The user-run 17.0.2 Fitter repeatedly emitted Warning 171070 for the source
+patterns in Candidate B. The uploaded truncated log contains 548 repetitions;
+the original log reached approximately 140 MiB according to the user. This
+run is not evidence for driver retention, resource usage or timing improvement.
+
+The supplied `crt_local_drivers_map.tsv` confirms that all five intended source
+nodes exist, exactly as below, each with fanout 15440:
+
+```
+emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[0]~0
+emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[1]~1
+emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[2]~2
+emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[3]~3
+emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[4]~4
+```
+
+The correction replaces patterned `-from` values with these exact names, and
+uses literal entity/array names in destination prefixes with only a trailing
+`*`. The upstream assignment uses exact `wa[3]~3` and exact read mux bit 3.
+Tcl braces and `format` preserve the brackets as characters. No RTL, SDC,
+project device or RAM mapping is changed. Quartus acceptance still requires a
+local Fitter run; the prior plain Tcl glob test did not validate that behavior.
+
+Reference basis: the uploaded map TSV and Fitter log, target
+`rtl/CRT/crt_address_duplication.qsf`, `crt_vsize_fixed.sv:packed_ram`,
+`crt_packed_ram.sv` and existing map/cmp reporter; approved receiver
+`psakhis/Groovy_MiSTer/rtl/vga.v:ce_pix` counter/field update block remains
+untouched. Altera's older Quartus handbook documents exact source nodes with
+wildcard destination hierarchies for this assignment:
+https://cdrdv2-public.intel.com/653790/quartusii_handbook_10_1_0.pdf
+Its example supports the exact-source/hierarchy-destination approach; it does
+not establish that these assignments have been accepted by this build.
+
+`check_crt_duplicate_targets.py` sources the actual QSF in ordinary Tcl, then
+checks all expanded assignments against the saved TSV. All 31 pass on the
+user's audit. For each of the 30 final mux assignments, it verifies the exact
+source and every selected low-bit read-address connection within the intended
+bank. Each MLAB bank has 3840 RAM atoms; each M10K bank has 40. The upstream
+assignment's node existence passes; its direct edge was established by the
+previous fan-in audit and is not re-proved by this address-only TSV.
+
+The fresh-build runner now executes map, map audit, preflight, guarded fit,
+assembly and STA as explicit stages. The guarded fitter stops its process
+group on the first Warning 171070 and returns failure. It does not suppress
+warnings or claim timing success. It preserves ordinary process exit codes.
+Use this runner for the next local build rather than the older unguarded
+`quartus_fit` command:
+
+```bash
+export PATH="$HOME/intelFPGA_lite/17.0/quartus/bin:$PATH"
+bash tests/run_crt_read_address_quartus.sh
+```
+
+The runner creates a new timestamped directory beside the checkout. Return
+its `output_files` reports. If it stops, return `duplicate_fit.log` and
+`crt_local_drivers_map.tsv` from that directory before attempting more fits.
+If it completes, also return the cmp TSV, setup/hold, six per-bank paths,
+LZ4, unconstrained report and `Groovy.map/fit/sta.rpt` plus summaries.
+
+Validation executed for this correction: all 31 assignments against the
+uploaded TSV; two subprocess tests of the fitter guard using Python stand-ins
+(one repeated missing-source loop, one ordinary nonzero exit); three independent
+counter model tests over 210000 clocks; Tcl assignment checks, Python syntax,
+Bash syntax and `git diff --check`. No Quartus executable was invoked. No RTL
+simulation was rerun because simulation tools are absent in the refreshed
+workspace; the earlier 6698817-clock result belongs to the unchanged RTL from
+the preceding experiment. It is not a new simulation result for this turn.
+
+The M9K parameter belongs to `jtframe_hsize`'s inferred horizontal line buffer.
+The uploaded map report emits Warning 287001 and states it uses available
+memory blocks. Its RAM summary lists that buffer as AUTO; the geometry scaler
+still has four MLAB and two M10K 3072x40 memories. No M9K-related change is
+included in this correction. Last verified physical slack remains
+-0.132 ns setup / +0.263 ns hold; LZ4 RTL remains unchanged.

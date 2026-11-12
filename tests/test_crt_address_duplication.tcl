@@ -26,11 +26,15 @@ foreach a $assignments {
         foreach p {0 1 2} {
             foreach b {even odd} {
                 set other [format {emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[%d].%s_ram|mem~0} $p $b]
-                if {[string match $sink $other] != ($p == $part && $b eq $bank)} {error "Cross-bank target $sink"}
+                if {[expr {[string first [string range $sink 0 end-1] $other] == 0}] != ($p == $part && $b eq $bank)} {error "Cross-bank target $sink"}
             }
         }
     }
-    if {![string match $source $observed_source] || ![string match $sink $observed_sink]} {error "Nonmatching target: $a"}
+    if {$source ne $observed_source || ![expr {$sink eq $observed_sink || ([string index $sink end] eq "*" && [string first [string range $sink 0 end-1] $observed_sink] == 0)}]} {error "Nonmatching target: $a"}
 }
 puts "PASS: 31 unique assignments; observed source names match; six bank targets remain disjoint"
-puts "Tcl syntax/matching only; Quartus assignment acceptance and physical duplication are unverified"
+puts "Exact source names and literal destination prefixes only; Quartus assignment acceptance and physical duplication are unverified"
+
+if {[llength $argv] && [lindex $argv 0] eq "--dump"} {
+    foreach a $assignments {puts [join [list ASSIGN [lindex $a 2] [lindex $a 4] [lindex $a 6]] "\t"]}
+}
