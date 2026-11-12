@@ -797,6 +797,15 @@ reg [23:0] PoC_subframe_px_lz4 = 24'd0;
 reg        PoC_lz4_delta = 1'b0;
 reg [6:0]  PoC_lz4_delta_index = 7'd0;
 reg [63:0] PoC_lz4_delta_FB[128];
+// Two combinational mux levels: sixteen groups of eight existing words.
+// Preserve group boundaries, not copies of index state or pixel storage.
+wire [63:0] PoC_lz4_delta_group[0:15];
+genvar delta_group;
+generate for(delta_group=0;delta_group<16;delta_group=delta_group+1) begin : delta_read_group
+  (* keep = "true" *) wire [63:0] selected = PoC_lz4_delta_FB[delta_group*8 + PoC_lz4_delta_index[2:0]];
+  assign PoC_lz4_delta_group[delta_group] = selected;
+end endgenerate
+wire [63:0] PoC_lz4_delta_selected = PoC_lz4_delta_group[PoC_lz4_delta_index[6:3]];
 reg        PoC_lz4_delta_req;
 reg [27:0] PoC_lz4_delta_bytes = 28'd0;
 
@@ -1875,7 +1884,7 @@ lz4 lz4
  .lz4_writed_bytes       (lz4_writed_bytes),
  .lz4_readed_bytes       (lz4_readed_bytes),
  .lz4_read_ready         (lz4_read_ready),
- .lz4_delta_long         (PoC_lz4_delta_FB[PoC_lz4_delta_index])      
+ .lz4_delta_long         (PoC_lz4_delta_selected)      
 );   
 
 
