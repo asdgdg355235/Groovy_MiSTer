@@ -24,3 +24,13 @@ for bits in range(1,5):
    b=((((p0+s0)&mask)>>bits)-(p0>>bits))&((1<<(bits+1))-1)
    assert a==b
  print('PASS: exhaustive reduced-width row difference, half width',bits)
+from z3 import Bool, If, UGE, ULT, Not
+line,first,started=Bool('line_begin'),Bool('first_source'),Bool('started')
+n,out=BitVec('line_no',16),BitVec('out_height',16)
+d=BitVec('delay_lines',6)
+read=If(first,BitVecVal(0,16),n+1)
+now=If(line,read,n)
+old=If(line,(started|first)&UGE(now,ZeroExt(10,d))&ULT(ZeroExt(1,now),ZeroExt(1,out)+ZeroExt(11,d)),Bool('line_active'))
+new=If(line,(started|first)&UGE(read,ZeroExt(10,d))&ULT(ZeroExt(1,read),ZeroExt(1,out)+ZeroExt(11,d)),Bool('line_active'))
+prove('upcoming-line qualification including 16-bit wrap',old,new)
+prove('first-output qualification',line&(now==ZeroExt(10,d)),line&(read==ZeroExt(10,d)))

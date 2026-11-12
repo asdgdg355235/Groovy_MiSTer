@@ -61,6 +61,7 @@ module crt_vsize_fixed #(
         address_word = AW'((32'(s) >> 1)*LINE_WORDS + 32'(word));
     endfunction
 
+
     // A restoring division runs once per field, in blanking. No pixel-rate
     // divider. Q16 error is less than one source line / 65536 per output row.
     reg [31:0] dividend = 0, quotient = 0;
@@ -83,13 +84,18 @@ module crt_vsize_fixed #(
     wire [SW-1:0] next_aslot = (advance_rows == 2) ? next_slot(next_slot(aslot))
                                              : (advance_rows == 1) ? next_slot(aslot) : aslot;
     wire first_source = !started && !vb_in;
-    wire [15:0] line_now = line_begin ? (first_source ? 16'd0 : line_no + 1'b1) : line_no;
+    // Qualify the upcoming line independently of the late line-begin mux.
+    // Use 16-bit addition here, matching line_now's original wrap behavior.
+    wire [15:0] read_line_no = first_source ? 16'd0 : line_no + 16'd1;
+    wire [15:0] line_now = line_begin ? read_line_no : line_no;
     wire [15:0] row_now = line_begin && !vb_in ? (first_source ? 16'd0 : wrow + 1'b1) : wrow;
     wire [SW-1:0] write_slot = line_begin && !vb_in ? (first_source ? SW'(0) : next_slot(wslot)) : wslot;
     wire [15:0] col_now = line_begin ? 16'd0 : wcol;
-    wire first_output = line_begin && line_now == {10'd0,delay_lines};
-    wire output_now = line_begin ? ((started || first_source) && line_now >= {10'd0,delay_lines}
-                               && {1'b0,line_now} < {1'b0,out_height}+{11'd0,delay_lines}) : line_active;
+    wire first_output_line = read_line_no == {10'd0,delay_lines};
+    wire first_output = line_begin && first_output_line;
+    wire output_line = (started || first_source) && read_line_no >= {10'd0,delay_lines}
+                    && {1'b0,read_line_no} < {1'b0,out_height}+{11'd0,delay_lines};
+    wire output_now = line_begin ? output_line : line_active;
     wire [31:0] pos_now = line_begin ? (first_output ? 32'd0 : position_next) : position;
     wire [15:0] src_now = first_output ? 16'd0 : (line_begin ? source_row + advance_rows[15:0] : source_row);
     wire [SW-1:0] slot_now = first_output ? SW'(0) : (line_begin ? next_aslot : aslot);
@@ -117,9 +123,11 @@ module crt_vsize_fixed #(
                 line_active <= output_now;
                 if(output_now && !vs_in) displayed_rows <= displayed_rows + 1'b1;
                 if (output_now) begin
-                    position <= pos_now;
-                    source_row <= src_now;
-                    aslot <= slot_now;
+                    // This branch already proves line_begin; do not repeat
+                    // that mux in front of these existing state updates.
+                    position <= first_output_line ? 32'd0 : position_next;
+                    source_row <= first_output_line ? 16'd0 : source_row + advance_rows[15:0];
+                    aslot <= first_output_line ? SW'(0) : next_aslot;
                 end
             end else if (!hb_in && wcol < LINE_PX) begin
                 wcol <= wcol + 1'b1;
@@ -223,7 +231,6 @@ module crt_vsize_fixed #(
     // and read_word is zero. Keeping the bank wrap/selection and word add
     // ahead of that final mux removes ce_in from their combinational cone.
     // No register or RAM read cycle is added; blanking reads are preserved.
-    wire [15:0] read_line_no = first_source ? 16'd0 : line_no + 16'd1;
     wire [SW-1:0] read_line_slot = read_line_no == {10'd0,delay_lines} ? SW'(0) : next_aslot;
     wire [SW-1:0] read_line_bslot = next_slot(read_line_slot);
     wire [SW-1:0] read_bslot = next_slot(aslot);
