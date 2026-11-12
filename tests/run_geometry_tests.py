@@ -88,7 +88,8 @@ def main():
         bits=set(range(start,end+1))
         assert not occupied & bits, ('OSD status overlap', bits & occupied)
         occupied |= bits
-    for path in ['rtl/vga.v','rtl/hps_ext.v','rtl/sound.v','rtl/lz4.v',
+    # LZ4 timing changes have the complete decoder reference regression.
+    for path in ['rtl/vga.v','rtl/hps_ext.v','rtl/sound.v',
                  'hps_linux/src/input.cpp','hps_linux/src/support/groovy/groovy.cpp']:
         inherited=subprocess.check_output(['git','show',BASE+':'+path],cwd=ROOT)
         assert (ROOT/path).read_bytes()==inherited, 'unexpected protocol/controller/audio/timing change: '+path
