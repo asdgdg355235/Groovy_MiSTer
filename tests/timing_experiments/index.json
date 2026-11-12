@@ -25,5 +25,14 @@
     "result_sha256": "958c9d17b9da31578f6805c721b76cf3d34a08cebc8489eefdae6adfe8c188c7",
     "cone": "wcol/current row base -> six final read-address muxes",
     "proof": "address"
+  },
+  "read-late": {
+    "path": "rtl/CRT/crt_vsize_fixed.sv",
+    "patch": "read-late.patch",
+    "patch_sha256": "c417b65effafab3a4bba39260cbe8eaabd32d0e1a07792d53224a3eb9e8adb97",
+    "baseline_sha256": "efe58c15761e085490635049989ded292788d5dfb65ed80b153b579547df97c3",
+    "result_sha256": "c314674aa2b99152ebabdae3680cf2216a28e34e9a04159015ede18ca71cc2c0",
+    "cone": "late range selection after complete current read addresses",
+    "proof": "address"
   }
 }

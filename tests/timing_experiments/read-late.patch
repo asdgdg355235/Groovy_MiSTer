@@ -1,0 +1,16 @@
+--- a/rtl/CRT/crt_vsize_fixed.sv
++++ b/rtl/CRT/crt_vsize_fixed.sv
+@@ -224,8 +224,11 @@
+     wire [AW-1:0] read_current_word = wcol < LINE_PX ? group_col : AW'(0);
+     wire [AW-1:0] ra_even_line = address_word(read_line_slot[0] ? read_line_bslot : read_line_slot, AW'(0));
+     wire [AW-1:0] ra_odd_line = address_word(read_line_slot[0] ? read_line_slot : read_line_bslot, AW'(0));
+-    wire [AW-1:0] ra_even_current = address_word(aslot[0] ? read_bslot : aslot, read_current_word);
+-    wire [AW-1:0] ra_odd_current = address_word(aslot[0] ? aslot : read_bslot, read_current_word);
++    // Calculate complete addresses before applying the late column qualifier.
++    wire [AW-1:0] ra_even_current = wcol < LINE_PX ?
++        address_word(aslot[0] ? read_bslot : aslot, group_col) : address_word(aslot[0] ? read_bslot : aslot, AW'(0));
++    wire [AW-1:0] ra_odd_current = wcol < LINE_PX ?
++        address_word(aslot[0] ? aslot : read_bslot, group_col) : address_word(aslot[0] ? aslot : read_bslot, AW'(0));
+     wire [AW-1:0] ra_even = line_begin ? ra_even_line : ra_even_current;
+     wire [AW-1:0] ra_odd = line_begin ? ra_odd_line : ra_odd_current;
+     wire write_pixel = running && !reset && ce_in && !hb_in && !vb_in
