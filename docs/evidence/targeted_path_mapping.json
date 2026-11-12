@@ -1,0 +1,1477 @@
+[
+  {
+    "corner": "corner_01",
+    "launch": "emu:emu|crt_vsize_fixed:u_vsize|wcol[14]~DUPLICATE",
+    "capture": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[0].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[11]_OTERM1091",
+    "slack_ns": -0.089,
+    "data_delay_ns": 11.618,
+    "cell_delay_ns": 3.297,
+    "routing_delay_ns": 8.321,
+    "cells": [
+      {
+        "increment": "0.761",
+        "fanout": "2",
+        "location": "IOIBUF_X56_Y0_N1",
+        "element": "FPGA_CLK2_50~input|o"
+      },
+      {
+        "increment": "0.564",
+        "fanout": "1",
+        "location": "FF_X42_Y25_N44",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|wcol[14]~DUPLICATE"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "2",
+        "location": "FF_X42_Y25_N44",
+        "element": "emu|u_vsize|wcol[14]~DUPLICATE|q"
+      },
+      {
+        "increment": "0.553",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y25_N57",
+        "element": "emu|u_vsize|LessThan13~0|combout"
+      },
+      {
+        "increment": "0.359",
+        "fanout": "49",
+        "location": "LABCELL_X42_Y25_N48",
+        "element": "emu|u_vsize|LessThan13~1|combout"
+      },
+      {
+        "increment": "0.354",
+        "fanout": "3840",
+        "location": "LABCELL_X53_Y22_N30",
+        "element": "emu|u_vsize|crt_read_0_odd_bit0|combout"
+      },
+      {
+        "increment": "0.709",
+        "fanout": "1",
+        "location": "MLABCELL_X39_Y55_N27",
+        "element": "emu|u_vsize|packed_ram[0].odd_ram|distributed.mem_rtl_0|auto_generated|lutrama2731|portbdataout[0]"
+      },
+      {
+        "increment": "0.507",
+        "fanout": "1",
+        "location": "LABCELL_X48_Y53_N3",
+        "element": "emu|u_vsize|packed_ram[0].odd_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w11_n4_mux_dataout~0|combout"
+      },
+      {
+        "increment": "0.555",
+        "fanout": "1",
+        "location": "LABCELL_X48_Y54_N30",
+        "element": "emu|u_vsize|packed_ram[0].odd_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w11_n4_mux_dataout~4|combout"
+      },
+      {
+        "increment": "0.260",
+        "fanout": "1",
+        "location": "FF_X48_Y54_N31",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[0].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[11]_OTERM1091"
+      }
+    ]
+  },
+  {
+    "corner": "corner_01",
+    "launch": "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4457",
+    "capture": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[38]_OTERM905",
+    "slack_ns": -0.07,
+    "data_delay_ns": 11.832,
+    "cell_delay_ns": 3.374,
+    "routing_delay_ns": 8.458,
+    "cells": [
+      {
+        "increment": "0.761",
+        "fanout": "2",
+        "location": "IOIBUF_X56_Y0_N1",
+        "element": "FPGA_CLK2_50~input|o"
+      },
+      {
+        "increment": "0.581",
+        "fanout": "1",
+        "location": "FF_X43_Y22_N26",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4457"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "2",
+        "location": "FF_X43_Y22_N26",
+        "element": "emu|u_vsize|hb_d~0_NEW_REG4456|q"
+      },
+      {
+        "increment": "0.554",
+        "fanout": "142",
+        "location": "LABCELL_X43_Y22_N21",
+        "element": "emu|u_vsize|line_begin~0|combout"
+      },
+      {
+        "increment": "0.462",
+        "fanout": "15406",
+        "location": "LABCELL_X43_Y22_N39",
+        "element": "emu|u_vsize|wa[3]~3|combout"
+      },
+      {
+        "increment": "0.380",
+        "fanout": "3840",
+        "location": "LABCELL_X42_Y26_N15",
+        "element": "emu|u_vsize|crt_read_1_odd_bit3|combout"
+      },
+      {
+        "increment": "0.649",
+        "fanout": "1",
+        "location": "MLABCELL_X6_Y44_N33",
+        "element": "emu|u_vsize|packed_ram[1].odd_ram|distributed.mem_rtl_0|auto_generated|lutrama3118|portbdataout[0]"
+      },
+      {
+        "increment": "0.510",
+        "fanout": "1",
+        "location": "LABCELL_X40_Y24_N18",
+        "element": "emu|u_vsize|packed_ram[1].odd_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w38_n4_mux_dataout~2|combout"
+      },
+      {
+        "increment": "0.559",
+        "fanout": "1",
+        "location": "LABCELL_X40_Y24_N30",
+        "element": "emu|u_vsize|packed_ram[1].odd_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w38_n4_mux_dataout~4|combout"
+      },
+      {
+        "increment": "0.260",
+        "fanout": "1",
+        "location": "FF_X40_Y24_N31",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[38]_OTERM905"
+      }
+    ]
+  },
+  {
+    "corner": "corner_01",
+    "launch": "emu:emu|PoC_lz4_delta_index[3]",
+    "capture": "emu:emu|r_vram_in2[2]",
+    "slack_ns": -0.023,
+    "data_delay_ns": 11.427,
+    "cell_delay_ns": 3.968,
+    "routing_delay_ns": 7.46,
+    "cells": [
+      {
+        "increment": "0.761",
+        "fanout": "2",
+        "location": "IOIBUF_X56_Y0_N1",
+        "element": "FPGA_CLK2_50~input|o"
+      },
+      {
+        "increment": "0.596",
+        "fanout": "1",
+        "location": "FF_X16_Y45_N11",
+        "element": "emu:emu|PoC_lz4_delta_index[3]"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "914",
+        "location": "FF_X16_Y45_N11",
+        "element": "emu|PoC_lz4_delta_index[3]|q"
+      },
+      {
+        "increment": "0.508",
+        "fanout": "1",
+        "location": "LABCELL_X13_Y35_N42",
+        "element": "emu|Mux221~27|combout"
+      },
+      {
+        "increment": "0.507",
+        "fanout": "1",
+        "location": "LABCELL_X12_Y39_N15",
+        "element": "emu|Mux221~30|combout"
+      },
+      {
+        "increment": "0.508",
+        "fanout": "1",
+        "location": "LABCELL_X30_Y46_N6",
+        "element": "emu|Mux221~41|combout"
+      },
+      {
+        "increment": "0.837",
+        "fanout": "1",
+        "location": "LABCELL_X40_Y46_N0",
+        "element": "emu|lz4|Add35~1|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X40_Y46_N3",
+        "element": "emu|lz4|Add35~5|cout"
+      },
+      {
+        "increment": "0.359",
+        "fanout": "6",
+        "location": "LABCELL_X40_Y46_N6",
+        "element": "emu|lz4|Add35~9|sumout"
+      },
+      {
+        "increment": "0.483",
+        "fanout": "1",
+        "location": "LABCELL_X36_Y46_N12",
+        "element": "emu|Selector1100~2|combout"
+      },
+      {
+        "increment": "0.504",
+        "fanout": "1",
+        "location": "LABCELL_X36_Y46_N36",
+        "element": "emu|Selector1100~3|combout"
+      },
+      {
+        "increment": "0.262",
+        "fanout": "1",
+        "location": "FF_X36_Y46_N38",
+        "element": "emu:emu|r_vram_in2[2]"
+      }
+    ]
+  },
+  {
+    "corner": "corner_01",
+    "launch": "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4457",
+    "capture": "altshift_taps:dv_hs1_rtl_0|shift_taps_quu:auto_generated|altsyncram_fr91:altsyncram5|ram_block6a0~porta_datain_reg7",
+    "slack_ns": -0.017,
+    "data_delay_ns": 11.47,
+    "cell_delay_ns": 4.048,
+    "routing_delay_ns": 7.426,
+    "cells": [
+      {
+        "increment": "0.761",
+        "fanout": "2",
+        "location": "IOIBUF_X56_Y0_N1",
+        "element": "FPGA_CLK2_50~input|o"
+      },
+      {
+        "increment": "0.581",
+        "fanout": "1",
+        "location": "FF_X43_Y22_N26",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4457"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "2",
+        "location": "FF_X43_Y22_N26",
+        "element": "emu|u_vsize|hb_d~0_NEW_REG4456|q"
+      },
+      {
+        "increment": "0.569",
+        "fanout": "142",
+        "location": "LABCELL_X43_Y22_N21",
+        "element": "emu|u_vsize|line_begin~0|combout"
+      },
+      {
+        "increment": "0.441",
+        "fanout": "5",
+        "location": "LABCELL_X45_Y22_N9",
+        "element": "emu|u_vsize|line_now[5]~3|combout"
+      },
+      {
+        "increment": "0.268",
+        "fanout": "1",
+        "location": "LABCELL_X45_Y22_N33",
+        "element": "emu|u_vsize|Equal7~4|combout"
+      },
+      {
+        "increment": "0.508",
+        "fanout": "50",
+        "location": "LABCELL_X45_Y22_N12",
+        "element": "emu|u_vsize|Equal7~8|combout"
+      },
+      {
+        "increment": "0.097",
+        "fanout": "37",
+        "location": "LABCELL_X42_Y18_N54",
+        "element": "emu|u_vsize|tag.raddr_a[3]~3|combout"
+      },
+      {
+        "increment": "0.355",
+        "fanout": "16",
+        "location": "LABCELL_X45_Y16_N24",
+        "element": "emu|u_vsize|Mux2~0|combout"
+      },
+      {
+        "increment": "0.434",
+        "fanout": "1",
+        "location": "LABCELL_X48_Y15_N39",
+        "element": "emu|u_vsize|Equal10~3|combout"
+      },
+      {
+        "increment": "0.496",
+        "fanout": "1",
+        "location": "LABCELL_X48_Y18_N54",
+        "element": "emu|u_vsize|comb~1|combout"
+      },
+      {
+        "increment": "0.508",
+        "fanout": "1",
+        "location": "LABCELL_X48_Y18_N18",
+        "element": "emu|u_vsize|control~9|combout"
+      },
+      {
+        "increment": "0.372",
+        "fanout": "0",
+        "location": "M10K_X49_Y18_N0",
+        "element": "altshift_taps:dv_hs1_rtl_0|shift_taps_quu:auto_generated|altsyncram_fr91:altsyncram5|ram_block6a0~porta_datain_reg7"
+      }
+    ]
+  },
+  {
+    "corner": "corner_02",
+    "launch": "emu:emu|crt_vsize_fixed:u_vsize|delay_lines[1]",
+    "capture": "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[1]~61_OTERM4407",
+    "slack_ns": -0.161,
+    "data_delay_ns": 11.561,
+    "cell_delay_ns": 7.341,
+    "routing_delay_ns": 4.226,
+    "cells": [
+      {
+        "increment": "0.792",
+        "fanout": "2",
+        "location": "IOIBUF_X56_Y0_N1",
+        "element": "FPGA_CLK2_50~input|o"
+      },
+      {
+        "increment": "0.527",
+        "fanout": "1",
+        "location": "FF_X50_Y20_N5",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|delay_lines[1]"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "6",
+        "location": "FF_X50_Y20_N5",
+        "element": "emu|u_vsize|delay_lines[1]|q"
+      },
+      {
+        "increment": "1.543",
+        "fanout": "1",
+        "location": "LABCELL_X50_Y20_N3",
+        "element": "emu|u_vsize|Add8~53|sumout"
+      },
+      {
+        "increment": "0.602",
+        "fanout": "1",
+        "location": "LABCELL_X46_Y20_N45",
+        "element": "emu|u_vsize|LessThan7~4|combout"
+      },
+      {
+        "increment": "0.608",
+        "fanout": "2",
+        "location": "LABCELL_X46_Y20_N6",
+        "element": "emu|u_vsize|LessThan7~7|combout"
+      },
+      {
+        "increment": "0.671",
+        "fanout": "2",
+        "location": "LABCELL_X46_Y20_N30",
+        "element": "emu|u_vsize|output_now~10|combout"
+      },
+      {
+        "increment": "0.112",
+        "fanout": "60",
+        "location": "LABCELL_X45_Y20_N42",
+        "element": "emu|u_vsize|position[7]~0|combout"
+      },
+      {
+        "increment": "0.088",
+        "fanout": "2",
+        "location": "LABCELL_X45_Y21_N42",
+        "element": "emu|u_vsize|position[2]_NEW3712|combout"
+      },
+      {
+        "increment": "0.991",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N6",
+        "element": "emu|u_vsize|Add1~117|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N9",
+        "element": "emu|u_vsize|Add1~113|cout"
+      },
+      {
+        "increment": "0.054",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N12",
+        "element": "emu|u_vsize|Add1~109|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N15",
+        "element": "emu|u_vsize|Add1~105|cout"
+      },
+      {
+        "increment": "0.054",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N18",
+        "element": "emu|u_vsize|Add1~101|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N21",
+        "element": "emu|u_vsize|Add1~97|cout"
+      },
+      {
+        "increment": "0.069",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N24",
+        "element": "emu|u_vsize|Add1~77|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N27",
+        "element": "emu|u_vsize|Add1~81|cout"
+      },
+      {
+        "increment": "0.133",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N30",
+        "element": "emu|u_vsize|Add1~85|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N33",
+        "element": "emu|u_vsize|Add1~89|cout"
+      },
+      {
+        "increment": "0.054",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N36",
+        "element": "emu|u_vsize|Add1~93|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N39",
+        "element": "emu|u_vsize|Add1~73|cout"
+      },
+      {
+        "increment": "0.054",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N42",
+        "element": "emu|u_vsize|Add1~69|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N45",
+        "element": "emu|u_vsize|Add1~65|cout"
+      },
+      {
+        "increment": "0.436",
+        "fanout": "3",
+        "location": "LABCELL_X43_Y21_N48",
+        "element": "emu|u_vsize|Add1~57|sumout"
+      },
+      {
+        "increment": "0.286",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N0",
+        "element": "emu|u_vsize|advance_rows[0]~57|shareout"
+      },
+      {
+        "increment": "0.923",
+        "fanout": "2",
+        "location": "LABCELL_X42_Y20_N3",
+        "element": "emu|u_vsize|advance_rows[1]~61|sumout"
+      },
+      {
+        "increment": "0.663",
+        "fanout": "1",
+        "location": "FF_X42_Y20_N59",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[1]~61_OTERM4407"
+      }
+    ]
+  },
+  {
+    "corner": "corner_02",
+    "launch": "emu:emu|PoC_lz4_delta_index[3]",
+    "capture": "emu:emu|r_vram_in2[2]",
+    "slack_ns": -0.148,
+    "data_delay_ns": 11.565,
+    "cell_delay_ns": 4.661,
+    "routing_delay_ns": 6.905,
+    "cells": [
+      {
+        "increment": "0.792",
+        "fanout": "2",
+        "location": "IOIBUF_X56_Y0_N1",
+        "element": "FPGA_CLK2_50~input|o"
+      },
+      {
+        "increment": "0.555",
+        "fanout": "1",
+        "location": "FF_X16_Y45_N11",
+        "element": "emu:emu|PoC_lz4_delta_index[3]"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "914",
+        "location": "FF_X16_Y45_N11",
+        "element": "emu|PoC_lz4_delta_index[3]|q"
+      },
+      {
+        "increment": "0.601",
+        "fanout": "1",
+        "location": "LABCELL_X13_Y35_N42",
+        "element": "emu|Mux221~27|combout"
+      },
+      {
+        "increment": "0.600",
+        "fanout": "1",
+        "location": "LABCELL_X12_Y39_N15",
+        "element": "emu|Mux221~30|combout"
+      },
+      {
+        "increment": "0.601",
+        "fanout": "1",
+        "location": "LABCELL_X30_Y46_N6",
+        "element": "emu|Mux221~41|combout"
+      },
+      {
+        "increment": "0.991",
+        "fanout": "1",
+        "location": "LABCELL_X40_Y46_N0",
+        "element": "emu|lz4|Add35~1|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X40_Y46_N3",
+        "element": "emu|lz4|Add35~5|cout"
+      },
+      {
+        "increment": "0.439",
+        "fanout": "6",
+        "location": "LABCELL_X40_Y46_N6",
+        "element": "emu|lz4|Add35~9|sumout"
+      },
+      {
+        "increment": "0.562",
+        "fanout": "1",
+        "location": "LABCELL_X36_Y46_N12",
+        "element": "emu|Selector1100~2|combout"
+      },
+      {
+        "increment": "0.599",
+        "fanout": "1",
+        "location": "LABCELL_X36_Y46_N36",
+        "element": "emu|Selector1100~3|combout"
+      },
+      {
+        "increment": "0.268",
+        "fanout": "1",
+        "location": "FF_X36_Y46_N38",
+        "element": "emu:emu|r_vram_in2[2]"
+      }
+    ]
+  },
+  {
+    "corner": "corner_02",
+    "launch": "emu:emu|crt_vsize_fixed:u_vsize|delay_lines[1]",
+    "capture": "emu:emu|crt_vsize_fixed:u_vsize|Add2~1_OTERM4415",
+    "slack_ns": -0.029,
+    "data_delay_ns": 11.428,
+    "cell_delay_ns": 7.71,
+    "routing_delay_ns": 3.722,
+    "cells": [
+      {
+        "increment": "0.792",
+        "fanout": "2",
+        "location": "IOIBUF_X56_Y0_N1",
+        "element": "FPGA_CLK2_50~input|o"
+      },
+      {
+        "increment": "0.527",
+        "fanout": "1",
+        "location": "FF_X50_Y20_N5",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|delay_lines[1]"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "6",
+        "location": "FF_X50_Y20_N5",
+        "element": "emu|u_vsize|delay_lines[1]|q"
+      },
+      {
+        "increment": "1.543",
+        "fanout": "1",
+        "location": "LABCELL_X50_Y20_N3",
+        "element": "emu|u_vsize|Add8~53|sumout"
+      },
+      {
+        "increment": "0.602",
+        "fanout": "1",
+        "location": "LABCELL_X46_Y20_N45",
+        "element": "emu|u_vsize|LessThan7~4|combout"
+      },
+      {
+        "increment": "0.608",
+        "fanout": "2",
+        "location": "LABCELL_X46_Y20_N6",
+        "element": "emu|u_vsize|LessThan7~7|combout"
+      },
+      {
+        "increment": "0.671",
+        "fanout": "2",
+        "location": "LABCELL_X46_Y20_N30",
+        "element": "emu|u_vsize|output_now~10|combout"
+      },
+      {
+        "increment": "0.112",
+        "fanout": "60",
+        "location": "LABCELL_X45_Y20_N42",
+        "element": "emu|u_vsize|position[7]~0|combout"
+      },
+      {
+        "increment": "0.640",
+        "fanout": "2",
+        "location": "LABCELL_X42_Y21_N45",
+        "element": "emu|u_vsize|position[14]_NEW3760|combout"
+      },
+      {
+        "increment": "1.006",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N42",
+        "element": "emu|u_vsize|Add1~69|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N45",
+        "element": "emu|u_vsize|Add1~65|cout"
+      },
+      {
+        "increment": "0.053",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N48",
+        "element": "emu|u_vsize|Add1~57|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N51",
+        "element": "emu|u_vsize|Add1~61|cout"
+      },
+      {
+        "increment": "0.433",
+        "fanout": "2",
+        "location": "LABCELL_X43_Y21_N54",
+        "element": "emu|u_vsize|Add1~5|sumout"
+      },
+      {
+        "increment": "0.983",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N6",
+        "element": "emu|u_vsize|advance_rows[2]~5|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N9",
+        "element": "emu|u_vsize|advance_rows[3]~9|cout"
+      },
+      {
+        "increment": "0.053",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N12",
+        "element": "emu|u_vsize|advance_rows[4]~13|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N15",
+        "element": "emu|u_vsize|advance_rows[5]~17|cout"
+      },
+      {
+        "increment": "0.053",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N18",
+        "element": "emu|u_vsize|advance_rows[6]~21|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N21",
+        "element": "emu|u_vsize|advance_rows[7]~25|cout"
+      },
+      {
+        "increment": "0.067",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N24",
+        "element": "emu|u_vsize|advance_rows[8]~41|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N27",
+        "element": "emu|u_vsize|advance_rows[9]~45|cout"
+      },
+      {
+        "increment": "0.105",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N30",
+        "element": "emu|u_vsize|advance_rows[10]~29|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N33",
+        "element": "emu|u_vsize|advance_rows[11]~37|cout"
+      },
+      {
+        "increment": "0.053",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N36",
+        "element": "emu|u_vsize|advance_rows[12]~33|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N39",
+        "element": "emu|u_vsize|advance_rows[13]~1|cout"
+      },
+      {
+        "increment": "0.053",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N42",
+        "element": "emu|u_vsize|advance_rows[14]~49|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N45",
+        "element": "emu|u_vsize|advance_rows[15]~53|cout"
+      },
+      {
+        "increment": "0.408",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N48",
+        "element": "emu|u_vsize|Add2~1|sumout"
+      },
+      {
+        "increment": "0.267",
+        "fanout": "1",
+        "location": "FF_X42_Y20_N49",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|Add2~1_OTERM4415"
+      }
+    ]
+  },
+  {
+    "corner": "corner_02",
+    "launch": "emu:emu|PoC_V[0]~DUPLICATE",
+    "capture": "emu:emu|Add17~5_OTERM2885DUPLICATE",
+    "slack_ns": -0.026,
+    "data_delay_ns": 11.806,
+    "cell_delay_ns": 8.045,
+    "routing_delay_ns": 3.764,
+    "cells": [
+      {
+        "increment": "0.792",
+        "fanout": "2",
+        "location": "IOIBUF_X56_Y0_N1",
+        "element": "FPGA_CLK2_50~input|o"
+      },
+      {
+        "increment": "0.519",
+        "fanout": "1",
+        "location": "FF_X55_Y24_N50",
+        "element": "emu:emu|PoC_V[0]~DUPLICATE"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "11",
+        "location": "FF_X55_Y24_N50",
+        "element": "emu|PoC_V[0]~DUPLICATE|q"
+      },
+      {
+        "increment": "1.058",
+        "fanout": "2",
+        "location": "LABCELL_X55_Y24_N0",
+        "element": "emu|vga|Add1~29|sumout"
+      },
+      {
+        "increment": "1.416",
+        "fanout": "1",
+        "location": "LABCELL_X56_Y24_N0",
+        "element": "emu|vga|Add0~29|sumout"
+      },
+      {
+        "increment": "1.397",
+        "fanout": "1",
+        "location": "LABCELL_X57_Y24_N0",
+        "element": "emu|vga|Add54~33|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X57_Y24_N3",
+        "element": "emu|vga|Add54~29|cout"
+      },
+      {
+        "increment": "0.410",
+        "fanout": "1",
+        "location": "LABCELL_X57_Y24_N6",
+        "element": "emu|vga|Add54~25|sumout"
+      },
+      {
+        "increment": "0.496",
+        "fanout": "1",
+        "location": "LABCELL_X56_Y24_N54",
+        "element": "emu|vga|LessThan19~1|combout"
+      },
+      {
+        "increment": "0.100",
+        "fanout": "1",
+        "location": "LABCELL_X61_Y24_N42",
+        "element": "emu|vga|LessThan19~2|combout"
+      },
+      {
+        "increment": "0.504",
+        "fanout": "2",
+        "location": "LABCELL_X61_Y24_N0",
+        "element": "emu|vga|LessThan19~6|combout"
+      },
+      {
+        "increment": "0.587",
+        "fanout": "30",
+        "location": "LABCELL_X61_Y24_N24",
+        "element": "emu|vga|v_cnt[13]~6|combout"
+      },
+      {
+        "increment": "0.104",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y25_N42",
+        "element": "emu|vga|v_cnt[7]_NEW1500~_Duplicate|combout"
+      },
+      {
+        "increment": "0.996",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N21",
+        "element": "emu|Add17~41|cout"
+      },
+      {
+        "increment": "0.067",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N24",
+        "element": "emu|Add17~33|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N27",
+        "element": "emu|Add17~29|cout"
+      },
+      {
+        "increment": "0.105",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N30",
+        "element": "emu|Add17~25|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N33",
+        "element": "emu|Add17~21|cout"
+      },
+      {
+        "increment": "0.053",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N36",
+        "element": "emu|Add17~17|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N39",
+        "element": "emu|Add17~13|cout"
+      },
+      {
+        "increment": "0.053",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N42",
+        "element": "emu|Add17~9|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N45",
+        "element": "emu|Add17~1|cout"
+      },
+      {
+        "increment": "0.408",
+        "fanout": "2",
+        "location": "LABCELL_X60_Y24_N48",
+        "element": "emu|Add17~5|sumout"
+      },
+      {
+        "increment": "0.291",
+        "fanout": "1",
+        "location": "FF_X60_Y24_N50",
+        "element": "emu:emu|Add17~5_OTERM2885DUPLICATE"
+      }
+    ]
+  },
+  {
+    "corner": "corner_02",
+    "launch": "emu:emu|PoC_V[0]~DUPLICATE",
+    "capture": "emu:emu|Add17~5_OTERM2885",
+    "slack_ns": -0.018,
+    "data_delay_ns": 11.805,
+    "cell_delay_ns": 8.044,
+    "routing_delay_ns": 3.764,
+    "cells": [
+      {
+        "increment": "0.792",
+        "fanout": "2",
+        "location": "IOIBUF_X56_Y0_N1",
+        "element": "FPGA_CLK2_50~input|o"
+      },
+      {
+        "increment": "0.519",
+        "fanout": "1",
+        "location": "FF_X55_Y24_N50",
+        "element": "emu:emu|PoC_V[0]~DUPLICATE"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "11",
+        "location": "FF_X55_Y24_N50",
+        "element": "emu|PoC_V[0]~DUPLICATE|q"
+      },
+      {
+        "increment": "1.058",
+        "fanout": "2",
+        "location": "LABCELL_X55_Y24_N0",
+        "element": "emu|vga|Add1~29|sumout"
+      },
+      {
+        "increment": "1.416",
+        "fanout": "1",
+        "location": "LABCELL_X56_Y24_N0",
+        "element": "emu|vga|Add0~29|sumout"
+      },
+      {
+        "increment": "1.397",
+        "fanout": "1",
+        "location": "LABCELL_X57_Y24_N0",
+        "element": "emu|vga|Add54~33|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X57_Y24_N3",
+        "element": "emu|vga|Add54~29|cout"
+      },
+      {
+        "increment": "0.410",
+        "fanout": "1",
+        "location": "LABCELL_X57_Y24_N6",
+        "element": "emu|vga|Add54~25|sumout"
+      },
+      {
+        "increment": "0.496",
+        "fanout": "1",
+        "location": "LABCELL_X56_Y24_N54",
+        "element": "emu|vga|LessThan19~1|combout"
+      },
+      {
+        "increment": "0.100",
+        "fanout": "1",
+        "location": "LABCELL_X61_Y24_N42",
+        "element": "emu|vga|LessThan19~2|combout"
+      },
+      {
+        "increment": "0.504",
+        "fanout": "2",
+        "location": "LABCELL_X61_Y24_N0",
+        "element": "emu|vga|LessThan19~6|combout"
+      },
+      {
+        "increment": "0.587",
+        "fanout": "30",
+        "location": "LABCELL_X61_Y24_N24",
+        "element": "emu|vga|v_cnt[13]~6|combout"
+      },
+      {
+        "increment": "0.104",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y25_N42",
+        "element": "emu|vga|v_cnt[7]_NEW1500~_Duplicate|combout"
+      },
+      {
+        "increment": "0.996",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N21",
+        "element": "emu|Add17~41|cout"
+      },
+      {
+        "increment": "0.067",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N24",
+        "element": "emu|Add17~33|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N27",
+        "element": "emu|Add17~29|cout"
+      },
+      {
+        "increment": "0.105",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N30",
+        "element": "emu|Add17~25|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N33",
+        "element": "emu|Add17~21|cout"
+      },
+      {
+        "increment": "0.053",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N36",
+        "element": "emu|Add17~17|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N39",
+        "element": "emu|Add17~13|cout"
+      },
+      {
+        "increment": "0.053",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N42",
+        "element": "emu|Add17~9|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X60_Y24_N45",
+        "element": "emu|Add17~1|cout"
+      },
+      {
+        "increment": "0.408",
+        "fanout": "2",
+        "location": "LABCELL_X60_Y24_N48",
+        "element": "emu|Add17~5|sumout"
+      },
+      {
+        "increment": "0.290",
+        "fanout": "1",
+        "location": "FF_X60_Y24_N49",
+        "element": "emu:emu|Add17~5_OTERM2885"
+      }
+    ]
+  },
+  {
+    "corner": "corner_02",
+    "launch": "emu:emu|crt_vsize_fixed:u_vsize|delay_lines[1]",
+    "capture": "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[14]~49_OTERM4413",
+    "slack_ns": -0.007,
+    "data_delay_ns": 11.399,
+    "cell_delay_ns": 7.681,
+    "routing_delay_ns": 3.722,
+    "cells": [
+      {
+        "increment": "0.792",
+        "fanout": "2",
+        "location": "IOIBUF_X56_Y0_N1",
+        "element": "FPGA_CLK2_50~input|o"
+      },
+      {
+        "increment": "0.527",
+        "fanout": "1",
+        "location": "FF_X50_Y20_N5",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|delay_lines[1]"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "6",
+        "location": "FF_X50_Y20_N5",
+        "element": "emu|u_vsize|delay_lines[1]|q"
+      },
+      {
+        "increment": "1.543",
+        "fanout": "1",
+        "location": "LABCELL_X50_Y20_N3",
+        "element": "emu|u_vsize|Add8~53|sumout"
+      },
+      {
+        "increment": "0.602",
+        "fanout": "1",
+        "location": "LABCELL_X46_Y20_N45",
+        "element": "emu|u_vsize|LessThan7~4|combout"
+      },
+      {
+        "increment": "0.608",
+        "fanout": "2",
+        "location": "LABCELL_X46_Y20_N6",
+        "element": "emu|u_vsize|LessThan7~7|combout"
+      },
+      {
+        "increment": "0.671",
+        "fanout": "2",
+        "location": "LABCELL_X46_Y20_N30",
+        "element": "emu|u_vsize|output_now~10|combout"
+      },
+      {
+        "increment": "0.112",
+        "fanout": "60",
+        "location": "LABCELL_X45_Y20_N42",
+        "element": "emu|u_vsize|position[7]~0|combout"
+      },
+      {
+        "increment": "0.640",
+        "fanout": "2",
+        "location": "LABCELL_X42_Y21_N45",
+        "element": "emu|u_vsize|position[14]_NEW3760|combout"
+      },
+      {
+        "increment": "1.006",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N42",
+        "element": "emu|u_vsize|Add1~69|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N45",
+        "element": "emu|u_vsize|Add1~65|cout"
+      },
+      {
+        "increment": "0.053",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N48",
+        "element": "emu|u_vsize|Add1~57|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X43_Y21_N51",
+        "element": "emu|u_vsize|Add1~61|cout"
+      },
+      {
+        "increment": "0.433",
+        "fanout": "2",
+        "location": "LABCELL_X43_Y21_N54",
+        "element": "emu|u_vsize|Add1~5|sumout"
+      },
+      {
+        "increment": "0.983",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N6",
+        "element": "emu|u_vsize|advance_rows[2]~5|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N9",
+        "element": "emu|u_vsize|advance_rows[3]~9|cout"
+      },
+      {
+        "increment": "0.053",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N12",
+        "element": "emu|u_vsize|advance_rows[4]~13|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N15",
+        "element": "emu|u_vsize|advance_rows[5]~17|cout"
+      },
+      {
+        "increment": "0.053",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N18",
+        "element": "emu|u_vsize|advance_rows[6]~21|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N21",
+        "element": "emu|u_vsize|advance_rows[7]~25|cout"
+      },
+      {
+        "increment": "0.067",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N24",
+        "element": "emu|u_vsize|advance_rows[8]~41|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N27",
+        "element": "emu|u_vsize|advance_rows[9]~45|cout"
+      },
+      {
+        "increment": "0.105",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N30",
+        "element": "emu|u_vsize|advance_rows[10]~29|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N33",
+        "element": "emu|u_vsize|advance_rows[11]~37|cout"
+      },
+      {
+        "increment": "0.053",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N36",
+        "element": "emu|u_vsize|advance_rows[12]~33|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N39",
+        "element": "emu|u_vsize|advance_rows[13]~1|cout"
+      },
+      {
+        "increment": "0.430",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y20_N42",
+        "element": "emu|u_vsize|advance_rows[14]~49|sumout"
+      },
+      {
+        "increment": "0.269",
+        "fanout": "1",
+        "location": "FF_X42_Y20_N44",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[14]~49_OTERM4413"
+      }
+    ]
+  },
+  {
+    "corner": "corner_03",
+    "launch": "emu:emu|crt_vsize_fixed:u_vsize|wcol[14]~DUPLICATE",
+    "capture": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[0].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[11]_OTERM1091",
+    "slack_ns": -0.04,
+    "data_delay_ns": 11.576,
+    "cell_delay_ns": 3.317,
+    "routing_delay_ns": 8.259,
+    "cells": [
+      {
+        "increment": "0.766",
+        "fanout": "2",
+        "location": "IOIBUF_X56_Y0_N1",
+        "element": "FPGA_CLK2_50~input|o"
+      },
+      {
+        "increment": "0.552",
+        "fanout": "1",
+        "location": "FF_X42_Y25_N44",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|wcol[14]~DUPLICATE"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "2",
+        "location": "FF_X42_Y25_N44",
+        "element": "emu|u_vsize|wcol[14]~DUPLICATE|q"
+      },
+      {
+        "increment": "0.559",
+        "fanout": "1",
+        "location": "LABCELL_X42_Y25_N57",
+        "element": "emu|u_vsize|LessThan13~0|combout"
+      },
+      {
+        "increment": "0.354",
+        "fanout": "49",
+        "location": "LABCELL_X42_Y25_N48",
+        "element": "emu|u_vsize|LessThan13~1|combout"
+      },
+      {
+        "increment": "0.349",
+        "fanout": "3840",
+        "location": "LABCELL_X53_Y22_N30",
+        "element": "emu|u_vsize|crt_read_0_odd_bit0|combout"
+      },
+      {
+        "increment": "0.721",
+        "fanout": "1",
+        "location": "MLABCELL_X39_Y55_N27",
+        "element": "emu|u_vsize|packed_ram[0].odd_ram|distributed.mem_rtl_0|auto_generated|lutrama2731|portbdataout[0]"
+      },
+      {
+        "increment": "0.513",
+        "fanout": "1",
+        "location": "LABCELL_X48_Y53_N3",
+        "element": "emu|u_vsize|packed_ram[0].odd_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w11_n4_mux_dataout~0|combout"
+      },
+      {
+        "increment": "0.561",
+        "fanout": "1",
+        "location": "LABCELL_X48_Y54_N30",
+        "element": "emu|u_vsize|packed_ram[0].odd_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w11_n4_mux_dataout~4|combout"
+      },
+      {
+        "increment": "0.260",
+        "fanout": "1",
+        "location": "FF_X48_Y54_N31",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[0].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[11]_OTERM1091"
+      }
+    ]
+  },
+  {
+    "corner": "corner_03",
+    "launch": "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4457",
+    "capture": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[38]_OTERM905",
+    "slack_ns": -0.025,
+    "data_delay_ns": 11.792,
+    "cell_delay_ns": 3.379,
+    "routing_delay_ns": 8.411,
+    "cells": [
+      {
+        "increment": "0.766",
+        "fanout": "2",
+        "location": "IOIBUF_X56_Y0_N1",
+        "element": "FPGA_CLK2_50~input|o"
+      },
+      {
+        "increment": "0.568",
+        "fanout": "1",
+        "location": "FF_X43_Y22_N26",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4457"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "2",
+        "location": "FF_X43_Y22_N26",
+        "element": "emu|u_vsize|hb_d~0_NEW_REG4456|q"
+      },
+      {
+        "increment": "0.560",
+        "fanout": "142",
+        "location": "LABCELL_X43_Y22_N21",
+        "element": "emu|u_vsize|line_begin~0|combout"
+      },
+      {
+        "increment": "0.467",
+        "fanout": "15406",
+        "location": "LABCELL_X43_Y22_N39",
+        "element": "emu|u_vsize|wa[3]~3|combout"
+      },
+      {
+        "increment": "0.373",
+        "fanout": "3840",
+        "location": "LABCELL_X42_Y26_N15",
+        "element": "emu|u_vsize|crt_read_1_odd_bit3|combout"
+      },
+      {
+        "increment": "0.646",
+        "fanout": "1",
+        "location": "MLABCELL_X6_Y44_N33",
+        "element": "emu|u_vsize|packed_ram[1].odd_ram|distributed.mem_rtl_0|auto_generated|lutrama3118|portbdataout[0]"
+      },
+      {
+        "increment": "0.508",
+        "fanout": "1",
+        "location": "LABCELL_X40_Y24_N18",
+        "element": "emu|u_vsize|packed_ram[1].odd_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w38_n4_mux_dataout~2|combout"
+      },
+      {
+        "increment": "0.565",
+        "fanout": "1",
+        "location": "LABCELL_X40_Y24_N30",
+        "element": "emu|u_vsize|packed_ram[1].odd_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w38_n4_mux_dataout~4|combout"
+      },
+      {
+        "increment": "0.260",
+        "fanout": "1",
+        "location": "FF_X40_Y24_N31",
+        "element": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[38]_OTERM905"
+      }
+    ]
+  },
+  {
+    "corner": "corner_04",
+    "launch": "emu:emu|PoC_lz4_delta_index[3]",
+    "capture": "emu:emu|r_vram_in2[2]",
+    "slack_ns": -0.027,
+    "data_delay_ns": 11.445,
+    "cell_delay_ns": 4.503,
+    "routing_delay_ns": 6.944,
+    "cells": [
+      {
+        "increment": "0.785",
+        "fanout": "2",
+        "location": "IOIBUF_X56_Y0_N1",
+        "element": "FPGA_CLK2_50~input|o"
+      },
+      {
+        "increment": "0.547",
+        "fanout": "1",
+        "location": "FF_X16_Y45_N11",
+        "element": "emu:emu|PoC_lz4_delta_index[3]"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "914",
+        "location": "FF_X16_Y45_N11",
+        "element": "emu|PoC_lz4_delta_index[3]|q"
+      },
+      {
+        "increment": "0.580",
+        "fanout": "1",
+        "location": "LABCELL_X13_Y35_N42",
+        "element": "emu|Mux221~27|combout"
+      },
+      {
+        "increment": "0.579",
+        "fanout": "1",
+        "location": "LABCELL_X12_Y39_N15",
+        "element": "emu|Mux221~30|combout"
+      },
+      {
+        "increment": "0.580",
+        "fanout": "1",
+        "location": "LABCELL_X30_Y46_N6",
+        "element": "emu|Mux221~41|combout"
+      },
+      {
+        "increment": "0.951",
+        "fanout": "1",
+        "location": "LABCELL_X40_Y46_N0",
+        "element": "emu|lz4|Add35~1|cout"
+      },
+      {
+        "increment": "0.000",
+        "fanout": "1",
+        "location": "LABCELL_X40_Y46_N3",
+        "element": "emu|lz4|Add35~5|cout"
+      },
+      {
+        "increment": "0.420",
+        "fanout": "6",
+        "location": "LABCELL_X40_Y46_N6",
+        "element": "emu|lz4|Add35~9|sumout"
+      },
+      {
+        "increment": "0.545",
+        "fanout": "1",
+        "location": "LABCELL_X36_Y46_N12",
+        "element": "emu|Selector1100~2|combout"
+      },
+      {
+        "increment": "0.576",
+        "fanout": "1",
+        "location": "LABCELL_X36_Y46_N36",
+        "element": "emu|Selector1100~3|combout"
+      },
+      {
+        "increment": "0.272",
+        "fanout": "1",
+        "location": "FF_X36_Y46_N38",
+        "element": "emu:emu|r_vram_in2[2]"
+      }
+    ]
+  }
+]
