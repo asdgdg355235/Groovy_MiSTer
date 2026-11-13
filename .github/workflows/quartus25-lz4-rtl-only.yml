@@ -15,6 +15,10 @@ jobs:
           fetch-depth: 0
       - name: Install Icarus Verilog only
         run: sudo apt-get update && sudo apt-get install -y iverilog
+      - name: Git linked-worktree and non-Quartus preflight regression
+        run: |
+          python3 tests/test_q25_runner_git_worktree.py
+          python3 tests/run_q25_lz4_user.py --preflight-only
       - name: Static schedule checks
         run: python3 tests/test_lz4_q25_window_schedule.py
       - name: Original-write source check
