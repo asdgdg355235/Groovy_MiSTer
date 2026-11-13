@@ -12,7 +12,7 @@ import tempfile
 import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT/'tests'))
-from physical.control import expected_build_id, hardware_hashes, verify_version, digest
+from physical.control import expected_build_id, hardware_hashes, verify_version, digest, accepted_compiler_version_metadata
 from physical.q25_ram_evidence import preflight, mapped
 from physical.overlays import validate_recipe
 from physical.diagnostics import collect
@@ -242,6 +242,40 @@ source {{{ROOT/'tests/physical/report_project.tcl'}}}
         source = (ROOT/'tests/run_physical_timing_quartus.sh').read_text()
         self.assertIn('export PHYSICAL_COMPILER_PROFILE="$PROFILE"', source)
         self.assertLess(source.index('verify-version'), source.index('export PHYSICAL_COMPILER_PROFILE'))
+
+class Q25CompilerMetadataGate(unittest.TestCase):
+    """Only the observed Q17 to Q25 version stamp may be normalized."""
+    old = ['global', '-name', 'LAST_QUARTUS_VERSION', '17.0.2 Lite Edition']
+    new = ['global', '-name', 'LAST_QUARTUS_VERSION', '25.1std.0 Lite Edition']
+    seed = ['global', '-name', 'SEED', '1']
+
+    def test_exact_q25_version_marker_only(self):
+        expected = [self.seed, self.old, ['global', '-name', 'DEVICE', '5CSEBA6U23I7']]
+        actual = [self.seed, self.new, expected[-1]]
+        result, record = accepted_compiler_version_metadata(expected, actual, 'q25')
+        self.assertEqual(result, expected)
+        self.assertEqual(record['assignment'], 'LAST_QUARTUS_VERSION')
+        self.assertEqual(record['observed'], '25.1std.0 Lite Edition')
+        self.assertEqual(actual[1], self.new)  # raw evidence is never altered
+        for profile in ('q17', 'unknown'):
+            self.assertEqual(accepted_compiler_version_metadata(expected, actual, profile), (actual, None))
+
+    def test_reordered_duplicate_other_version_and_unrelated_drift_fail(self):
+        expected = [self.seed, self.old]
+        mutations = [
+            [self.new, self.seed],
+            [self.seed, self.new, self.new],
+            [self.seed, self.old, self.new],
+            [self.seed, self.old],
+            [self.seed, ['global', '-name', 'LAST_QUARTUS_VERSION', '25.2 Lite Edition']],
+            [['global', '-name', 'SEED', '2'], self.new],
+            [self.seed, self.new, ['global', '-name', 'PHYSICAL_SYNTHESIS_REGISTER_RETIMING', 'OFF']],
+        ]
+        for rows in mutations:
+            with self.subTest(rows=rows):
+                normalized, accepted = accepted_compiler_version_metadata(expected, rows, 'q25')
+                self.assertTrue(accepted is None or normalized != expected)
+
 
 if __name__ == '__main__':
     unittest.main()

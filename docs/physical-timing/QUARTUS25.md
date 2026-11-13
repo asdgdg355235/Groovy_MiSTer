@@ -76,6 +76,18 @@ updated branch, choose a new `CRT_READ_BUILD_DIR`, and retain the new report
 archive for analysis. A successful R0 build does not approve A1 retiming
 assignments; these require separate compiler-supported evidence.
 
+## Quartus-updated QSF project version metadata
+
+Quartus 25.1 rewrites `LAST_QUARTUS_VERSION` from
+`17.0.2 Lite Edition` to `25.1std.0 Lite Edition` when opening
+the original project. The input-stage gate accepts this exact version
+metadata transition for the Q25 profile only, while preserving the
+unaltered sourced assignment sequence in `project_calls_*.json` and
+recording the exception in each `input_gate_*.json`. Any change to an
+other assignment, any unexpected compiler stamp, or a duplicate/reordered
+version stamp still rejects the build. Q17 retains byte-for-byte
+assignment comparison without this exception.
+
 ## Evidence and comparisons
 
 Q25 A1/D1 recipes require new Q25 R0 evidence. Quartus 17 targets and sites

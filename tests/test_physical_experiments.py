@@ -145,6 +145,25 @@ class PhysicalControls(unittest.TestCase):
             out = parent / 'build'; create(source, out)
             freeze_generated(out); stage_inputs(out, 'before_map')
             self.assertEqual((out / 'output_files/source_inputs/before_map/build_id.v').read_bytes(), expected_build_id())
+            # Quartus 25.1 rewrites exactly one project-version metadata value
+            # when opening the Q17-generated Groovy.qsf. It changes no RTL knobs.
+            qsf_path = out / 'Groovy.qsf'
+            pristine = qsf_path.read_text()
+            old_line = 'set_global_assignment -name LAST_QUARTUS_VERSION "17.0.2 Lite Edition"'
+            self.assertEqual(pristine.count(old_line), 1)
+            qsf_path.write_text(pristine.replace(old_line, 'set_global_assignment -name LAST_QUARTUS_VERSION "25.1std.0 Lite Edition"'))
+            stage_inputs(out, 'before_map')
+            stage_inputs(out, 'before_fit')
+            for phase in ('before_map', 'before_fit'):
+                gate = json.loads((out / 'output_files' / ('input_gate_' + phase + '.json')).read_text())
+                self.assertEqual(gate['accepted_compiler_version_metadata']['observed'], '25.1std.0 Lite Edition')
+                raw = json.loads((out / 'output_files' / ('project_calls_' + phase + '.json')).read_text())
+                self.assertIn(['global', '-name', 'LAST_QUARTUS_VERSION', '25.1std.0 Lite Edition'], raw['events'])
+            # The prior strict difference check remains active for every other
+            # assignment, even in a Q25 project whose version stamp changed.
+            with qsf_path.open('a') as f: f.write('\nset_global_assignment -name SEED 9\n')
+            with self.assertRaisesRegex(ValueError, 'Unapproved'): stage_inputs(out, 'before_map')
+            qsf_path.write_text(pristine)
             with self.assertRaisesRegex(ValueError, 'new'): create(source, out)
             with (out / 'Groovy.qsf').open('a') as f: f.write('\nset_global_assignment -name SEED 9\n')
             with self.assertRaisesRegex(ValueError, 'Unapproved'): stage_inputs(out, 'before_map')

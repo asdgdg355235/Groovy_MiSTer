@@ -131,6 +131,32 @@ def verify_generated(root):
         raise ValueError('Generated build_id.v changed; experiment is invalid')
 
 
+def accepted_compiler_version_metadata(wanted, observed, profile):
+    """Permit only Quartus 25.1's observed Q17->Q25 project-version stamp.
+
+    The raw assignment capture remains unchanged in project_calls_*.json.
+    The comparison still rejects all other assignment changes, including any
+    additional, reordered or duplicated LAST_QUARTUS_VERSION statements.
+    """
+    if profile != 'q25':
+        return observed, None
+    marker = ['global', '-name', 'LAST_QUARTUS_VERSION']
+    prepared = marker + ['17.0.2 Lite Edition']
+    q25 = marker + ['25.1std.0 Lite Edition']
+    expected_indices = [i for i, row in enumerate(wanted) if row[:3] == marker]
+    actual_indices = [i for i, row in enumerate(observed) if row[:3] == marker]
+    if len(expected_indices) != 1 or actual_indices != expected_indices:
+        return observed, None
+    i = expected_indices[0]
+    if wanted[i] != prepared or observed[i] != q25:
+        return observed, None
+    normalized = list(observed)
+    normalized[i] = prepared
+    return normalized, {'assignment': 'LAST_QUARTUS_VERSION',
+                        'prepared': prepared[3], 'observed': q25[3],
+                        'reason': 'Quartus 25.1 project-version metadata update, not physical assignment'}
+
+
 def stage_inputs(root, phase):
     """Record vendor-expanded calls, reject non-QSF hardware drift and overlays
     beyond the single reviewed factor. Never model vendor defaults as Python.
@@ -177,6 +203,8 @@ def stage_inputs(root, phase):
             # preserve every other event and its precedence/order.
             occurrences.append({'assignment': addition, 'count': count})
             observed = [row for row in observed if row != addition]
+        observed, compiler_version_metadata = accepted_compiler_version_metadata(
+            wanted, observed, provenance.get('compiler_profile', 'q17'))
         if observed != wanted:
             write_json(out / ('assignment_difference_' + phase + '.json'), {'expected': wanted, 'actual': policy(actual['events'])})
             raise ValueError('Unapproved effective assignment difference at ' + phase)
@@ -185,6 +213,7 @@ def stage_inputs(root, phase):
         'assignment_scope': actual['scope'], 'vendor_defaults_checked_here': False,
         'derived_duplication_policy_requires_fresh_map_and_fitted_audits': True,
         'reviewed_assignment_occurrences': occurrences if control is not None else [],
+        'accepted_compiler_version_metadata': compiler_version_metadata if control is not None else None,
     })
     record(root, phase)
 
