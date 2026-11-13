@@ -148,6 +148,9 @@ class PhysicalControls(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'new'): create(source, out)
             with (out / 'Groovy.qsf').open('a') as f: f.write('\nset_global_assignment -name SEED 9\n')
             with self.assertRaisesRegex(ValueError, 'Unapproved'): stage_inputs(out, 'before_map')
+            # Pre-fit must independently compare all effective sourced
+            # assignments against the prepared Q25 R0 configuration.
+            with self.assertRaisesRegex(ValueError, 'Unapproved'): stage_inputs(out, 'before_fit')
             # Native map can serialize an approved sourced option a second
             # time. It remains one factor; a different value must still fail.
             (out / 'Groovy.qsf').write_bytes((ROOT / 'Groovy.qsf').read_bytes())

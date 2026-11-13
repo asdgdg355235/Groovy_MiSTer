@@ -151,7 +151,7 @@ def stage_inputs(root, phase):
     write_json(out / ('project_calls_' + phase + '.json'), actual)
     experiment = provenance['experiment']['name']
     if experiment == 'R0':
-        control = json.loads((out / 'control_project_calls_prepared.json').read_text()) if phase == 'before_map' else None
+        control = json.loads((out / 'control_project_calls_prepared.json').read_text())
         additions = []
     else:
         path = out / 'control_evidence' / ('project_calls_' + phase + '.json')

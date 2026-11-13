@@ -1,5 +1,9 @@
 # Gated physical timing experiments
 
+> This document describes the preserved Quartus 17 R0 investigation. The
+> Quartus 25.1 compatibility port, Q25 hardware profile and local build
+> invocation are in [QUARTUS25.md](QUARTUS25.md).
+
 This implementation adds R0 diagnostics, fixed generated inputs, reviewed
 assignment-only overlays & complete endpoint comparisons. Hardware remains
 byte-identical to `c8d4b3897c4ed98165d3ee862cabbdd9ab9a4f17` across the 92

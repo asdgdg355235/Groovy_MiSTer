@@ -22,7 +22,9 @@ jobs:
           python3 tests/physical/q25_ram_evidence.py preflight . --profile q25
           python3 -m unittest discover -s tests -p test_physical_q25.py -v
           bash -n tests/run_physical_timing_quartus.sh
-      - name: Independent timing candidate tests
+      - name: Independent timing candidate tests (Icarus RTL parity and Verilator lint)
+        env:
+          CRT_RTL_SIMULATOR: iverilog
         run: python3 tests/run_timing_candidate_tests.py
       - name: R0 evidence gate tests
         run: python3 -m unittest discover -s tests -p test_physical_experiments.py -v
