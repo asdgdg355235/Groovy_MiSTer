@@ -32,7 +32,7 @@ module tb_lz4_timing;
     integer cycles=0, packets=0, received=0, n=0, expected_n=0;
     integer i,j,k,m,st,low,ll,rr,rst,gate,counter_seed;
     integer states_seen=0;
-    reg [7:0] packet[0:4095], expected[0:8191];
+    reg [7:0] packet[0:4095], expected[0:131071];
     reg checking=0, emitted;
     reg [31:0] old_count;
     reg old_window_write;
@@ -111,12 +111,12 @@ module tb_lz4_timing;
         end
     endtask
     task decode_packet;
-        integer word_index, timeout;
+        integer word_index, timeout, timeout_limit;
         begin
             clear_stream(); compressed_bytes=n; received=0;
             // Feed input with gaps while the decoder runs; test paused/ready.
-            word_index=0; timeout=0; run=1; checking=1;
-            while(!done && timeout<12000) begin
+            word_index=0; timeout=0; timeout_limit=12000+expected_n*4; run=1; checking=1;
+            while(!done && timeout<timeout_limit) begin
                 write_long=0;
                 if(word_index<(n+7)/8 && ready && timeout%5==0) begin
                     for(integer b=0;b<8;b=b+1) compressed_long[8*b +:8]=word_index*8+b<n?packet[word_index*8+b]:0;
@@ -153,6 +153,8 @@ module tb_lz4_timing;
             for(k=1;k<=8;k=k+1) begin make_packet(40,k,80); decode_packet(); end
             make_packet(64,17,160); decode_packet();
             make_packet(64,32,160); decode_packet();
+            // More than 65536 output bytes: exercise the complete 8192-word window rollover.
+            make_packet(64,8,65500); decode_packet();
         end
         // All state/mode/offset combinations; rollover and concurrent reset/run.
         // Deliberate state injection supplements valid packet tests, it does
