@@ -79,7 +79,7 @@ reg [7:0]  data;
 reg [63:0] data_64;
 
 reg [63:0] window_data;
-reg [63:0] window[WINDOW_SIZE];    // Decoded window buffer
+(* ramstyle = "M10K" *) reg [63:0] window[WINDOW_SIZE];    // Decoded window buffer
 reg [15:0] window_addr = 16'd0;
 reg [02:0] window_addr3 = 3'd0;
 reg [12:0] window_addr13  = 13'd0;
@@ -102,6 +102,126 @@ reg paused = 1'b0;
 reg done = 1'b0;
 reg error = 1'b0;
 
+
+
+ // The Cyclone V M10K read port is synchronous. Look ahead to the MP13
+ // address used on the next match-copy clock edge. Forward a matching write
+ // from the previous cycle rather than depending on RAM collision mode.
+reg [63:0] window_prefetch_data;
+reg [63:0] window_last_write_data;
+reg [12:0] window_last_write_addr;
+reg window_last_write_valid = 1'b0;
+reg [12:0] window_prefetch_addr;
+reg window_write_enable;
+reg [63:0] window_write_value;
+wire window_advance = lz4_run && (!long_valid || !lz4_stop);
+wire [63:0] window_read_word =
+    window_last_write_valid && window_last_write_addr == MP13
+    ? window_last_write_data : window_prefetch_data;
+
+always @* begin
+    window_prefetch_addr = MP13;
+    if (window_advance) begin
+        case (state)
+            S_Read_Match_Offset:
+                if (!((offset == 0 && ML == 0) || blocks_readed) && ML < 15)
+                    window_prefetch_addr = (window_addr - offset) >> 3;
+            S_Read_Match_Length:
+                if (data < 255)
+                    window_prefetch_addr = (window_addr - offset) >> 3;
+            S_Copy_Matches:
+                if (MP3 == 7)
+                    window_prefetch_addr = MP13 + 13'd1;
+`ifndef MISTER_LZ4_DISABLE_64B
+            S_Copy_Matches_64, S_Copy_Matches_64_8:
+                window_prefetch_addr = MP13 + 13'd1;
+`endif
+            default: ;
+        endcase
+    end
+end
+
+// One explicit write port follows the original values for every copy state.
+// This allows synthesis to recognize a one-read/one-write synchronous RAM.
+always @* begin
+    window_write_enable = 1'b0;
+    window_write_value = 64'd0;
+    if (window_advance) begin
+        case (state)
+            S_Read_Literals:
+                if ((read_ready || blocks_readed) && LL != 0 && window_addr3 == 7) begin
+                    window_write_enable = 1'b1;
+                    window_write_value = {data, window_data[00 +: 56]};
+                end
+`ifndef MISTER_LZ4_DISABLE_64B
+            S_Read_Literals_64:
+                if (read_ready || blocks_readed) begin
+                    window_write_enable = 1'b1;
+                    case (window_addr3)
+                        0: window_write_value = data_64;
+                        1: window_write_value = {data_64[00 +: 56], window_data[00 +: 08]};
+                        2: window_write_value = {data_64[00 +: 48], window_data[00 +: 16]};
+                        3: window_write_value = {data_64[00 +: 40], window_data[00 +: 24]};
+                        4: window_write_value = {data_64[00 +: 32], window_data[00 +: 32]};
+                        5: window_write_value = {data_64[00 +: 24], window_data[00 +: 40]};
+                        6: window_write_value = {data_64[00 +: 16], window_data[00 +: 48]};
+                        7: window_write_value = {data_64[00 +: 08], window_data[00 +: 56]};
+                        default: window_write_enable = 1'b0;
+                    endcase
+                end
+`endif
+            S_Copy_Matches:
+                if (window_addr3 == 7) begin
+                    window_write_enable = 1'b1;
+                    window_write_value = {
+                        window_addr3 >= offset ? window_data[8*MP3 +: 8] : window_read_word[8*MP3 +: 8],
+                        window_data[00 +: 56]
+                    };
+                end
+`ifndef MISTER_LZ4_DISABLE_64B
+            S_Copy_Matches_64: begin
+                window_write_enable = 1'b1;
+                case (window_addr3)
+                    0: window_write_value = window_read_word;
+                    1: window_write_value = {window_read_word[00 +: 56], window_data[00 +: 08]};
+                    2: window_write_value = {window_read_word[00 +: 48], window_data[00 +: 16]};
+                    3: window_write_value = {window_read_word[00 +: 40], window_data[00 +: 24]};
+                    4: window_write_value = {window_read_word[00 +: 32], window_data[00 +: 32]};
+                    5: window_write_value = {window_read_word[00 +: 24], window_data[00 +: 40]};
+                    6: window_write_value = {window_read_word[00 +: 16], window_data[00 +: 48]};
+                    7: window_write_value = {window_read_word[00 +: 08], window_data[00 +: 56]};
+                    default: window_write_enable = 1'b0;
+                endcase
+            end
+            S_Copy_Matches_64_8: begin
+                window_write_enable = 1'b1;
+                case (offset)
+                    1: window_write_value = {8{window_data[56 +: 08]}};
+                    2: window_write_value = {4{window_data[48 +: 16]}};
+                    3: window_write_value = {window_data[40 +: 16], window_data[40 +: 24], window_data[40 +: 24]};
+                    4: window_write_value = {2{window_data[32 +: 32]}};
+                    5: window_write_value = {window_data[24 +: 24], window_data[24 +: 40]};
+                    6: window_write_value = {window_data[16 +: 16], window_data[16 +: 48]};
+                    7: window_write_value = {window_data[08 +: 08], window_data[08 +: 56]};
+                    8: window_write_value = window_data;
+                    default: window_write_enable = 1'b0;
+                endcase
+            end
+`endif
+            default: ;
+        endcase
+    end
+end
+
+always @(posedge lz4_clk) begin
+    window_prefetch_data <= window[window_prefetch_addr];
+    window_last_write_valid <= window_write_enable;
+    if (window_write_enable) begin
+        window[window_addr13] <= window_write_value;
+        window_last_write_addr <= window_addr13;
+        window_last_write_data <= window_write_value;
+    end
+end
 
 //write new compressed bytes
 always @(posedge lz4_clk) begin             
@@ -241,8 +361,7 @@ always @(posedge lz4_clk) begin
                          if (window_addr3 == 7) begin
                            if (lz4_mode_64) uncompressed_bytes <= uncompressed_bytes + 32'd8;                           
                            long_valid                          <= 1'b1;
-                           uncompressed_long                   <= {data, window_data[00 +: 56]};       
-                           window[window_addr13]               <= {data, window_data[00 +: 56]};
+                           uncompressed_long                   <= {data, window_data[00 +: 56]};
                            window_addr13                       <= window_addr13 + 1'b1;                                                                                                                                        
                          end  
                          //end write_word
@@ -275,35 +394,35 @@ always @(posedge lz4_clk) begin
                        case (window_addr3)
                          0: begin 
                               window_data                                 <= data_64;
-                              {uncompressed_long, window[window_addr13]}  <= {2{data_64}};                             
+                              uncompressed_long <= {data_64};
                             end
                          1: begin 
                               window_data[00 +: 08]                       <= data_64[56 +: 08];  
-                              {uncompressed_long, window[window_addr13]}  <= {2{data_64[00 +: 56], window_data[00 +: 08]}};                                                        
+                              uncompressed_long <= {data_64[00 +: 56], window_data[00 +: 08]};
                             end
                          2: begin         
                               window_data[00 +: 16]                       <= data_64[48 +: 16];                                     
-                              {uncompressed_long, window[window_addr13]}  <= {2{data_64[00 +: 48], window_data[00 +: 16]}};   
+                              uncompressed_long <= {data_64[00 +: 48], window_data[00 +: 16]};
                             end 
                          3: begin         
                               window_data[00 +: 24]                       <= data_64[40 +: 24];  
-                              {uncompressed_long, window[window_addr13]}  <= {2{data_64[00 +: 40], window_data[00 +: 24]}};                                     
+                              uncompressed_long <= {data_64[00 +: 40], window_data[00 +: 24]};
                             end 
                          4: begin         
                               window_data[00 +: 32]                       <= data_64[32 +: 32];   
-                              {uncompressed_long, window[window_addr13]}  <= {2{data_64[00 +: 32], window_data[00 +: 32]}};                                       
+                              uncompressed_long <= {data_64[00 +: 32], window_data[00 +: 32]};
                             end 
                          5: begin         
                               window_data[00 +: 40]                       <= data_64[24 +: 40];   
-                              {uncompressed_long, window[window_addr13]}  <= {2{data_64[00 +: 24], window_data[00 +: 40]}};                                          
+                              uncompressed_long <= {data_64[00 +: 24], window_data[00 +: 40]};
                             end 
                          6: begin         
                               window_data[00 +: 48]                       <= data_64[16 +: 48];   
-                              {uncompressed_long, window[window_addr13]}  <= {2{data_64[00 +: 16], window_data[00 +: 48]}};                                         
+                              uncompressed_long <= {data_64[00 +: 16], window_data[00 +: 48]};
                             end 
                          7: begin         
                               window_data[00 +: 56]                       <= data_64[08 +: 56];                              
-                              {uncompressed_long, window[window_addr13]}  <= {2{data_64[00 +: 08], window_data[00 +: 56]}}; 
+                              uncompressed_long <= {data_64[00 +: 08], window_data[00 +: 56]};
                             end         
                        endcase 
                        //end write_long
@@ -398,7 +517,7 @@ always @(posedge lz4_clk) begin
                      //write_word                                                                                                                                                                                                                             
                      window_addr                     <= window_addr + 1'b1; 
                      window_addr3                    <= window_addr3 + 1'b1;                                                                                                                               
-                     {uncompressed_byte, window_data[8*window_addr3 +:8]} <= window_addr3 >= offset ? {2{window_data[8*MP3 +: 8]}} : {2{window[MP13][8*MP3 +: 8]}};                                                                                                                                                                                                                                                                   
+                     {uncompressed_byte, window_data[8*window_addr3 +:8]} <= window_addr3 >= offset ? {2{window_data[8*MP3 +: 8]}} : {2{window_read_word[8*MP3 +: 8]}};                                                                                                                                                                                                                                                                   
                      if (!lz4_mode_64) begin                      
                        byte_valid                    <= 1'b1;
                        uncompressed_bytes            <= uncompressed_bytes + 32'd1;
@@ -406,7 +525,7 @@ always @(posedge lz4_clk) begin
                      if (window_addr3 == 7) begin                       
                        long_valid                                 <= 1'b1;
                        if (lz4_mode_64) uncompressed_bytes        <= uncompressed_bytes + 32'd8;  
-                       {uncompressed_long, window[window_addr13]} <= {2{window_addr3 >= offset ? window_data[8*MP3 +: 8] : window[MP13][8*MP3 +: 8], window_data[00 +: 56]}};                                                                                                                                                                       
+                       uncompressed_long <= {window_addr3 >= offset ? window_data[8*MP3 +: 8] : window_read_word[8*MP3 +: 8], window_data[00 +: 56]};
                        window_addr13                              <= window_addr13 + 1'b1;  
                      end
                      //end write_word    
@@ -435,36 +554,36 @@ always @(posedge lz4_clk) begin
                      uncompressed_bytes <= uncompressed_bytes + 32'd8;
                      case (window_addr3)
                        0: begin 
-                            window_data                                <= window[MP13];
-                            {uncompressed_long, window[window_addr13]} <= {2{window[MP13]}};                             
+                            window_data                                <= window_read_word;
+                            uncompressed_long <= {window_read_word};
                           end
                        1: begin 
-                            window_data[00 +: 08]                      <= window[MP13][56 +: 08];  
-                            {uncompressed_long, window[window_addr13]} <= {2{window[MP13][00 +: 56], window_data[00 +: 08]}};                                                      
+                            window_data[00 +: 08]                      <= window_read_word[56 +: 08];  
+                            uncompressed_long <= {window_read_word[00 +: 56], window_data[00 +: 08]};
                           end
                        2: begin      
-                            window_data[00 +: 16]                      <= window[MP13][48 +: 16];  
-                            {uncompressed_long, window[window_addr13]} <= {2{window[MP13][00 +: 48], window_data[00 +: 16]}};                               
+                            window_data[00 +: 16]                      <= window_read_word[48 +: 16];  
+                            uncompressed_long <= {window_read_word[00 +: 48], window_data[00 +: 16]};
                           end 
                        3: begin         
-                            window_data[00 +: 24]                      <= window[MP13][40 +: 24];  
-                            {uncompressed_long, window[window_addr13]} <= {2{window[MP13][00 +: 40], window_data[00 +: 24]}};    
+                            window_data[00 +: 24]                      <= window_read_word[40 +: 24];  
+                            uncompressed_long <= {window_read_word[00 +: 40], window_data[00 +: 24]};
                           end 
                        4: begin         
-                            window_data[00 +: 32]                      <= window[MP13][32 +: 32];  
-                            {uncompressed_long, window[window_addr13]} <= {2{window[MP13][00 +: 32], window_data[00 +: 32]}};
+                            window_data[00 +: 32]                      <= window_read_word[32 +: 32];  
+                            uncompressed_long <= {window_read_word[00 +: 32], window_data[00 +: 32]};
                           end 
                        5: begin         
-                            window_data[00 +: 40]                      <= window[MP13][24 +: 40];  
-                            {uncompressed_long, window[window_addr13]} <= {2{window[MP13][00 +: 24], window_data[00 +: 40]}};
+                            window_data[00 +: 40]                      <= window_read_word[24 +: 40];  
+                            uncompressed_long <= {window_read_word[00 +: 24], window_data[00 +: 40]};
                           end 
                        6: begin         
-                            window_data[00 +: 48]                      <= window[MP13][16 +: 48];  
-                            {uncompressed_long, window[window_addr13]} <= {2{window[MP13][00 +: 16], window_data[00 +: 48]}};
+                            window_data[00 +: 48]                      <= window_read_word[16 +: 48];  
+                            uncompressed_long <= {window_read_word[00 +: 16], window_data[00 +: 48]};
                           end 
                        7: begin         
-                            window_data[00 +: 56]                      <= window[MP13][08 +: 56];  
-                            {uncompressed_long, window[window_addr13]} <= {2{window[MP13][00 +: 08], window_data[00 +: 56]}};
+                            window_data[00 +: 56]                      <= window_read_word[08 +: 56];  
+                            uncompressed_long <= {window_read_word[00 +: 08], window_data[00 +: 56]};
                           end         
                      endcase 
                      //end write_long                                                                                
@@ -486,42 +605,34 @@ always @(posedge lz4_clk) begin
                      case (offset)
                        1: begin    
                             window_data           <= {8{window_data[56 +: 08]}};                      
-                            uncompressed_long     <= {8{window_data[56 +: 08]}};                              
-                            window[window_addr13] <= {8{window_data[56 +: 08]}};                                               
+                            uncompressed_long     <= {8{window_data[56 +: 08]}};                                               
                           end
                        2: begin    
                             window_data           <= {4{window_data[48 +: 16]}};                      
                             uncompressed_long     <= {4{window_data[48 +: 16]}};                              
-                            window[window_addr13] <= {4{window_data[48 +: 16]}};                              
                           end
                        3: begin    
                             window_data           <= {window_data[40 +: 16], window_data[40 +: 24], window_data[40 +: 24]};                    
-                            uncompressed_long     <= {window_data[40 +: 16], window_data[40 +: 24], window_data[40 +: 24]};                              
-                            window[window_addr13] <= {window_data[40 +: 16], window_data[40 +: 24], window_data[40 +: 24]}; 
+                            uncompressed_long     <= {window_data[40 +: 16], window_data[40 +: 24], window_data[40 +: 24]}; 
                           end
                        4: begin    
                             window_data           <= {2{window_data[32 +: 32]}};                      
                             uncompressed_long     <= {2{window_data[32 +: 32]}};                              
-                            window[window_addr13] <= {2{window_data[32 +: 32]}};                              
                           end
                        5: begin    
                             window_data           <= {window_data[24 +: 24], window_data[24 +: 40]};                      
-                            uncompressed_long     <= {window_data[24 +: 24], window_data[24 +: 40]};                              
-                            window[window_addr13] <= {window_data[24 +: 24], window_data[24 +: 40]}; 
+                            uncompressed_long     <= {window_data[24 +: 24], window_data[24 +: 40]}; 
                           end
                        6: begin    
                             window_data           <= {window_data[16 +: 16], window_data[16 +: 48]};                      
-                            uncompressed_long     <= {window_data[16 +: 16], window_data[16 +: 48]};                              
-                            window[window_addr13] <= {window_data[16 +: 16], window_data[16 +: 48]};   
+                            uncompressed_long     <= {window_data[16 +: 16], window_data[16 +: 48]};   
                           end
                        7: begin    
                             window_data           <= {window_data[08 +: 08], window_data[08 +: 56]};                      
-                            uncompressed_long     <= {window_data[08 +: 08], window_data[08 +: 56]};                                                                           
-                            window[window_addr13] <= {window_data[08 +: 08], window_data[08 +: 56]}; 
+                            uncompressed_long     <= {window_data[08 +: 08], window_data[08 +: 56]}; 
                           end
                        8: begin
-                            uncompressed_long     <= window_data;                             
-                            window[window_addr13] <= window_data;
+                            uncompressed_long     <= window_data;
                           end
                      endcase 
                      //end write_long                                                                                
