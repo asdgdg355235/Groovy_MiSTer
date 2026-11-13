@@ -59,17 +59,17 @@ four CRT MLAB banks and two CRT M10K banks, and required video timing.
 
 ## Quartus 25.1 assignment capability discovery
 
-On Quartus Prime Lite 25.1std.0 Build 1129, \`get_all_assignment_names\`
-terminates \`quartus_sh\` with \`PJC: Unsupported smart action\`, even when the
+On Quartus Prime Lite 25.1std.0 Build 1129, `get_all_assignment_names`
+terminates `quartus_sh` with `PJC: Unsupported smart action`, even when the
 project is open. The R0 support probe avoids that native command and records
-all 16 map/fit, global/instance assignment combinations as \`available=0\`
-with explicit \`UNVERIFIED\` metadata. This is not a finding that the
+all 16 map/fit, global/instance assignment combinations as `available=0`
+with explicit `UNVERIFIED` metadata. This is not a finding that the
 assignments are unsupported. No capabilities or legal values are inferred.
 The pre-existing A1 overlay validator still rejects any unverified
 assignment; R0 and D1 do not depend on approving A1 assignments.
 
 Do not use a prior failed build directory for the next run. Fetch the
-updated branch, choose a new \`CRT_READ_BUILD_DIR\`, and retain the new report
+updated branch, choose a new `CRT_READ_BUILD_DIR`, and retain the new report
 archive for analysis. A successful R0 build does not approve A1 retiming
 assignments; these require separate compiler-supported evidence.
 
