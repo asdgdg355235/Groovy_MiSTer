@@ -31,5 +31,29 @@
     "A1/D1 recipes remain unapproved pending actual native correspondence, scope and legal-placement evidence.",
     "Coverage and CRT hardware acceptance remain unresolved."
   ],
-  "log_sha256": "c4e5849b6fdd7ee7e7333419d9b8afe71e70cf6f7a93500deb2deebac1b2c655"
+  "log_sha256": "c4e5849b6fdd7ee7e7333419d9b8afe71e70cf6f7a93500deb2deebac1b2c655",
+  "cli_prepare_only": {
+    "R0": {
+      "runner_exit_code": 0,
+      "last_stage": "prepared-only",
+      "compilation_completed": false,
+      "timing_results_available": false,
+      "qualification": "Inspect timing/resource/I/O gates; tool success alone is not timing closure.",
+      "physical_exports_complete": false,
+      "diagnostic_assembly_failed": false
+    },
+    "A1_without_review": {
+      "runner_exit_code": 1,
+      "last_stage": "preparation",
+      "compilation_completed": false,
+      "timing_results_available": false,
+      "qualification": "Inspect timing/resource/I/O gates; tool success alone is not timing closure.",
+      "physical_exports_complete": false,
+      "diagnostic_assembly_failed": false
+    },
+    "archives_verified_lossless": true,
+    "vendor_executables_launched": false
+  },
+  "prepared_source_commit": "49a4c298e55544e187f0cf07e2726c6b05e0ce01",
+  "native_qsf_serialization": "Measured control: 92 prepared/pre-map lines, 330 pre-fit lines. Current ordered pre-map assignment calls match original (1634 events). Exact repeated approved overlay calls are permitted; other changes rejected."
 }
