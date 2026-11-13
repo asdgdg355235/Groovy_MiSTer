@@ -175,7 +175,7 @@ def collect(output, destination=None):
     if not (out / 'node_inventory.tsv').exists():
         table(out / 'node_inventory.tsv', ['stage', 'name', 'short_name', 'type', 'creator', 'source_file', 'query_status'], [])
     if not (out / 'assignment_support.txt').exists():
-        (out / 'assignment_support.txt').write_text('PENDING: installed Quartus 17.0.2 Lite metadata export has not been run.\n')
+        (out / 'assignment_support.txt').write_text('PENDING: installed compiler assignment metadata export has not been run.\n')
     if not (out / 'assignment_capabilities.tsv').exists():
         table(out / 'assignment_capabilities.tsv', ['module', 'scope', 'name', 'available', 'metadata'], [])
     panels = read_rows(out / 'report_panels_map.tsv') + read_rows(out / 'report_panels_cmp.tsv')
@@ -256,7 +256,10 @@ def collect(output, destination=None):
         shutil.copy2(output / 'timing_closure/timing_gate.json', out / 'timing_gate.json')
     provenance = json.loads((output / 'provenance.json').read_text()) if (output / 'provenance.json').exists() else {}
     identity = {
-        'hardware_baseline': load_registry()['hardware_baseline'],
+        'hardware_baseline': (json.loads((output / 'provenance.json').read_text()).get('experiment', {}).get('hardware_baseline', load_registry()['hardware_baseline']) if (output / 'provenance.json').exists() else load_registry()['hardware_baseline']),
+        'compiler_profile': (json.loads((output / 'provenance.json').read_text()).get('compiler_profile', 'q17') if (output / 'provenance.json').exists() else 'q17'),
+        'source_commit': (json.loads((output / 'provenance.json').read_text()).get('source_commit') if (output / 'provenance.json').exists() else None),
+        'hardware_manifest_sha256': (json.loads((output / 'provenance.json').read_text()).get('hardware_manifest_sha256') if (output / 'provenance.json').exists() else None),
         'experiment': provenance.get('experiment', {}).get('name'), 'source_commit': provenance.get('source_commit'),
         'generated_input': provenance.get('generated_input'),
         'source_manifest_hashes': {p.name: digest(p.read_bytes()) for p in output.glob('source_manifest_*.json')},

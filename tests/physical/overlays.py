@@ -43,7 +43,7 @@ def exact_target(value):
     return value
 
 
-def validate_recipe(recipe_path, evidence_root, experiment):
+def validate_recipe(recipe_path, evidence_root, experiment, profile='q17'):
     recipe = json.loads(Path(recipe_path).read_text())
     if experiment not in ('A1', 'D1') or recipe.get('format') != 'physical-overlay-v1' or recipe.get('experiment') != experiment:
         raise ValueError('Unknown or mismatched physical overlay')
@@ -52,16 +52,23 @@ def validate_recipe(recipe_path, evidence_root, experiment):
     evidence_root = Path(evidence_root).resolve()
     seal_path = safe_path(evidence_root, 'evidence_manifest.json')
     seal = json.loads(seal_path.read_text())
+    from physical.control import profile_spec
+    if profile == 'q25':
+        if recipe.get('compiler_profile') != 'q25' or seal.get('compiler_profile') != 'q25':
+            raise ValueError('Quartus 25 requires new Q25 R0 evidence and compiler-bound recipe')
+        if not seal.get('source_commit') or seal.get('hardware_manifest_sha256') != digest(Path(__file__).with_name('hardware_q25.json').read_bytes()):
+            raise ValueError('Q25 R0 source or hardware manifest identity incomplete')
     if recipe.get('r0_evidence_sha256') != digest(seal_path.read_bytes()):
         raise ValueError('Recipe is not tied to this exact R0 evidence')
-    if seal.get('hardware_baseline') != load_registry()['hardware_baseline'] or seal.get('experiment') != 'R0':
+    if seal.get('hardware_baseline') != profile_spec(profile)['hardware_baseline'] or seal.get('experiment') != 'R0':
         raise ValueError('Not an R0 hardware control')
     for rel, expected in seal['files'].items():
         if digest(safe_path(evidence_root, rel).read_bytes()) != expected:
             raise ValueError('R0 evidence changed: ' + rel)
-    verify_version(safe_path(evidence_root, 'tool_version.txt').read_text())
+    verify_version(safe_path(evidence_root, 'tool_version.txt').read_text(), profile)
     must_seal = {'tool_version.txt', 'node_inventory.tsv', 'assignment_capabilities.tsv',
                  'input_gate_before_map.json', 'input_gate_before_fit.json'}
+    if profile == 'q25': must_seal |= {'resource_clock_gate.json', 'source_manifest_prepared.json', 'source_manifest_before_map.json', 'source_manifest_before_fit.json'}
     if experiment == 'D1': must_seal |= {'diagnostic_status.json', 'fanout_locations.tsv', 'fanout_seeds.tsv'}
     if not must_seal <= set(seal['files']):
         raise ValueError('Required evidence was not sealed: ' + ', '.join(sorted(must_seal - set(seal['files']))))

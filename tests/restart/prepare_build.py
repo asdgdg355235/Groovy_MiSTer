@@ -21,7 +21,7 @@ def record(root,phase):
  (out/f'source_manifest_{phase}.json').write_text(json.dumps({'phase':phase,'source_commit':identity.get('source_commit'),'experiment':identity.get('experiment'),'files':entries},indent=2)+'\n')
  return entries
 
-def prepare(source,output,name,working=False):
+def prepare(source,output,name,working=False,verified_physical=False):
  source=Path(source).resolve();output=Path(output).resolve()
  if output.exists() or source==output or source in output.parents:raise ValueError('Build directory must be new and outside source tree')
  head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip()
@@ -45,6 +45,9 @@ def prepare(source,output,name,working=False):
  if name=='working-tree':
   if not working:raise ValueError('working-tree experiment requires --working-tree')
   spec={'name':name,'controlled':False,'changes':'Actual explicit working-tree snapshot; not a one-factor baseline experiment'}
+ elif verified_physical:
+  if name!='baseline' or working:raise ValueError('Physical source must be committed baseline')
+  spec={'name':'baseline','controlled':True,'hardware_validation':'tests/physical/control.py verified manifest before snapshot'}
  else:spec=apply(output,name)
  out=output/'output_files';out.mkdir()
  (out/'timing_candidate_commit.txt').write_text(head+'\n');(out/'build_variant.txt').write_text(name+'\n')

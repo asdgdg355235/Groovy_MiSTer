@@ -25,10 +25,18 @@ def expected_build_id():
     return bytes.fromhex(load_registry()['generated_build_id_hex'])
 
 
-def hardware_hashes(root):
+def profile_spec(profile='q25'):
+    """Compiler-specific, committed hardware allow-list. Unknown profiles fail closed."""
+    profiles = load_registry()['compiler_profiles']
+    if profile not in profiles:
+        raise ValueError('Unknown compiler profile: ' + profile)
+    return profiles[profile]
+
+
+def hardware_hashes(root, profile='q25'):
     """Check all recorded hardware/IP/config inputs, not only the edited modules."""
     root = Path(root)
-    spec = json.loads(Path(__file__).with_name('hardware_baseline.json').read_text())
+    spec = json.loads(Path(__file__).with_name(profile_spec(profile)['manifest']).read_text())
     actual = {}
     for rel, wanted in spec['files'].items():
         path = root / rel
@@ -36,7 +44,7 @@ def hardware_hashes(root):
             raise ValueError('Missing or symlink hardware input: ' + rel)
         actual[rel] = digest(path.read_bytes())
         if actual[rel] != wanted:
-            raise ValueError('Hardware/config differs from c8d4b38: ' + rel)
+            raise ValueError('Hardware/config differs from ' + profile + ' approved manifest: ' + rel)
     suffixes = {'.v', '.sv', '.vhd', '.vhdl', '.vh', '.svh', '.qsf', '.qpf', '.qip', '.sdc', '.tcl', '.mif', '.hex', '.rom', '.qsys', '.ip', '.sip', '.sopcinfo'}
     excluded = {'tests', 'docs', '.github', '.git', 'db', 'incremental_db', 'output_files', 'old-builds', 'test-builds', '__pycache__'}
     for path in root.rglob('*'):
@@ -47,42 +55,48 @@ def hardware_hashes(root):
     return actual
 
 
-def verify_version(text):
-    if not re.search(r'\bVersion\s+17\.0\.2\s+Build\s+602\b', text) or 'Lite Edition' not in text:
-        raise ValueError('Requires Quartus Prime Lite 17.0.2 Build 602; other tools are invalid controls')
-    return {'version': '17.0.2', 'build': 602, 'edition': 'Lite'}
+def verify_version(text, profile='q17'):
+    config = profile_spec(profile)
+    pattern = r'\bVersion\s+' + re.escape(config['quartus_version']) + r'\s+Build\s+' + str(config['quartus_build']) + r'\b'
+    if not re.search(pattern, text) or not re.search(r'\bLite Edition\b', text):
+        raise ValueError('Wrong Quartus version/edition for ' + profile)
+    if re.search(r'\b(?:Standard|Pro) Edition\b', text):
+        raise ValueError('Mixed or non-Lite Quartus version: ' + profile)
+    return {'version': config['quartus_version'], 'build': config['quartus_build'], 'edition': 'Lite', 'compiler_profile': profile}
 
 
 def write_json(path, data):
     Path(path).write_text(json.dumps(data, indent=2, sort_keys=True) + '\n')
 
 
-def create(source, output, experiment='R0', overlay=None, evidence=None):
+def create(source, output, experiment='R0', overlay=None, evidence=None, profile='q25'):
     reg = load_registry()
     if experiment not in reg['experiments']:
         raise ValueError('Unknown physical experiment: ' + experiment)
     if experiment == 'R0' and (overlay or evidence):
         raise ValueError('R0 cannot contain a physical overlay')
-    hardware_hashes(source)
+    hardware_hashes(source, profile)
     accepted = None
     if experiment != 'R0':
         from physical.overlays import validate_recipe
         if not overlay or not evidence:
             raise ValueError(experiment + ' evidence gate pending: supply reviewed recipe and complete R0 evidence')
-        accepted = validate_recipe(overlay, evidence, experiment)
+        accepted = validate_recipe(overlay, evidence, experiment, profile=profile)
     # Existing clean-source preparation refuses dirty/unknown source and old databases.
-    provenance = prepare(source, output, 'baseline')
+    provenance = prepare(source, output, 'baseline', verified_physical=True)
     output = Path(output).resolve()
     out = output / 'output_files'
     (out / 'closure_diagnostics').mkdir()
     (out / 'build_variant.txt').write_text(experiment + '\n')
     provenance.update({
         'experiment': {'name': experiment, 'kind': reg['experiments'][experiment]['kind'],
-                       'hardware_baseline': reg['hardware_baseline'], 'controlled': True},
+                       'hardware_baseline': profile_spec(profile)['hardware_baseline'], 'compiler_profile': profile, 'controlled': True},
         'actual_preparation_timestamp_utc': datetime.now(timezone.utc).isoformat(),
         'generated_input': {'path': 'build_id.v', 'sha256': digest(expected_build_id()),
                             'policy': 'restore exact measured bytes after pre-flow; never change system clock'},
-        'hardware_hashes': hardware_hashes(output),
+        'hardware_hashes': hardware_hashes(output, profile),
+        'compiler_profile': profile,
+        'hardware_manifest_sha256': digest(Path(__file__).with_name(profile_spec(profile)['manifest']).read_bytes()),
     })
     from project_assignments import capture
     write_json(out / 'control_project_calls_prepared.json', capture(output))
@@ -179,18 +193,21 @@ def main():
     q = sub.add_parser('prepare')
     q.add_argument('source'); q.add_argument('output'); q.add_argument('experiment', choices=['R0', 'A1', 'D1'])
     q.add_argument('--overlay'); q.add_argument('--evidence')
+    q.add_argument('--profile', choices=['q17','q25'], default='q25')
     for name in ['freeze', 'verify-generated', 'verify-hardware']:
-        sub.add_parser(name).add_argument('root')
+        v = sub.add_parser(name); v.add_argument('root')
+        if name == 'verify-hardware': v.add_argument('--profile', choices=['q17','q25'], default='q25')
     q = sub.add_parser('stage-inputs'); q.add_argument('root'); q.add_argument('phase', choices=['before_map', 'before_fit'])
-    sub.add_parser('verify-version').add_argument('file')
+    v = sub.add_parser('verify-version'); v.add_argument('file')
+    v.add_argument('--profile', choices=['q17','q25'], default='q17')
     a = p.parse_args()
     if a.command == 'prepare':
-        create(a.source, a.output, a.experiment, a.overlay, a.evidence)
+        create(a.source, a.output, a.experiment, a.overlay, a.evidence, a.profile)
     elif a.command == 'freeze': freeze_generated(a.root)
     elif a.command == 'verify-generated': verify_generated(a.root)
-    elif a.command == 'verify-hardware': hardware_hashes(a.root)
+    elif a.command == 'verify-hardware': hardware_hashes(a.root, a.profile)
     elif a.command == 'stage-inputs': stage_inputs(a.root, a.phase)
-    else: verify_version(Path(a.file).read_text())
+    else: verify_version(Path(a.file).read_text(), a.profile)
 
 
 if __name__ == '__main__':

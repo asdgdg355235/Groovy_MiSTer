@@ -16,7 +16,7 @@ def inspect(root):
     if not re.search(r'Fitter Status\s*:\s*Successful',summary): failures.append('Unsuccessful fitter')
     if not re.search(r'Device\s*:\s*5CSEBA6U23I7\b',summary): failures.append('Unexpected device')
     ram=re.search(r'Total RAM Blocks\s*:\s*([\d,]+)\s*/\s*([\d,]+)',summary)
-    mlab=re.search(r';\s*Total MLAB memory bits\s*;\s*([\d,]+)\s*;',fit)
+    mlab=re.search(r';\s*Total MLAB memory bits\s*;\s*([\d,]+)\s*;',fit, re.I)
     if not ram or not mlab: raise ValueError('Missing RAM resource counts')
     used,capacity=(int(v.replace(',','')) for v in ram.groups())
     bits=int(mlab[1].replace(',',''))
@@ -27,7 +27,7 @@ def inspect(root):
         if row['kind']!='RAM_ADDRESS' or row['port']!='PORTBADDR': continue
         name=row['name']; match=re.search(r'packed_ram\[(\d+)\]\.(even|odd)_ram',name)
         if match:
-            kind='M10K' if 'altsyncram:block_ram' in name else 'MLAB' if 'altdpram:distributed' in name else 'unknown'
+            kind='M10K' if re.search(r'altsyncram:block_ram|\bM10K\b', name, re.I) else 'MLAB' if re.search(r'altdpram:distributed|\bMLAB\b', name, re.I) else 'unknown'
             banks.setdefault('.'.join(match.groups()),set()).add(kind)
     expected={f'{n}.{p}':{'M10K' if n==2 else 'MLAB'} for n in range(3) for p in ('even','odd')}
     if banks!=expected: failures.append('Six-bank RAM implementation changed or unrecognized')

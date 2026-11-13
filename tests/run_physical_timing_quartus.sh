@@ -4,17 +4,20 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd -P)"
 EXPERIMENT="${1:-R0}"
 [[ $# -eq 0 ]] || shift
-OVERLAY= EVIDENCE= PREPARE_ONLY=0
-QBIN="${QUARTUS_17_BIN:-}"
+OVERLAY= EVIDENCE= PREPARE_ONLY=0 PROFILE=q25
+QBIN=""
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --quartus-bin) QBIN="$2"; shift 2 ;;
+        --profile) PROFILE="$2"; shift 2 ;;
         --overlay) OVERLAY="$2"; shift 2 ;;
         --evidence) EVIDENCE="$2"; shift 2 ;;
         --prepare-only) PREPARE_ONLY=1; shift ;;
         *) echo "Unknown argument: $1" >&2; exit 2 ;;
     esac
 done
+[[ "$PROFILE" == q17 || "$PROFILE" == q25 ]] || { echo 'Expected --profile q17 or q25' >&2; exit 2; }
+[[ -n "$QBIN" ]] || { if [[ "$PROFILE" == q25 ]]; then QBIN="${QUARTUS_25_BIN:-}"; else QBIN="${QUARTUS_17_BIN:-}"; fi; }
 [[ "$EXPERIMENT" == R0 || "$EXPERIMENT" == A1 || "$EXPERIMENT" == D1 ]] || { echo 'Expected R0, A1 or D1' >&2; exit 2; }
 [[ "${CRT_DUPLICATION_DISABLED:-0}" != 1 ]] || { echo 'Driver duplication must remain enabled' >&2; exit 2; }
 OUT="${CRT_READ_BUILD_DIR:-$ROOT/../physical-$EXPERIMENT-$(date -u +%Y%m%d-%H%M%S)}"
@@ -53,7 +56,7 @@ PY
     exit "$result"
 }
 trap finish EXIT
-args=("$ROOT" "$OUT" "$EXPERIMENT")
+args=("$ROOT" "$OUT" "$EXPERIMENT" --profile "$PROFILE")
 [[ -z "$OVERLAY" ]] || args+=(--overlay "$OVERLAY")
 [[ -z "$EVIDENCE" ]] || args+=(--evidence "$EVIDENCE")
 python3 "$ROOT/tests/physical/control.py" prepare "${args[@]}" > "$OUT-preparation.log" 2>&1
@@ -68,15 +71,17 @@ Path('output_files/host_environment.json').write_text(json.dumps({
     'affinity':sorted(os.sched_getaffinity(0)) if hasattr(os,'sched_getaffinity') else None,
     'parallel_setting':'ALL (unchanged)', 'database_reuse':False},indent=2)+'\n')
 PY
+python3 tests/physical/q25_ram_evidence.py preflight . --profile "$PROFILE"
 if [[ "$PREPARE_ONLY" == 1 ]]; then STAGE=prepared-only; exit 0; fi
 STAGE=preflight
-[[ -n "$QBIN" && -d "$QBIN" ]] || { echo 'Set QUARTUS_17_BIN to the explicit 17.0.2 Lite bin directory' >&2; exit 2; }
+[[ -n "$QBIN" && -d "$QBIN" ]] || { echo 'Set QUARTUS_25_BIN or QUARTUS_17_BIN to its explicit Lite bin directory' >&2; exit 2; }
 QBIN="$(cd "$QBIN" && pwd -P)"
 export PATH="$QBIN:$PATH"
 for tool in quartus_sh quartus_map quartus_fit quartus_asm quartus_sta quartus_cdb; do
     [[ -x "$QBIN/$tool" ]] || { echo "Missing selected executable: $tool" >&2; exit 127; }
+    [[ "$(readlink -f "$(command -v "$tool")")" == "$(readlink -f "$QBIN/$tool")" ]] || { echo "Mixed toolchain executable: $tool" >&2; exit 2; }
     "$QBIN/$tool" --version > "output_files/${tool}_version.txt"
-    python3 tests/physical/control.py verify-version "output_files/${tool}_version.txt"
+    python3 tests/physical/control.py verify-version "output_files/${tool}_version.txt" --profile "$PROFILE"
 done
 cp output_files/quartus_sh_version.txt output_files/crt_read_address_tool_version.txt
 STAGE=capabilities
@@ -89,6 +94,7 @@ python3 tests/physical/control.py stage-inputs . before_map
 STAGE=mapping
 quartus_map Groovy -c Groovy 2>&1 | tee output_files/crt_read_address_compile.log
 grep -F 'Quartus Prime Analysis & Synthesis was successful' output_files/crt_read_address_compile.log >/dev/null
+python3 tests/physical/q25_ram_evidence.py map output_files --profile "$PROFILE"
 quartus_sh -t tests/physical/report_project.tcl map > output_files/closure_diagnostics/project_map.log 2>&1
 quartus_cdb -t tests/physical/report_atoms.tcl map > output_files/closure_diagnostics/atoms_map.log 2>&1
 python3 tests/physical/application.py output_files map

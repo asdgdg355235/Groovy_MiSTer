@@ -3,18 +3,51 @@
   "hardware_baseline": "c8d4b3897c4ed98165d3ee862cabbdd9ab9a4f17",
   "generated_build_id_hex": "60646566696e65204255494c445f44415445202232363131313222",
   "experiments": {
-    "R0": {"kind": "diagnostic-control", "assignments": [], "status": "ready-user-run"},
+    "R0": {
+      "kind": "diagnostic-control",
+      "assignments": [],
+      "status": "ready-user-run"
+    },
     "A1": {
-      "kind": "register-boundary", "status": "evidence-required",
+      "kind": "register-boundary",
+      "status": "evidence-required",
       "target_family": "CRT position state",
-      "requires": ["source_to_physical_correspondence", "register_movement", "assignment_scope_and_value"],
+      "requires": [
+        "source_to_physical_correspondence",
+        "register_movement",
+        "assignment_scope_and_value"
+      ],
       "reason": "Generated advance_rows captures do not establish the original position-register boundary."
     },
     "D1": {
-      "kind": "placement", "status": "evidence-required",
+      "kind": "placement",
+      "status": "evidence-required",
       "target_family": "original delta selector",
-      "requires": ["complete_selector_footprint", "refill_decode_paths", "legal_site_and_target"],
+      "requires": [
+        "complete_selector_footprint",
+        "refill_decode_paths",
+        "legal_site_and_target"
+      ],
       "reason": "A 914-load launch and two endpoint locations do not establish a legal beneficial placement."
+    }
+  },
+  "default_compiler_profile": "q25",
+  "compiler_profiles": {
+    "q17": {
+      "manifest": "hardware_baseline.json",
+      "hardware_baseline": "c8d4b3897c4ed98165d3ee862cabbdd9ab9a4f17",
+      "quartus_version": "17.0.2",
+      "quartus_build": 602,
+      "edition": "Lite",
+      "pll_qip": "sys/pll_q17.qip"
+    },
+    "q25": {
+      "manifest": "hardware_q25.json",
+      "hardware_baseline": "248d48ab625b04418fab1bc369c4cb60ff47fff1",
+      "quartus_version": "25.1std.0",
+      "quartus_build": 1129,
+      "edition": "Lite",
+      "pll_qip": "sys/pll_q25.qip"
     }
   }
 }
