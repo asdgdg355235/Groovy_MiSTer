@@ -1,0 +1,23 @@
+name: LZ4 Quartus 25 candidate RTL-only tests
+on:
+  push:
+    branches:
+      - experimental/quartus25-lz4-registered-window
+  workflow_dispatch:
+
+jobs:
+  lz4-rtl-only:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout full history for frozen c8d4b38 reference
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Icarus Verilog only
+        run: sudo apt-get update && sudo apt-get install -y iverilog
+      - name: Static schedule checks
+        run: python3 tests/test_lz4_q25_window_schedule.py
+      - name: Original-write source check
+        run: python3 tests/test_lz4_q25_source_contract.py
+      - name: Full and byte-only cycle-equivalence checks
+        run: python3 tests/run_lz4_q25_differential.py
