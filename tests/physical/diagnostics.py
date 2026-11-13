@@ -245,7 +245,16 @@ def collect(output, destination=None):
         'pending_experiments': {'A1': load_registry()['experiments']['A1']['reason'], 'D1': load_registry()['experiments']['D1']['reason']},
         'qualification': 'Observed exports only. A generated name is not source correspondence; no timing-closure or hardware claim.',
     }
+    provenance = json.loads((output / 'provenance.json').read_text()) if (output / 'provenance.json').exists() else {}
+    profile = provenance.get('compiler_profile', 'q17')
+    ram_evidence = output / 'q25_window_ram_gate.json'
+    if profile == 'q25':
+        status['q25_lz4_ram_evidence_present'] = ram_evidence.is_file()
+        status['q25_lz4_ram_inferred'] = (json.loads(ram_evidence.read_text()).get('embedded_ram_inferred', False)
+                                        if ram_evidence.is_file() else False)
+        status['export_queries_complete'] = bool(status['export_queries_complete'] and status['q25_lz4_ram_inferred'])
     write_json(out / 'diagnostic_status.json', status)
+    if ram_evidence.is_file(): shutil.copy2(ram_evidence, out / 'q25_window_ram_gate.json')
     version = output / 'crt_read_address_tool_version.txt'
     if version.exists(): shutil.copy2(version, out / 'tool_version.txt')
     for name in ('project_calls_before_map.json', 'project_calls_before_fit.json', 'host_environment.json',
@@ -254,12 +263,10 @@ def collect(output, destination=None):
         if (output / name).exists(): shutil.copy2(output / name, out / name)
     if (output / 'timing_closure/timing_gate.json').exists():
         shutil.copy2(output / 'timing_closure/timing_gate.json', out / 'timing_gate.json')
-    provenance = json.loads((output / 'provenance.json').read_text()) if (output / 'provenance.json').exists() else {}
     identity = {
-        'hardware_baseline': (json.loads((output / 'provenance.json').read_text()).get('experiment', {}).get('hardware_baseline', load_registry()['hardware_baseline']) if (output / 'provenance.json').exists() else load_registry()['hardware_baseline']),
-        'compiler_profile': (json.loads((output / 'provenance.json').read_text()).get('compiler_profile', 'q17') if (output / 'provenance.json').exists() else 'q17'),
-        'source_commit': (json.loads((output / 'provenance.json').read_text()).get('source_commit') if (output / 'provenance.json').exists() else None),
-        'hardware_manifest_sha256': (json.loads((output / 'provenance.json').read_text()).get('hardware_manifest_sha256') if (output / 'provenance.json').exists() else None),
+        'hardware_baseline': provenance.get('experiment', {}).get('hardware_baseline', load_registry()['hardware_baseline']),
+        'compiler_profile': profile,
+        'hardware_manifest_sha256': provenance.get('hardware_manifest_sha256'),
         'experiment': provenance.get('experiment', {}).get('name'), 'source_commit': provenance.get('source_commit'),
         'generated_input': provenance.get('generated_input'),
         'source_manifest_hashes': {p.name: digest(p.read_bytes()) for p in output.glob('source_manifest_*.json')},

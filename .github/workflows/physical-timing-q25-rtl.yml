@@ -1,0 +1,30 @@
+name: Quartus 25 physical timing non-Quartus regression
+on:
+  push:
+    branches:
+      - work/physical-timing-q25
+  workflow_dispatch:
+
+jobs:
+  non-quartus:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install independent verification tools only
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog verilator g++ tcl
+          python3 -m pip install --user z3-solver
+      - name: Source and version preflight, no Quartus
+        run: |
+          python3 tests/physical/q25_ram_evidence.py preflight . --profile q25
+          python3 -m unittest discover -s tests -p test_physical_q25.py -v
+          bash -n tests/run_physical_timing_quartus.sh
+      - name: Independent timing candidate tests
+        run: python3 tests/run_timing_candidate_tests.py
+      - name: R0 evidence gate tests
+        run: python3 -m unittest discover -s tests -p test_physical_experiments.py -v
+      - name: LZ4 full and byte-only differential, independently repeated
+        run: python3 tests/run_lz4_q25_differential.py

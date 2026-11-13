@@ -19,7 +19,11 @@ else:
  assert src==old,'Flat-selector test requires untouched baseline root state/decode'
  assert src.count('(PoC_lz4_delta_FB[PoC_lz4_delta_index])')==1
  select='wire [63:0] delta_read_value=PoC_lz4_delta_FB[PoC_lz4_delta_index];\n'
-assert (root/'rtl/lz4.v').read_bytes()==baseline('rtl/lz4.v')
+# The approved Q25 decoder changes only the window RAM schedule. The delta
+# selector is checked here, while the full decoder gets a separate
+# original-source differential simulation in both modes.
+from physical.control import hardware_hashes
+hardware_hashes(root, 'q25')
 task=src[src.index('task decode_pixel;'):src.index('endtask',src.index('task decode_pixel;'))+7]
 lz4=(root/'rtl/lz4.v').read_text();start=lz4.index('assign lz4_uncompressed_long[07:00]')
 addition=lz4[start:lz4.index('assign lz4_long_valid',start)]

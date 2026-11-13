@@ -72,7 +72,12 @@ Path('output_files/host_environment.json').write_text(json.dumps({
     'parallel_setting':'ALL (unchanged)', 'database_reuse':False},indent=2)+'\n')
 PY
 python3 tests/physical/q25_ram_evidence.py preflight . --profile "$PROFILE"
-if [[ "$PREPARE_ONLY" == 1 ]]; then STAGE=prepared-only; exit 0; fi
+if [[ "$PREPARE_ONLY" == 1 ]]; then
+    python3 tests/physical/control.py freeze .
+    python3 tests/physical/control.py stage-inputs . before_map
+    STAGE=prepared-only
+    exit 0
+fi
 STAGE=preflight
 [[ -n "$QBIN" && -d "$QBIN" ]] || { echo 'Set QUARTUS_25_BIN or QUARTUS_17_BIN to its explicit Lite bin directory' >&2; exit 2; }
 QBIN="$(cd "$QBIN" && pwd -P)"

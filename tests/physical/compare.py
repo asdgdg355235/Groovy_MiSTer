@@ -37,6 +37,75 @@ def load_timing(output):
     return gate, checks
 
 
+def compare_versions(quartus17, quartus25):
+    """Report compiler-configuration differences without equating node identities."""
+    quartus17, quartus25 = Path(quartus17), Path(quartus25)
+    left_gate, old = load_timing(quartus17)
+    right_gate, new = load_timing(quartus25)
+    if set(old) != set(new):
+        raise ValueError('Cross-version timing corners/checks differ')
+    def identity(root):
+        path = root / 'provenance.json'
+        return json.loads(path.read_text()) if path.exists() else {}
+    old_source, new_source = identity(quartus17), identity(quartus25)
+    if old_source.get('compiler_profile', 'q17') != 'q17' or new_source.get('compiler_profile') != 'q25':
+        raise ValueError('Cross-version comparison requires q17 then q25 provenance')
+    def resources(root):
+        summary = root / 'Groovy.fit.summary'
+        data = {}
+        if summary.exists():
+            for row in summary.read_text(errors='replace').splitlines():
+                if ':' in row:
+                    key, value = row.split(':', 1)
+                    data[key.strip()] = value.strip()
+        gate_path = root / 'resource_clock_gate.json'
+        if gate_path.exists():
+            data['validated_resource_gate'] = json.loads(gate_path.read_text())
+        return data
+    def families(rows):
+        from collections import Counter
+        return dict(sorted(Counter(family(row['from'], row['to'])
+                                   for check in rows.values() if check['check'] == 'setup'
+                                   for row in check['negative'].values()).items()))
+    def physical(root):
+        rows = read_rows(root / 'closure_diagnostics/critical_path_metrics.tsv')
+        by_family = {}
+        for row in rows:
+            label = (row['corner'], row['family'])
+            stats = by_family.setdefault(label, [])
+            stats.append({'slack_ns': row['slack_ns'], 'cell_delay_ns': row['cell_delay_ns'],
+                          'routing_delay_ns': row['routing_delay_ns'], 'clock_skew_ns': row['clock_skew_ns'],
+                          'launch_fanout': row['launch_fanout']})
+        return [{'corner': corner, 'family': family_name, 'paths': values}
+                for (corner, family_name), values in sorted(by_family.items())]
+    def register_count(root):
+        from collections import Counter
+        rows = read_rows(root / 'closure_diagnostics/node_inventory.tsv')
+        return dict(Counter((r['stage'], r['type']) for r in rows))
+    margins = [{'corner_and_check': '/'.join(key),
+                'q17_wns_ns': old[key]['wns'], 'q25_wns_ns': new[key]['wns'],
+                'q17_tns_ns': old[key]['tns'], 'q25_tns_ns': new[key]['tns'],
+                'q17_failing_endpoints': old[key]['count'], 'q25_failing_endpoints': new[key]['count']}
+               for key in sorted(old)]
+    return {'format': 'physical-cross-version-v1',
+            'q17_source': old_source.get('source_commit'), 'q25_source': new_source.get('source_commit'),
+            'configuration_differences': {
+                'lz4': 'q17 asynchronous window; q25 registered-read look-ahead and write-forwarding',
+                'pll': 'sys/pll_q17.qip versus sys/pll_q25.qip (same four included QIP lists)',
+                'compiler': 'Quartus Prime Lite 17.0.2 Build 602 versus 25.1std.0 Build 1129'},
+            'timing_vectors': margins, 'q17_timing_pass': left_gate['timing_pass'],
+            'q25_timing_pass': right_gate['timing_pass'],
+            'negative_setup_families': {'q17': families(old), 'q25': families(new)},
+            'critical_family_metrics': {'q17': physical(quartus17), 'q25': physical(quartus25)},
+            'resource_counts': {'q17': resources(quartus17), 'q25': resources(quartus25)},
+            'register_inventories': {'q17': [{'stage': stage, 'type': typ, 'count': count}
+                                            for (stage,typ), count in sorted(register_count(quartus17).items())],
+                                     'q25': [{'stage': stage, 'type': typ, 'count': count}
+                                            for (stage,typ), count in sorted(register_count(quartus25).items())]},
+            'identity_policy': 'Compiler-local physical node IDs must not be matched across versions.',
+            'interpretation': 'RTL window and PLL profile change alongside the compiler; causal attribution to the compiler alone is unsupported.'}
+
+
 def compare(control, candidate, timing_only=False, published_control=None):
     control, candidate = Path(control), Path(candidate)
     cg, a = load_timing(control); ng, b = load_timing(candidate)
@@ -88,6 +157,10 @@ def compare(control, candidate, timing_only=False, published_control=None):
             np = json.loads((candidate / 'provenance.json').read_text())
             if cp['experiment']['name'] != 'R0': invalid.append('Control is not R0')
             if cp['hardware_hashes'] != np['hardware_hashes']: invalid.append('Hardware baseline hashes changed')
+            if cp.get('compiler_profile', 'q17') != np.get('compiler_profile', 'q17'):
+                invalid.append('Cross-version candidate comparison is prohibited; use --cross-version')
+            if cp.get('hardware_manifest_sha256') != np.get('hardware_manifest_sha256'):
+                invalid.append('Physical compiler manifest changed')
             for p in (cp, np):
                 if p['generated_input']['sha256'] != digest(expected_build_id()): invalid.append('Generated input mismatch')
             ce = json.loads((control / 'host_environment.json').read_text())
@@ -123,10 +196,21 @@ def compare(control, candidate, timing_only=False, published_control=None):
         if not all(v['full_distribution'] for v in b.values()): pending.append('Complete endpoint distributions missing')
     published = None
     if published_control is not None:
-        second = compare(published_control, candidate, True)
-        published = {k: second[k] for k in ('setup_regressions', 'new_failing_families', 'other_timing_failures', 'pulse_failures', 'all_corner_check_vectors')}
-        if any(published[k] for k in ('setup_regressions', 'new_failing_families', 'other_timing_failures', 'pulse_failures')):
-            invalid.append('Candidate fails the original published hardware-baseline comparison')
+        published_profile = 'q17'
+        ppath = Path(published_control) / 'provenance.json'
+        if ppath.exists():
+            published_profile = json.loads(ppath.read_text()).get('compiler_profile', 'q17')
+        candidate_profile = 'q17'
+        cpath = candidate / 'provenance.json'
+        if cpath.exists():
+            candidate_profile = json.loads(cpath.read_text()).get('compiler_profile', 'q17')
+        if published_profile != candidate_profile:
+            published = compare_versions(published_control, candidate)
+        else:
+            second = compare(published_control, candidate, True)
+            published = {k: second[k] for k in ('setup_regressions', 'new_failing_families', 'other_timing_failures', 'pulse_failures', 'all_corner_check_vectors')}
+            if any(published[k] for k in ('setup_regressions', 'new_failing_families', 'other_timing_failures', 'pulse_failures')):
+                invalid.append('Candidate fails the original published hardware-baseline comparison')
     retained = timing_retain and not invalid and not pending and not timing_only
     verdict = 'RETAIN_FOR_COMBINATION_TEST' if retained else 'REJECT' if regressions or new_families or other_failures or ng['pulse_failures'] or invalid else 'PENDING_EVIDENCE' if pending else 'NO_GLOBAL_IMPROVEMENT'
     def metrics(root):
@@ -170,7 +254,13 @@ if __name__ == '__main__':
     p.add_argument('control', type=Path); p.add_argument('candidate', type=Path)
     p.add_argument('--output', required=True, type=Path); p.add_argument('--timing-only', action='store_true')
     p.add_argument('--published-control', type=Path)
-    a = p.parse_args(); result = compare(a.control, a.candidate, a.timing_only, a.published_control)
+    p.add_argument('--cross-version', action='store_true')
+    a = p.parse_args()
+    if a.cross_version:
+        write_json(a.output, compare_versions(a.control, a.candidate))
+        print('Cross-version observations written; no endpoint-identity or compiler-only attribution')
+        sys.exit(0)
+    result = compare(a.control, a.candidate, a.timing_only, a.published_control)
     # Complete structured distribution is a compact TSV, not repeated JSON keys.
     from physical.diagnostics import table
     distribution = result.pop('endpoint_slack_distribution')

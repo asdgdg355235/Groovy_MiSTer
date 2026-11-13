@@ -111,7 +111,8 @@ class PhysicalControls(unittest.TestCase):
             with self.assertRaises(ValueError): verify_version(text)
 
     def test_repository_hardware_is_byte_identical(self):
-        self.assertEqual(len(hardware_hashes(ROOT)), 92)
+        self.assertEqual(len(hardware_hashes(ROOT)), 93)
+        self.assertEqual(len(hardware_hashes(ROOT, 'q25')), 93)
 
     def test_additional_hardware_cannot_bypass_baseline_hashes(self):
         import shutil

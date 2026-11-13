@@ -2,7 +2,7 @@
 """Validate reviewed physical evidence and render one safe assignment-only overlay.
 
 The repository intentionally contains no approved A1/D1 targets or sites.
-Names, scope and legal sites must come from the user's exact 17.0.2 R0 build.
+Names, scope and legal sites must come from the exact current compiler R0 build.
 Human source correspondence is retained as a review, never inferred from ~NEW_REG.
 """
 import csv
@@ -56,7 +56,7 @@ def validate_recipe(recipe_path, evidence_root, experiment, profile='q17'):
     if profile == 'q25':
         if recipe.get('compiler_profile') != 'q25' or seal.get('compiler_profile') != 'q25':
             raise ValueError('Quartus 25 requires new Q25 R0 evidence and compiler-bound recipe')
-        if not seal.get('source_commit') or seal.get('hardware_manifest_sha256') != digest(Path(__file__).with_name('hardware_q25.json').read_bytes()):
+        if not seal.get('source_commit') or recipe.get('r0_source_commit') != seal['source_commit'] or seal.get('hardware_manifest_sha256') != digest(Path(__file__).with_name('hardware_q25.json').read_bytes()):
             raise ValueError('Q25 R0 source or hardware manifest identity incomplete')
     if recipe.get('r0_evidence_sha256') != digest(seal_path.read_bytes()):
         raise ValueError('Recipe is not tied to this exact R0 evidence')
@@ -134,7 +134,7 @@ def validate_recipe(recipe_path, evidence_root, experiment, profile='q17'):
             if not any(re.search(r'\b' + re.escape(value) + r'\b', r['metadata'], re.I) for r in cap):
                 raise ValueError('Accepted value not established by installed assignment metadata')
             if not mapping.get('register_scope_verified'):
-                raise ValueError('Individual-register scope has not been reviewed in 17.0.2')
+                raise ValueError('Individual-register scope has not been reviewed in installed compiler')
         else:
             if a.get('kind') != 'location' or name != 'LOCATION':
                 raise ValueError('D1 permits existing-node placement only')
