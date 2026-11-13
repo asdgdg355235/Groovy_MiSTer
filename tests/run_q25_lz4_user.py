@@ -30,25 +30,34 @@ def run_log(args, cwd, logpath, env):
         code=proc.wait()
     if code:raise RuntimeError(f"{args[0]} failed with exit code {code}")
 
-def main():
-    parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--full",action="store_true",help="continue through fitter and eight-corner timing after map audit")
-    parser.add_argument("--quartus",default="/home/taichi/altera_lite/25.1std")
-    a=parser.parse_args()
-    # In a linked git worktree, .git is a pointer *file*, not a directory.
-    # Query Git rather than assuming how the checkout stores its metadata.
-    git_root = subprocess.run(
-        ["git", "-C", str(ROOT), "rev-parse", "--show-toplevel"],
+def require_git_worktree(root):
+    """Accept ordinary checkouts and detached linked worktrees, not archives."""
+    root = Path(root).resolve()
+    probe = subprocess.run(
+        ["git", "-C", str(root), "rev-parse", "--show-toplevel"],
         text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         check=False,
     )
-    if git_root.returncode or Path(git_root.stdout.strip()).resolve() != ROOT.resolve():
-        raise SystemExit("Use a Git checkout or linked worktree (not a source archive)")
+    if probe.returncode or Path(probe.stdout.strip()).resolve() != root:
+        raise ValueError("Use a Git checkout or linked worktree (not a source archive)")
+    return root
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--full",action="store_true",help="continue through fitter and eight-corner timing after map audit")
+    parser.add_argument("--preflight-only",action="store_true",help="validate the checkout without launching Quartus")
+    parser.add_argument("--quartus",default="/home/taichi/altera_lite/25.1std")
+    a=parser.parse_args()
+    require_git_worktree(ROOT)
     if result(["git","status","--porcelain","--untracked-files=all"],ROOT,True).stdout.strip():
         raise SystemExit("Commit or clean the checkout before testing")
     result(["git","merge-base","--is-ancestor",PIN,"HEAD"],ROOT)
     if "window_prefetch_data <= window[window_prefetch_addr];" not in (ROOT/"rtl/lz4.v").read_text():
         raise SystemExit("Missing LZ4 window candidate")
+
+    if a.preflight_only:
+        print("PASS: clean Git checkout/worktree, pinned ancestor, and LZ4 source")
+        return 0
 
     env=os.environ.copy()
     env["PATH"]=str(Path(a.quartus)/"quartus"/"bin")+os.pathsep+env.get("PATH","")
