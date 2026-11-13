@@ -27,6 +27,19 @@ with tempfile.TemporaryDirectory(prefix='crt-read-address-') as tmp:
             # This avoids the hosted Verilator 5.032 internal code-generation
             # fault without reducing the number of vectors or checked signals.
             build.mkdir(parents=True, exist_ok=True)
+            # Icarus cannot elaborate an unpacked-array assignment pattern
+            # initializer. Replace it with equivalent time-zero element
+            # initialization in a throwaway simulator-only testbench copy.
+            original_tb = (ROOT/'tests/tb_crt_read_address.sv').read_text()
+            old_init = "integer advances[0:2]='{0,0,0};"
+            if original_tb.count(old_init) != 1:
+                raise ValueError('Cannot adapt unrecognized CRT testbench initializer')
+            normalized = original_tb.replace(old_init,
+                'integer advances[0:2];\n'
+                '    initial begin advances[0]=0; advances[1]=0; advances[2]=0; end')
+            local_tb = tmp/'tb_crt_read_address_icarus.sv'
+            local_tb.write_text(normalized)
+            source_files[-1] = str(local_tb)
             executable = build/'crt-read-address.vvp'
             cmd = shlex.split(os.environ.get('IVERILOG', 'iverilog')) + [
                 '-g2012', '-s', 'tb_crt_read_address',
