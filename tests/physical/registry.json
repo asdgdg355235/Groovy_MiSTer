@@ -1,0 +1,20 @@
+{
+  "format": "physical-experiments-v1",
+  "hardware_baseline": "c8d4b3897c4ed98165d3ee862cabbdd9ab9a4f17",
+  "generated_build_id_hex": "60646566696e65204255494c445f44415445202232363131313222",
+  "experiments": {
+    "R0": {"kind": "diagnostic-control", "assignments": [], "status": "ready-user-run"},
+    "A1": {
+      "kind": "register-boundary", "status": "evidence-required",
+      "target_family": "CRT position state",
+      "requires": ["source_to_physical_correspondence", "register_movement", "assignment_scope_and_value"],
+      "reason": "Generated advance_rows captures do not establish the original position-register boundary."
+    },
+    "D1": {
+      "kind": "placement", "status": "evidence-required",
+      "target_family": "original delta selector",
+      "requires": ["complete_selector_footprint", "refill_decode_paths", "legal_site_and_target"],
+      "reason": "A 914-load launch and two endpoint locations do not establish a legal beneficial placement."
+    }
+  }
+}

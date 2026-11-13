@@ -1,5 +1,11 @@
 # Independent timing experiments after rollback
 
+**Measured follow-up:** all eight RTL variants below regressed setup timing.
+Do not repeat or integrate them unchanged. The current implementation uses
+[gated physical experiments](../physical-timing/README.md), beginning with R0
+diagnostics & fixed generated inputs. The historical instructions below are
+retained as experiment provenance.
+
 The rollback restores the entire tracked tree to
 `c8d4b3897c4ed98165d3ee862cabbdd9ab9a4f17`, tree
 `51e56ffb5637fdfd67bd90b3908f0e325c78f85d`. The published history through

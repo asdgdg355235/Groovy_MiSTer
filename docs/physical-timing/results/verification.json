@@ -1,0 +1,35 @@
+{
+  "status": "PASS independent checks; physical timing and tool acceptance pending",
+  "quartus_executed": false,
+  "hardware_baseline": "c8d4b3897c4ed98165d3ee862cabbdd9ab9a4f17",
+  "harness_base": "d071948d765c426921873093b9900ed9210532e0",
+  "hardware_files_identical": 92,
+  "full_suite_command": "python3 tests/run_timing_candidate_tests.py",
+  "full_suite_unit_tests": 52,
+  "latest_focused_command": "python3 -m unittest discover -s tests -p test_physical_experiments.py -q",
+  "focused_tests": 25,
+  "crt_equivalence_clocks": 6698817,
+  "delta_decode_cycles": 21737,
+  "lz4_clocks": [
+    32109,
+    35008
+  ],
+  "lz4_golden_packets_each": 37,
+  "historical_variant_verdicts": "8 REJECT; all 72 corner exports revalidated",
+  "offline_observed_no_clock": {
+    "sysmem": 1236,
+    "h2f_gp": 617,
+    "hdmi_i2c": 617
+  },
+  "offline_observed_io": {
+    "input": 3,
+    "output": 47
+  },
+  "limits": [
+    "One complete-suite attempt hit Verilator 5.032 internal fault; unchanged CRT retry and later complete suite passed. Failed log retained.",
+    "Independent HDL models and Tcl stand-ins do not establish Quartus 17.0.2 acceptance.",
+    "A1/D1 recipes remain unapproved pending actual native correspondence, scope and legal-placement evidence.",
+    "Coverage and CRT hardware acceptance remain unresolved."
+  ],
+  "log_sha256": "c4e5849b6fdd7ee7e7333419d9b8afe71e70cf6f7a93500deb2deebac1b2c655"
+}

@@ -1,0 +1,266 @@
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 tests/restart/language_gate.py
+{
+  "project_modes": {
+    "rtl/pll.v": "VERILOG_FILE",
+    "rtl/pll/pll_0002.v": "VERILOG_FILE",
+    "sys/pll_audio.v": "VERILOG_FILE",
+    "sys/pll_audio/pll_audio_0002.v": "VERILOG_FILE",
+    "sys/pll_cfg/altera_pll_reconfig_core.v": "VERILOG_FILE",
+    "sys/pll_cfg/altera_pll_reconfig_top.v": "VERILOG_FILE",
+    "sys/pll_cfg/pll_cfg.v": "VERILOG_FILE",
+    "sys/pll_cfg/pll_cfg_hdmi.v": "VERILOG_FILE",
+    "sys/pll_hdmi.v": "VERILOG_FILE",
+    "sys/pll_hdmi/pll_hdmi_0002.v": "VERILOG_FILE",
+    "Groovy.sv": "SYSTEMVERILOG_FILE",
+    "rtl/CRT/crt_edge_mask.sv": "SYSTEMVERILOG_FILE",
+    "rtl/CRT/crt_packed_ram.sv": "SYSTEMVERILOG_FILE",
+    "rtl/CRT/crt_vsize_fixed.sv": "SYSTEMVERILOG_FILE",
+    "rtl/ddram.sv": "SYSTEMVERILOG_FILE",
+    "sys/alsa.sv": "SYSTEMVERILOG_FILE",
+    "sys/ddr_svc.sv": "SYSTEMVERILOG_FILE",
+    "sys/f2sdram_safe_terminator.sv": "SYSTEMVERILOG_FILE",
+    "sys/gamma_corr.sv": "SYSTEMVERILOG_FILE",
+    "sys/hps_io.sv": "SYSTEMVERILOG_FILE",
+    "sys/hq2x.sv": "SYSTEMVERILOG_FILE",
+    "sys/ltc2308.sv": "SYSTEMVERILOG_FILE",
+    "sys/math.sv": "SYSTEMVERILOG_FILE",
+    "sys/mcp23009.sv": "SYSTEMVERILOG_FILE",
+    "sys/mt32pi.sv": "SYSTEMVERILOG_FILE",
+    "sys/sd_card.sv": "SYSTEMVERILOG_FILE",
+    "sys/shadowmask.sv": "SYSTEMVERILOG_FILE",
+    "sys/sysmem.sv": "SYSTEMVERILOG_FILE",
+    "sys/vga_out.sv": "SYSTEMVERILOG_FILE",
+    "sys/video_cleaner.sv": "SYSTEMVERILOG_FILE",
+    "sys/video_freak.sv": "SYSTEMVERILOG_FILE",
+    "sys/video_freezer.sv": "SYSTEMVERILOG_FILE",
+    "sys/video_mixer.sv": "SYSTEMVERILOG_FILE",
+    "sys/yc_out.sv": "SYSTEMVERILOG_FILE",
+    "rtl/JTFRAME/jtframe_hsize.v": "VERILOG_FILE",
+    "rtl/JTFRAME/jtframe_linebuf.v": "VERILOG_FILE",
+    "rtl/JTFRAME/jtframe_resync.v": "VERILOG_FILE",
+    "rtl/JTFRAME/jtframe_rpwp_ram.v": "VERILOG_FILE",
+    "rtl/binary_to_bcd.v": "VERILOG_FILE",
+    "rtl/fifo_sound.v": "VERILOG_FILE",
+    "rtl/fifo_vga.v": "VERILOG_FILE",
+    "rtl/hps_ext.v": "VERILOG_FILE",
+    "rtl/lz4.v": "VERILOG_FILE",
+    "rtl/sound.v": "VERILOG_FILE",
+    "rtl/vga.v": "VERILOG_FILE",
+    "sys/arcade_video.v": "VERILOG_FILE",
+    "sys/audio_out.v": "VERILOG_FILE",
+    "sys/i2c.v": "VERILOG_FILE",
+    "sys/i2s.v": "VERILOG_FILE",
+    "sys/iir_filter.v": "VERILOG_FILE",
+    "sys/osd.v": "VERILOG_FILE",
+    "sys/scandoubler.v": "VERILOG_FILE",
+    "sys/scanlines.v": "VERILOG_FILE",
+    "sys/sigma_delta_dac.v": "VERILOG_FILE",
+    "sys/spdif.v": "VERILOG_FILE",
+    "sys/sys_top.v": "VERILOG_FILE",
+    "sys/vga_pwm.v": "VERILOG_FILE"
+  },
+  "checks": [
+    "vga Verilog-2001 parse/elaboration (missing unrelated modules ignored)",
+    "CRT SystemVerilog-2012 parse/elaboration",
+    "mixed-language emu elaboration with explicit IP/VHDL models",
+    "former sized cast rejected in Verilog, accepted in SystemVerilog"
+  ],
+  "warnings": [
+    "/workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/vga.v:155: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "/workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/vga.v:155: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "/workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/vga.v:155: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "/workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/vga.v:156: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "/workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/vga.v:156: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "/workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/vga.v:156: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "/workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/vga.v:157: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "/workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/vga.v:157: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "/workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/vga.v:158: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "/workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/vga.v:158: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning.",
+    "/workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/vga.v:159: warning: Use of SystemVerilog [size] dimension. Use at least -g2005-sv to remove this warning."
+  ],
+  "limits": "Independent frontends, not Quartus acceptance. Inherited VGA [size] array declarations are accepted with warnings by Icarus and unchanged."
+}
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 tests/restart/prove.py row qualify address vga sync
+PASS: row delta: unrestricted 32-bit inputs and exact 17-bit result
+PASS: rejects naive row identity at position overflow
+PASS: exhaustive reduced-width arithmetic, fractional/integer/position wrap
+PASS: first-line predicate under established line_begin
+PASS: all read row/column fields
+PASS: reachable quotient/remainder invariant, CE holds and saturation
+PASS: VGA termination including zero and maximum total
+PASS: first-row tag factoring before unchanged capture
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 -m unittest discover -s tests -p test_*.py
+.................................................
+----------------------------------------------------------------------
+Ran 49 tests in 11.676s
+
+OK
+  cycles=210000 writes=13361 comparable_reads=261359 stalls=35114 line_starts=151 field_starts=15 saturated=6999 bank_entries=10650
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 tests/check_crt_ram_extraction.py
+test_memory_synchronous_and_unreset (__main__.ExtractionChecks.test_memory_synchronous_and_unreset) ... ok
+test_ram_region_and_video_pipeline_preserved (__main__.ExtractionChecks.test_ram_region_and_video_pipeline_preserved) ... ok
+test_random_packing_and_registered_read_model (__main__.ExtractionChecks.test_random_packing_and_registered_read_model) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.066s
+
+OK
++ tclsh tests/test_crt_address_duplication.tcl
+PASS: 30 unique assignments; observed source names match; six bank targets remain disjoint
+Exact source names and literal destination prefixes only; Quartus assignment acceptance and physical duplication are unverified
++ /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 tests/run_crt_read_address_rtl.py
+%Warning-TIMESCALEMOD: /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_packed_ram.sv:4:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    4 | module crt_packed_ram #(
+      |        ^~~~~~~~~~~~~~
+                       /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:2:8: ... Location of module with timescale
+    2 | module tb_crt_read_address #(parameter LINE_PX=32);
+      |        ^~~~~~~~~~~~~~~~~~~
+                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.032
+                       ... Use "/* verilator lint_off TIMESCALEMOD */" and lint_on around source to disable this message.
+%Warning-TIMESCALEMOD: /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_vsize_fixed.sv:7:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    7 | module crt_vsize_fixed #(
+      |        ^~~~~~~~~~~~~~~
+                       /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:2:8: ... Location of module with timescale
+    2 | module tb_crt_read_address #(parameter LINE_PX=32);
+      |        ^~~~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /tmp/crt-read-address-4d3768m3/reference.sv:7:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    7 | module crt_vsize_fixed_reference #(
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~
+                       /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:2:8: ... Location of module with timescale
+    2 | module tb_crt_read_address #(parameter LINE_PX=32);
+      |        ^~~~~~~~~~~~~~~~~~~
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_packed_ram.sv:7:23: Operator VAR 'USE_MLAB' expects 32 bits on the Initial value, but Initial value's CONST '1'h1' generates 1 bits.
+                                                                                                    : ... note: In instance 'tb_crt_read_address.baseline.packed_ram[1].odd_ram'
+    7 |     parameter integer USE_MLAB = 0
+      |                       ^~~~~~~~
+%Warning-WIDTHTRUNC: /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_packed_ram.sv:18:14: Logical operator GENIF expects 1 bit on the If, but If's VARREF 'USE_MLAB' generates 32 bits.
+                                                                                                    : ... note: In instance 'tb_crt_read_address.baseline.packed_ram[1].odd_ram'
+   18 |     generate if (USE_MLAB) begin : distributed
+      |              ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_packed_ram.sv:7:23: Operator VAR 'USE_MLAB' expects 32 bits on the Initial value, but Initial value's CONST '1'h0' generates 1 bits.
+                                                                                                    : ... note: In instance 'tb_crt_read_address.baseline.packed_ram[2].odd_ram'
+    7 |     parameter integer USE_MLAB = 0
+      |                       ^~~~~~~~
+%Warning-WIDTHEXPAND: /tmp/crt-read-address-4d3768m3/reference.sv:72:41: Operator LTE expects 32 bits on the LHS, but LHS's VARREF 'width' generates 16 bits.
+                                                                       : ... note: In instance 'tb_crt_read_address.baseline'
+   72 |                  && width != 0 && width <= LINE_PX && height >= 32
+      |                                         ^~
+%Warning-WIDTHEXPAND: /tmp/crt-read-address-4d3768m3/reference.sv:118:41: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'wcol' generates 16 bits.
+                                                                        : ... note: In instance 'tb_crt_read_address.baseline'
+  118 |             end else if (!hb_in && wcol < LINE_PX) begin
+      |                                         ^
+%Warning-WIDTHEXPAND: /tmp/crt-read-address-4d3768m3/reference.sv:125:56: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'col_now' generates 16 bits.
+                                                                        : ... note: In instance 'tb_crt_read_address.baseline'
+  125 |             if (running && !hb_in && !vb_in && col_now < LINE_PX && col_now < width_q && col_now == width_q-1'b1)
+      |                                                        ^
+%Warning-WIDTHEXPAND: /tmp/crt-read-address-4d3768m3/reference.sv:208:39: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'col_now' generates 16 bits.
+                                                                        : ... note: In instance 'tb_crt_read_address.baseline'
+  208 |     wire [AW-1:0] read_word = col_now < LINE_PX ? word_now : AW'(0);
+      |                                       ^
+%Warning-WIDTHEXPAND: /tmp/crt-read-address-4d3768m3/reference.sv:224:44: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'wcol' generates 16 bits.
+                                                                        : ... note: In instance 'tb_crt_read_address.baseline'
+  224 |     wire [AW-1:0] read_current_word = wcol < LINE_PX ? group_col : AW'(0);
+      |                                            ^
+%Warning-WIDTHEXPAND: /tmp/crt-read-address-4d3768m3/reference.sv:232:32: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'col_now' generates 16 bits.
+                                                                        : ... note: In instance 'tb_crt_read_address.baseline'
+  232 |                     && col_now < LINE_PX && col_now < width_q;
+      |                                ^
+%Warning-WIDTHEXPAND: /tmp/crt-read-address-4d3768m3/reference.sv:280:30: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'col_now' generates 16 bits.
+                                                                        : ... note: In instance 'tb_crt_read_address.baseline'
+  280 |         read_lane <= col_now < LINE_PX ? lane_now : 3'd0;
+      |                              ^
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_vsize_fixed.sv:72:41: Operator LTE expects 32 bits on the LHS, but LHS's VARREF 'width' generates 16 bits.
+                                                                                                      : ... note: In instance 'tb_crt_read_address.dut'
+   72 |                  && width != 0 && width <= LINE_PX && height >= 32
+      |                                         ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_vsize_fixed.sv:118:41: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'wcol' generates 16 bits.
+                                                                                                       : ... note: In instance 'tb_crt_read_address.dut'
+  118 |             end else if (!hb_in && wcol < LINE_PX) begin
+      |                                         ^
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_vsize_fixed.sv:125:56: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'col_now' generates 16 bits.
+                                                                                                       : ... note: In instance 'tb_crt_read_address.dut'
+  125 |             if (running && !hb_in && !vb_in && col_now < LINE_PX && col_now < width_q && col_now == width_q-1'b1)
+      |                                                        ^
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_vsize_fixed.sv:208:39: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'col_now' generates 16 bits.
+                                                                                                       : ... note: In instance 'tb_crt_read_address.dut'
+  208 |     wire [AW-1:0] read_word = col_now < LINE_PX ? word_now : AW'(0);
+      |                                       ^
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_vsize_fixed.sv:224:44: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'wcol' generates 16 bits.
+                                                                                                       : ... note: In instance 'tb_crt_read_address.dut'
+  224 |     wire [AW-1:0] read_current_word = wcol < LINE_PX ? group_col : AW'(0);
+      |                                            ^
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_vsize_fixed.sv:232:32: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'col_now' generates 16 bits.
+                                                                                                       : ... note: In instance 'tb_crt_read_address.dut'
+  232 |                     && col_now < LINE_PX && col_now < width_q;
+      |                                ^
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_vsize_fixed.sv:280:30: Operator LT expects 32 bits on the LHS, but LHS's VARREF 'col_now' generates 16 bits.
+                                                                                                       : ... note: In instance 'tb_crt_read_address.dut'
+  280 |         read_lane <= col_now < LINE_PX ? lane_now : 3'd0;
+      |                              ^
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:79:26: Operator EQ expects 32 bits on the LHS, but LHS's VARXREF 'wcol' generates 16 bits.
+                                                                                                        : ... note: In instance 'tb_crt_read_address'
+   79 |             if (dut.wcol == LINE_PX-1 && ce && !hb) qual_last++;
+      |                          ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:80:26: Operator EQ expects 32 bits on the LHS, but LHS's VARXREF 'wcol' generates 16 bits.
+                                                                                                        : ... note: In instance 'tb_crt_read_address'
+   80 |             if (dut.wcol == LINE_PX) begin
+      |                          ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:85:38: Operator EQ expects 32 bits on the LHS, but LHS's VARXREF 'wcol' generates 16 bits.
+                                                                                                        : ... note: In instance 'tb_crt_read_address'
+   85 |             was_saturated = dut.wcol == LINE_PX;
+      |                                      ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:87:52: Bit extraction of array[2:0] requires 2 bit index, not 17 bits.
+                                                                                                       : ... note: In instance 'tb_crt_read_address'
+   87 |                 if (dut.advance_rows <= 2) advances[dut.advance_rows]++;
+      |                                                    ^
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:88:34: Operator LT expects 32 bits on the LHS, but LHS's VARXREF 'slot_now' generates 4 bits.
+                                                                                                        : ... note: In instance 'tb_crt_read_address'
+   88 |                 if (dut.slot_now < last_slot) wraps++;
+      |                                  ^
+%Warning-WIDTHEXPAND: /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:89:26: Operator ASSIGN expects 32 bits on the Assign RHS, but Assign RHS's VARXREF 'slot_now' generates 4 bits.
+                                                                                                        : ... note: In instance 'tb_crt_read_address'
+   89 |                 last_slot=dut.slot_now;
+      |                          ^
+%Warning-WIDTHTRUNC: /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:115:18: Operator ASSIGN expects 1 bits on the Assign RHS, but Assign RHS's VARREF 'do_reset' generates 32 bits.
+                                                                                                        : ... note: In instance 'tb_crt_read_address'
+  115 |             reset=do_reset;
+      |                  ^
+%Warning-WIDTHTRUNC: /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:126:57: Logical operator LOGAND expects 1 bit on the LHS, but LHS's VARREF 'interlace' generates 32 bits.
+                                                                                                        : ... note: In instance 'tb_crt_read_address'
+  126 |                         vstart=(h+front)*ht+((interlace && f%2) ? ht/2 : 0);
+      |                                                         ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:126:57: Logical operator LOGAND expects 1 bit on the RHS, but RHS's MODDIVS generates 32 bits.
+                                                                                                        : ... note: In instance 'tb_crt_read_address'
+  126 |                         vstart=(h+front)*ht+((interlace && f%2) ? ht/2 : 0);
+      |                                                         ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:130:67: Logical operator LOGAND expects 1 bit on the LHS, but LHS's VARREF 'interlace' generates 32 bits.
+                                                                                                        : ... note: In instance 'tb_crt_read_address'
+  130 |                         vs=at>=vstart && at<vend; field=interlace && f%2;
+      |                                                                   ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:130:67: Logical operator LOGAND expects 1 bit on the RHS, but RHS's MODDIVS generates 32 bits.
+                                                                                                        : ... note: In instance 'tb_crt_read_address'
+  130 |                         vs=at>=vstart && at<vend; field=interlace && f%2;
+      |                                                                   ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:131:39: Logical operator LOGAND expects 1 bit on the LHS, but LHS's VARREF 'add_stalls' generates 32 bits.
+                                                                                                        : ... note: In instance 'tb_crt_read_address'
+  131 |                         if(add_stalls && (x+3*y+f)%17==0) begin
+      |                                       ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:138:45: Logical operator LOGAND expects 1 bit on the LHS, but LHS's VARREF 'mid_reset' generates 32 bits.
+                                                                                                        : ... note: In instance 'tb_crt_read_address'
+  138 |                             reset=mid_reset && f==0 && y==21 && x==9 && t==0;
+      |                                             ^~
+%Error: Verilator internal fault, sorry. Suggest trying --debug --gdbbt
+%Error: Command Failed ulimit -s unlimited 2>/dev/null; exec /workspace/scratch/15f2cd7137e1/tooling/root/usr/bin/verilator_bin --default-language 1364-2001 +1800-2012ext+sv --binary --timing -Wno-fatal --top-module tb_crt_read_address -j 2 --Mdir /tmp/crt-read-address-4d3768m3/32 -GLINE_PX=32 /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_packed_ram.sv /workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_vsize_fixed.sv /tmp/crt-read-address-4d3768m3/reference.sv /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv
+
+Traceback (most recent call last):
+  File "/workspace/scratch/15f2cd7137e1/Groovy-physical/tests/run_crt_read_address_rtl.py", line 31, in <module>
+    result.check_returncode()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 502, in check_returncode
+    raise CalledProcessError(self.returncode, self.args, self.stdout,
+subprocess.CalledProcessError: Command '['verilator', '--default-language', '1364-2001', '+1800-2012ext+sv', '--binary', '--timing', '-Wno-fatal', '--top-module', 'tb_crt_read_address', '-j', '2', '--Mdir', '/tmp/crt-read-address-4d3768m3/32', '-GLINE_PX=32', '/workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_packed_ram.sv', '/workspace/scratch/15f2cd7137e1/Groovy-physical/rtl/CRT/crt_vsize_fixed.sv', '/tmp/crt-read-address-4d3768m3/reference.sv', '/workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv']' returned non-zero exit status 255.
+Traceback (most recent call last):
+  File "/workspace/scratch/15f2cd7137e1/Groovy-physical/tests/run_timing_candidate_tests.py", line 31, in <module>
+    subprocess.run(command, cwd=ROOT, check=True)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3', 'tests/run_crt_read_address_rtl.py']' returned non-zero exit status 1.

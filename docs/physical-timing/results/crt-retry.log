@@ -1,0 +1,43 @@
+PASS: read/RAM/video equivalence d=-7 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-6 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-5 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-4 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-3 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-2 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-1 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=0 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=1 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=2 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=3 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=4 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=5 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=6 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=7 w=31 h=48 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=1 h=49 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=2 h=49 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=3 h=49 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=4 h=49 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=5 h=49 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=6 h=49 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=7 w=32 h=240 CE=1 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=7 w=32 h=240 CE=2 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=7 w=32 h=240 CE=4 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=7 w=32 h=240 CE=8 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=7 w=32 h=240 CE=16 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=32 h=288 CE=6 interlace=1 stalls=1 restart=1
+PASS: read/RAM/video equivalence d=3 w=16 h=241 CE=12 interlace=1 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=0 w=33 h=240 CE=4 interlace=0 stalls=1 restart=0
+PASS: qualifier boundary last=5354 saturated=871035 CE-stall=712674 next-line=4206
+PASS: 2111136 clocks, 164892 active pixels, 30985 writes, advances=138/5558/126 wraps=495 stalls=1675244 lines=7359
+- /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:172: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 21ms; walltime 2.077 s; speed 10.188 ms/s
+- Verilator: cpu 2.072 s on 1 threads; alloced 65 MB
+PASS: read/RAM/video equivalence d=7 w=2560 h=240 CE=1 interlace=0 stalls=1 restart=0
+PASS: read/RAM/video equivalence d=-7 w=2559 h=240 CE=2 interlace=1 stalls=1 restart=0
+PASS: qualifier boundary last=1009 saturated=222473 CE-stall=84047 next-line=550
+PASS: 4587681 clocks, 2457134 active pixels, 491520 writes, advances=14/930/12 wraps=79 stalls=1851053 lines=1056
+- /workspace/scratch/15f2cd7137e1/Groovy-physical/tests/tb_crt_read_address.sv:172: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 46ms; walltime 4.631 s; speed 9.923 ms/s
+- Verilator: cpu 4.623 s on 1 threads; alloced 65 MB

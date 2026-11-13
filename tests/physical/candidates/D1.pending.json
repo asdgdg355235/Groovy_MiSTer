@@ -1,0 +1,12 @@
+{
+  "format": "physical-overlay-v1",
+  "experiment": "D1",
+  "review_status": "pending",
+  "reviewed_by": null,
+  "rationale": "Resolve the original selector footprint, refill/decode effects and a native legal location before choosing a placement.",
+  "r0_evidence_sha256": null,
+  "mechanism_evidence": {},
+  "correspondence": [],
+  "assignments": [],
+  "legal_sites": {}
+}

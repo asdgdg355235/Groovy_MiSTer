@@ -37,15 +37,22 @@ proc get_timing_paths {args} {
         if {[lsearch -exact $args -setup]<0} {return {}}
         set result {}; for {set i 1} {$i<=45} {incr i} {lappend result $i}; return $result
     }
+    if {[lsearch -exact $args -npaths]>=0 && [lindex $args [expr {[lsearch -exact $args -npaths]+1}]]==0} {
+        if {[lsearch -exact $args -setup]>=0} {
+            set result {}; for {set i 1} {$i<=46} {incr i} {lappend result $i}; return $result
+        }
+        return {46}
+    }
     return {1}
 }
 proc get_path_info {flag id} {
     switch $flag {
         -to {return sink$id}
         -from {return launch$id}
-        -slack {return -0.1}
+        -slack {return [expr {$id==46 ? 0.1 : -0.1}]}
         -data_delay {return 12.0}
         -num_logic_levels {return 6}
+        -clock_skew {return -0.2}
         default {error "unsupported path API $flag"}
     }
 }
@@ -82,9 +89,10 @@ class ReportFlowTest(unittest.TestCase):
             self.assertEqual(sum('\tsetup\t45\t-4.500000\t' in row for row in summary), 8)
             for corner in (f'corner_{i:02d}' for i in range(1,9)):
                 self.assertEqual(len((root/corner/'negative_setup_endpoints.tsv').read_text().splitlines()), 46)
+                self.assertEqual(len((root/corner/'all_setup_endpoints.tsv').read_text().splitlines()), 47)
                 for kind in ('setup', 'hold', 'recovery', 'removal'):
                     self.assertIn('-npaths 0', (root/corner/f'negative_{kind}_paths.txt').read_text())
-                for family in ('wcol', 'column_flag', 'hb', 'poc_v', 'delta_index', 'lz4_compressed', 'lz4_counters'):
+                for family in ('wcol', 'column_flag', 'hb', 'poc_v', 'delta_index', 'delta_capture', 'crt_capture', 'vga_capture', 'metadata_capture', 'lz4_compressed', 'lz4_counters'):
                     self.assertTrue((root/corner/f'{family}_setup.txt').exists())
                     self.assertIn('-npaths 8',(root/corner/f'{family}_setup.txt').read_text())
                 self.assertIn('\t70\t-0.1\t0.1\t1', (root/corner/'pulse_summary.tsv').read_text())

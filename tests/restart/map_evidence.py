@@ -9,10 +9,10 @@ import csv,hashlib,json,re,sys
 
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def table(path):return list(csv.DictReader(path.read_text().splitlines(),delimiter='\t'))
-def extract(path):
+def extract(path,violations_only=True):
  result=[]
  for block in re.split(r'(?m)^Path #\d+: ',path.read_text())[1:]:
-  if '(VIOLATED)' not in block.splitlines()[0]:continue
+  if violations_only and '(VIOLATED)' not in block.splitlines()[0]:continue
   rows=[[c.strip() for c in line.split(';')[1:-1]] for line in block.splitlines() if line.startswith(';')]
   props={r[0]:r[1] for r in rows if len(r)==2}
   stats={r[0]:r for r in rows if len(r)==7}
@@ -29,6 +29,7 @@ def extract(path):
     ports.append(item)
     if r[3]=='CELL':cells.append(item)
   launch=props['From Node'];capture=props['To Node']
+  uncertainty=[abs(float(r[1])) for r in rows if len(r)==7 and r[-1].lower()=='clock uncertainty']
   if 'PoC_lz4_delta_index' in launch:
    family='delta-selection';mapping='Confirmed selector/byte-add/decode cone; baseline buffer read and unchanged LZ4 byte additions reach r_vram_in2.'
   elif 'PoC_V' in launch:
@@ -40,6 +41,10 @@ def extract(path):
   else:
    family='row-retimed';mapping='Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.'
   result.append({'launch':launch,'capture':capture,'slack_ns':float(re.search(r'slack is ([-.0-9]+)',block).group(1)),
+   'launch_clock':props.get('Launch Clock'),'latch_clock':props.get('Latch Clock'),
+   'clock_skew_ns':float(stats['Clock Skew'][1]) if 'Clock Skew' in stats else None,
+   'setup_relationship_ns':float(stats['Setup Relationship'][1]) if 'Setup Relationship' in stats else None,
+   'setup_uncertainty_ns':uncertainty[0] if len(uncertainty)==1 else None,
    'data_delay_ns':float(stats['Data Delay'][1]),'logic_levels':int(stats['Number of Logic Levels'][2]),
    'cell_delay_ns':cell_delay,'routing_delay_ns':routing_delay,'family':family,'source_mapping':mapping,
    'launch_cell':cells[0],'capture_cell':cells[-1],'data_cells':cells,

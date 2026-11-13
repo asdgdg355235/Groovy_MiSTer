@@ -21,6 +21,7 @@ commands = [
     [sys.executable, 'tests/run_crt_read_address_rtl.py'],
     ['bash', 'tests/run_crt_group_address_rtl.sh'],
     [sys.executable, 'tests/run_lz4_timing_tests.py'],
+    [sys.executable, 'tests/restart/delta_compare.py', str(ROOT)],
     [sys.executable, 'tests/run_geometry_tests.py'],
 ]
 if args.main:

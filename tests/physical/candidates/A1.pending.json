@@ -1,0 +1,11 @@
+{
+  "format": "physical-overlay-v1",
+  "experiment": "A1",
+  "review_status": "pending",
+  "reviewed_by": null,
+  "rationale": "Resolve the actual CRT position boundary and installed register-level assignment scope before choosing targets.",
+  "r0_evidence_sha256": null,
+  "mechanism_evidence": {},
+  "correspondence": [],
+  "assignments": []
+}

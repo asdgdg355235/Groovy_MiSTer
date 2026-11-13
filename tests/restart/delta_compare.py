@@ -8,10 +8,17 @@ import os,shlex,subprocess,tempfile,sys
 from pathlib import Path
 from experiments import ROOT,baseline
 root=Path(sys.argv[1]); src=(root/'Groovy.sv').read_text();old=baseline('Groovy.sv').decode()
-a=src.index('// Independent experiment:');b=src.index('reg        PoC_lz4_delta_req;',a)
-select=src[a:b]
-expected=old.replace('(PoC_lz4_delta_FB[PoC_lz4_delta_index])      ','(delta_read_value)')
-assert src[:a]+src[b:]==expected
+if '// Independent experiment:' in src:
+ a=src.index('// Independent experiment:');b=src.index('reg        PoC_lz4_delta_req;',a)
+ select=src[a:b]
+ expected=old.replace('(PoC_lz4_delta_FB[PoC_lz4_delta_index])      ','(delta_read_value)')
+ assert src[:a]+src[b:]==expected
+else:
+ # The physical experiments keep the original selector. Exercise that actual
+ # binding without applying either rejected hierarchical-selector patch.
+ assert src==old,'Flat-selector test requires untouched baseline root state/decode'
+ assert src.count('(PoC_lz4_delta_FB[PoC_lz4_delta_index])')==1
+ select='wire [63:0] delta_read_value=PoC_lz4_delta_FB[PoC_lz4_delta_index];\n'
 assert (root/'rtl/lz4.v').read_bytes()==baseline('rtl/lz4.v')
 task=src[src.index('task decode_pixel;'):src.index('endtask',src.index('task decode_pixel;'))+7]
 lz4=(root/'rtl/lz4.v').read_text();start=lz4.index('assign lz4_uncompressed_long[07:00]')

@@ -10,8 +10,9 @@ def source_paths(root):
 def record(root,phase):
  root=Path(root).resolve();out=root/'output_files';entries=[]
  paths=source_paths(root)
- generated=out/'crt_address_duplication_resolved.qsf'
- if generated.exists():paths.append(generated)
+ for name in ('crt_address_duplication_resolved.qsf','physical_overlay.qsf'):
+  generated=out/name
+  if generated.exists():paths.append(generated)
  for path in paths:
   rel=path.relative_to(root);data=path.read_bytes();target=out/'source_inputs'/phase/rel
   target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)

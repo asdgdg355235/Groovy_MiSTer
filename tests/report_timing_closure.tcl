@@ -9,6 +9,7 @@ update_timing_netlist
 set root output_files/timing_closure
 file mkdir $root
 set version [open $root/report_format.txt w]; puts $version "restart-v1"; close $version
+set version [open $root/endpoint_distribution_format.txt w]; puts $version "physical-endpoints-v1"; close $version
 report_clocks -file $root/clocks.txt
 report_sdc -file $root/constraints.txt
 report_sdc -ignored -file $root/ignored_constraints.txt
@@ -56,6 +57,23 @@ proc all_negative {dir corner kind summary} {
     report_timing -$kind -less_than_slack 0 -npaths 0 -nworst 1 -detail full_path -show_routing -file $dir/negative_${kind}_paths.txt
     report_timing -$kind -npaths 8 -nworst 1 -detail full_path -show_routing -file $dir/worst_${kind}.txt
 }
+proc complete_endpoint_inventory {dir kind} {
+    # Complete endpoint slack distribution, including positive paths. Only the
+    # compact table is unlimited; full routing detail remains bounded above.
+    set out [open $dir/all_${kind}_endpoints.tsv w]
+    puts $out "to\tfrom\tslack_ns\tdata_delay_ns\tlogic_levels\tclock_skew_ns"
+    array set seen {}
+    foreach_in_collection path [get_timing_paths -$kind -npaths 0 -nworst 1] {
+        set sink [node_name [get_path_info -to $path]]
+        set slack [get_path_info -slack $path]
+        if {![info exists seen($sink)] || $slack < [lindex $seen($sink) 2]} {
+            set seen($sink) [list $sink [node_name [get_path_info -from $path]] $slack \
+                [get_path_info -data_delay $path] [get_path_info -num_logic_levels $path] [get_path_info -clock_skew $path]]
+        }
+    }
+    foreach sink [lsort [array names seen]] {puts $out [join $seen($sink) "\t"]}
+    close $out
+}
 proc family {dir corner label from_pattern to_pattern filters {all_endpoints 0}} {
     set command [list report_timing -setup -npaths 8 -nworst 1 -detail full_path -show_routing -file $dir/${label}_setup.txt]
     set from_count ALL
@@ -96,7 +114,10 @@ foreach_in_collection op $corners {
     flush $manifest
     set_operating_conditions $op
     update_timing_netlist
-    foreach kind {setup hold recovery removal} {all_negative $dir $corner $kind $summary}
+    foreach kind {setup hold recovery removal} {
+        all_negative $dir $corner $kind $summary
+        complete_endpoint_inventory $dir $kind
+    }
     export_pulse_checks $dir
     report_clock_transfers -file $dir/clock_transfers.txt
     family $dir $corner wcol {*u_vsize*wcol*} {*u_vsize*packed_ram*} $filters
@@ -109,8 +130,13 @@ foreach_in_collection op $corners {
     family $dir $corner hb {*vga*hb* *u_vsize*hb_d*} {} $filters
     family $dir $corner poc_v {*|PoC_V*} {} $filters
     family $dir $corner vga {*vga*v_cnt* *|PoC_V*} {} $filters
+    # Capture-direction reports find paths absent from the launch-only filters.
+    family $dir $corner crt_capture {} {*u_vsize*} $filters
+    family $dir $corner vga_capture {} {*vga* *Add17*} $filters
+    family $dir $corner metadata_capture {} {*dv_hs1* *u_vsize*control*} $filters
     family $dir $corner delta_framebuffer {*PoC_lz4_delta_FB*} {} $filters
     family $dir $corner delta_index {*PoC_lz4_delta_index*} {} $filters
+    family $dir $corner delta_capture {} {*PoC_lz4_delta_FB* *PoC_lz4_delta_index* *r_vram_in2*} $filters
     family $dir $corner lz4_compressed {} {*lz4_compressed_bytes*} $filters 1
     family $dir $corner lz4_counters {} {*lz4*block_read_total* *lz4*block_write_total* *lz4*uncompressed_bytes* *lz4*LL* *lz4*ML* *lz4*window_addr* *lz4*MP*} $filters 1
     # Counter-to-state paths are independent of paths captured by counters.

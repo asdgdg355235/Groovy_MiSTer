@@ -1,0 +1,42 @@
+{
+  "row-increment": {
+    "verdict": "REJECT",
+    "regressing_setup_corners": 8,
+    "physical_paths": 1627
+  },
+  "row-enable": {
+    "verdict": "REJECT",
+    "regressing_setup_corners": 8,
+    "physical_paths": 243
+  },
+  "read-fields": {
+    "verdict": "REJECT",
+    "regressing_setup_corners": 8,
+    "physical_paths": 143
+  },
+  "read-late": {
+    "verdict": "REJECT",
+    "regressing_setup_corners": 8,
+    "physical_paths": 126
+  },
+  "delta-8x16": {
+    "verdict": "REJECT",
+    "regressing_setup_corners": 8,
+    "physical_paths": 102
+  },
+  "delta-4x32": {
+    "verdict": "REJECT",
+    "regressing_setup_corners": 8,
+    "physical_paths": 375
+  },
+  "vga-terminal": {
+    "verdict": "REJECT",
+    "regressing_setup_corners": 8,
+    "physical_paths": 66
+  },
+  "sync-first-row": {
+    "verdict": "REJECT",
+    "regressing_setup_corners": 8,
+    "physical_paths": 232
+  }
+}

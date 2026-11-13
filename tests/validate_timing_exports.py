@@ -20,6 +20,9 @@ def contains_gap(path):
 
 def validate(root, strict_families=True):
     root = Path(root)
+    distribution=root/'endpoint_distribution_format.txt'
+    if distribution.exists() and distribution.read_text().strip()!='physical-endpoints-v1':
+        raise ValueError('Unsupported endpoint distribution format')
     corners = list(csv.DictReader((root/'corners.tsv').read_text().splitlines(), delimiter='\t'))
     expected = {(m,t) for m in ('slow','fast') for t in ('-40','0','85','100')}
     if len(corners)!=8 or {(c['model'], c['temperature']) for c in corners}!=expected:
@@ -55,6 +58,17 @@ def validate(root, strict_families=True):
         if not slacks and row['worst_slack_ns']!='NA' and float(row['worst_slack_ns'])<0:
             raise ValueError('Missing failing endpoint inventory')
         if contains_gap(directory/f"negative_{row['check']}_paths.txt"): raise ValueError('Incomplete negative-path export')
+        if (root/'endpoint_distribution_format.txt').exists():
+            full=directory/f"all_{row['check']}_endpoints.tsv"
+            if not full.is_file():raise ValueError('Missing complete endpoint distribution')
+            complete=list(csv.DictReader(full.read_text().splitlines(),delimiter='\t'))
+            if len({e['to'] for e in complete})!=len(complete):raise ValueError('Duplicate complete endpoint')
+            if any(not math.isfinite(float(e['slack_ns'])) for e in complete):raise ValueError('Invalid complete endpoint slack')
+            actual={e['to']:float(e['slack_ns']) for e in complete if float(e['slack_ns'])<0}
+            if actual!={e['to']:float(e['slack_ns']) for e in entries}:raise ValueError('Complete/negative endpoint inventories disagree')
+            if complete and abs(min(float(e['slack_ns']) for e in complete)-float(row['worst_slack_ns']))>0.0000011:
+                raise ValueError('Complete endpoint WNS mismatch')
+            if row['check'] in ('setup','hold') and not complete:raise ValueError('Empty complete setup/hold distribution')
     if strict_families:
         for name in ('clocks.txt','constraints.txt','ignored_constraints.txt','check_timing.txt','unconstrained.txt','filters.tsv'):
             if not (root/name).is_file(): raise ValueError('Missing '+name)
