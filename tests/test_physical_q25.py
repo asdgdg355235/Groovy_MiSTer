@@ -12,7 +12,10 @@ import tempfile
 import unittest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT/'tests'))
-from physical.control import expected_build_id, hardware_hashes, verify_version, digest, accepted_compiler_version_metadata
+from physical.control import (expected_build_id, hardware_hashes, verify_version, digest,
+                              accepted_compiler_version_metadata,
+                              accepted_q25_postmap_serialization,
+                              Q25_R0_POSTMAP_SHA256, create, freeze_generated, stage_inputs)
 from physical.q25_ram_evidence import preflight, mapped
 from physical.overlays import validate_recipe
 from physical.diagnostics import collect
@@ -275,6 +278,106 @@ class Q25CompilerMetadataGate(unittest.TestCase):
             with self.subTest(rows=rows):
                 normalized, accepted = accepted_compiler_version_metadata(expected, rows, 'q25')
                 self.assertTrue(accepted is None or normalized != expected)
+
+
+class PostMapQ25SerializationGate(unittest.TestCase):
+    """Fixture is the real Quartus 25.1 R0 before-fit insertion, not a guess."""
+
+    @classmethod
+    def setUpClass(cls):
+        fixture = json.loads((ROOT/'tests/physical/fixtures/q25_r0_postmap_serialization.json').read_text())
+        cls.baseline = capture(ROOT, 'q25')['events']
+        cls.pivot = cls.baseline.index(['global', '-name', 'QIP_FILE', 'sys/pll_q25.qip'])
+        cls.block = []
+        for index in fixture['source_event_indices']:
+            if isinstance(index, int):
+                cls.block.append(cls.baseline[index])
+            else:
+                original = cls.baseline[cls.pivot - 3 + int(index[1:])]
+                cls.block.append(['hps_location', original[3], '-to', original[7]])
+
+    @classmethod
+    def with_block(cls, block=None):
+        return cls.baseline[:cls.pivot] + (cls.block if block is None else block) + cls.baseline[cls.pivot:]
+
+    def test_actual_quartus_serialization_is_accepted_and_audited(self):
+        self.assertEqual(len(self.block), 237)
+        self.assertEqual(digest(json.dumps(self.block, ensure_ascii=False, separators=(',', ':')).encode()),
+                         Q25_R0_POSTMAP_SHA256)
+        events = self.with_block()
+        normalized, record = accepted_q25_postmap_serialization(
+            self.baseline, events, 'q25', 'R0', 'before_fit')
+        self.assertEqual(normalized, self.baseline)
+        self.assertEqual(record['inserted_events'], 237)
+        self.assertEqual(record['source_assignment_repeats'], 234)
+        self.assertEqual(record['verified_hps_location_aliases'], 3)
+        self.assertTrue(record['raw_assignment_capture_preserved'])
+        self.assertEqual(events[self.pivot:self.pivot+237], self.block)
+
+    def test_q17_and_other_stages_and_experiments_are_unchanged(self):
+        events = self.with_block()
+        for profile, experiment, phase in [('q17', 'R0', 'before_fit'),
+                                           ('q25', 'R0', 'before_map'),
+                                           ('q25', 'A1', 'before_fit'),
+                                           ('q25', 'D1', 'before_fit')]:
+            with self.subTest(profile=profile, experiment=experiment, phase=phase):
+                result, record = accepted_q25_postmap_serialization(
+                    self.baseline, events, profile, experiment, phase)
+                self.assertEqual(result, events)
+                self.assertIsNone(record)
+
+    def test_unknown_or_modified_serialization_is_rejected(self):
+        original = self.block
+        modifications = [
+            original[:-1],
+            original + [original[-1]],
+            original[:1] + [original[2], original[1]] + original[3:],
+            original[:1] + [original[0]] + original[2:],
+            original[:2] + [['global', '-name', 'SEED', '9']] + original[3:],
+            [[*original[0][:3], 'unknown-hook']] + original[1:],
+        ]
+        index_hps = next(i for i, row in enumerate(original) if row[0] == 'hps_location')
+        modifications.append(original[:index_hps] + [['hps_location', 'WRONG_SITE', '-to', 'hdmi_i2c']] + original[index_hps+1:])
+        for block in modifications:
+            with self.subTest(block_len=len(block), first=block[0]):
+                result, record = accepted_q25_postmap_serialization(
+                    self.baseline, self.with_block(block), 'q25', 'R0', 'before_fit')
+                self.assertIsNone(record)
+                self.assertNotEqual(result, self.baseline)
+        shifted = self.baseline[:4] + original + self.baseline[4:]
+        result, record = accepted_q25_postmap_serialization(self.baseline, shifted, 'q25', 'R0', 'before_fit')
+        self.assertIsNone(record)
+        modified = [list(row) for row in self.baseline]
+        modified[0] = ['global', '-name', 'TOP_LEVEL_ENTITY', 'intruder']
+        result, record = accepted_q25_postmap_serialization(modified, self.with_block(), 'q25', 'R0', 'before_fit')
+        self.assertIsNone(record)
+
+    def test_stage_gate_accepts_only_native_block_and_preserves_raw_calls(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)/'build'
+            create(ROOT, out, profile='q25')
+            freeze_generated(out)
+            stage_inputs(out, 'before_map')
+            qsf = out/'Groovy.qsf'
+            qsf.write_text(qsf.read_text().replace(
+                'set_global_assignment -name LAST_QUARTUS_VERSION "17.0.2 Lite Edition"',
+                'set_global_assignment -name LAST_QUARTUS_VERSION "25.1std.0 Lite Edition"'))
+            def tcl_row(row):
+                return 'set_' + row[0] + '_assignment ' + ' '.join('{' + str(v) + '}' for v in row[1:])
+            with qsf.open('a') as stream:
+                stream.write('\n' + '\n'.join(map(tcl_row, self.block)) + '\n')
+            stage_inputs(out, 'before_fit')
+            gate = json.loads((out/'output_files/input_gate_before_fit.json').read_text())
+            self.assertTrue(gate['pass'])
+            self.assertEqual(gate['accepted_postmap_serialization']['inserted_events_sha256'],
+                             Q25_R0_POSTMAP_SHA256)
+            raw = json.loads((out/'output_files/project_calls_before_fit.json').read_text())['events']
+            self.assertEqual(raw[self.pivot:self.pivot+237], self.block)
+            self.assertEqual(len(raw), len(self.baseline)+237)
+            with qsf.open('a') as stream:
+                stream.write('set_global_assignment -name SEED 9\n')
+            with self.assertRaisesRegex(ValueError, 'Unapproved effective assignment'):
+                stage_inputs(out, 'before_fit')
 
 
 if __name__ == '__main__':

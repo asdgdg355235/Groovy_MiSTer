@@ -88,6 +88,26 @@ other assignment, any unexpected compiler stamp, or a duplicate/reordered
 version stamp still rejects the build. Q17 retains byte-for-byte
 assignment comparison without this exception.
 
+## Quartus Q25 R0 post-map assignment serialization
+
+Quartus Prime Lite 25.1std.0 Build 1129 appends 237 sourced QSF
+assignment calls after mapping and before the recursive QIP input calls.
+The observed block comprises 234 repeats of existing source assignments
+and three HPS location aliases matching the prepared HPS_LOCATION
+assignments. The R0 `before_fit` input gate accepts only the complete
+ordered block observed in the uploaded
+`Groovy-Q25-R0-metadataguard-reports.tar.gz`: its SHA-256 is
+`92bb9095ba3cbb792187af197f1d375d06d8e25afea451fcd40acdb490af96de`
+over compact UTF-8 JSON of the captured event rows. A compact fixture
+of indices into the approved pre-map assignment sequence is kept in
+`tests/physical/fixtures/q25_r0_postmap_serialization.json`.
+The raw capture remains in `project_calls_before_fit.json` and the
+accepted serialization is recorded in `input_gate_before_fit.json`.
+
+Q17, pre-map comparison, A1/D1 comparisons and unrelated QSF
+changes retain their existing fail-closed gates. RTL, physical settings,
+device pinout, and timing constraints are unchanged.
+
 ## Evidence and comparisons
 
 Q25 A1/D1 recipes require new Q25 R0 evidence. Quartus 17 targets and sites

@@ -157,6 +157,67 @@ def accepted_compiler_version_metadata(wanted, observed, profile):
                         'reason': 'Quartus 25.1 project-version metadata update, not physical assignment'}
 
 
+# Observed Quartus Prime Lite 25.1std.0 Build 1129 Q25 R0 post-map
+# QSF serialization block. Its ordered contents are retained as a test
+# fixture from Groovy-Q25-R0-metadataguard-reports.tar.gz. This seal
+# permits only that native block, not arbitrary duplicate assignments.
+Q25_R0_POSTMAP_EVENTS = 237
+Q25_R0_POSTMAP_SHA256 = '92bb9095ba3cbb792187af197f1d375d06d8e25afea451fcd40acdb490af96de'
+
+
+def accepted_q25_postmap_serialization(wanted, observed, profile, experiment, phase):
+    """Remove only a validated, known Q25 R0 post-map QSF serialization.
+
+    This is an accounting normalization: the original ordered vendor-expanded
+    calls remain in project_calls_before_fit.json for audits. Never normalize
+    across Q17, before_map, or reviewed A1/D1 experiment comparisons.
+    """
+    if (profile, experiment, phase) != ('q25', 'R0', 'before_fit'):
+        return observed, None
+    anchor = ['global', '-name', 'QIP_FILE', 'sys/pll_q25.qip']
+    if wanted.count(anchor) != 1:
+        return observed, None
+    pivot = wanted.index(anchor)
+    suffix = wanted[pivot:]
+    if (len(observed) != len(wanted) + Q25_R0_POSTMAP_EVENTS
+            or observed[:pivot] != wanted[:pivot]
+            or observed[-len(suffix):] != suffix):
+        return observed, None
+    block = observed[pivot:-len(suffix)]
+    if len(block) != Q25_R0_POSTMAP_EVENTS:
+        return observed, None
+    hps_entries = [row for row in block if row and row[0] == 'hps_location']
+    original_hps = wanted[pivot - 3:pivot]
+    if (len(original_hps) != 3
+            or any(len(row) != 8 or row[:3] != ['instance', '-name', 'HPS_LOCATION']
+                   or row[4:7] != ['-entity', 'sys_top', '-to'] for row in original_hps)):
+        return observed, None
+    expected_hps = [['hps_location', row[3], '-to', row[7]] for row in original_hps]
+    if hps_entries != expected_hps:
+        return observed, None
+    repeated = [row for row in block if row and row[0] != 'hps_location']
+    if len(repeated) != Q25_R0_POSTMAP_EVENTS - len(expected_hps):
+        return observed, None
+    if (len({tuple(row) for row in repeated}) != len(repeated)
+            or any(wanted[:pivot].count(row) != 1 for row in repeated)):
+        return observed, None
+    serialized = json.dumps(block, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+    block_sha = digest(serialized)
+    if block_sha != Q25_R0_POSTMAP_SHA256:
+        return observed, None
+    return list(wanted), {
+        'kind': 'q25_r0_postmap_qsf_serialization',
+        'compiler_profile': profile,
+        'stage': phase,
+        'inserted_events': len(block),
+        'source_assignment_repeats': len(repeated),
+        'verified_hps_location_aliases': len(hps_entries),
+        'inserted_events_sha256': block_sha,
+        'raw_assignment_capture_preserved': True,
+        'physical_settings_override_approved': False,
+    }
+
+
 def stage_inputs(root, phase):
     """Record vendor-expanded calls, reject non-QSF hardware drift and overlays
     beyond the single reviewed factor. Never model vendor defaults as Python.
@@ -205,6 +266,8 @@ def stage_inputs(root, phase):
             observed = [row for row in observed if row != addition]
         observed, compiler_version_metadata = accepted_compiler_version_metadata(
             wanted, observed, provenance.get('compiler_profile', 'q17'))
+        observed, postmap_serialization = accepted_q25_postmap_serialization(
+            wanted, observed, provenance.get('compiler_profile', 'q17'), experiment, phase)
         if observed != wanted:
             write_json(out / ('assignment_difference_' + phase + '.json'), {'expected': wanted, 'actual': policy(actual['events'])})
             raise ValueError('Unapproved effective assignment difference at ' + phase)
@@ -214,6 +277,7 @@ def stage_inputs(root, phase):
         'derived_duplication_policy_requires_fresh_map_and_fitted_audits': True,
         'reviewed_assignment_occurrences': occurrences if control is not None else [],
         'accepted_compiler_version_metadata': compiler_version_metadata if control is not None else None,
+        'accepted_postmap_serialization': postmap_serialization if control is not None else None,
     })
     record(root, phase)
 
