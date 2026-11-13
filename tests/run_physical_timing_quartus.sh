@@ -89,6 +89,9 @@ for tool in quartus_sh quartus_map quartus_fit quartus_asm quartus_sta quartus_c
     python3 tests/physical/control.py verify-version "output_files/${tool}_version.txt" --profile "$PROFILE"
 done
 cp output_files/quartus_sh_version.txt output_files/crt_read_address_tool_version.txt
+# The support-mode Tcl script must not infer the compiler profile from
+# quartus(version): Q25 crashes in native PJC on assignment enumeration.
+export PHYSICAL_COMPILER_PROFILE="$PROFILE"
 STAGE=capabilities
 quartus_sh -t tests/physical/report_project.tcl support > output_files/closure_diagnostics/assignment_support.log 2>&1
 STAGE=pre-flow

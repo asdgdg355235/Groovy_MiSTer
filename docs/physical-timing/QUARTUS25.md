@@ -61,9 +61,12 @@ four CRT MLAB banks and two CRT M10K banks, and required video timing.
 
 On Quartus Prime Lite 25.1std.0 Build 1129, `get_all_assignment_names`
 terminates `quartus_sh` with `PJC: Unsupported smart action`, even when the
-project is open. The R0 support probe avoids that native command and records
-all 16 map/fit, global/instance assignment combinations as `available=0`
-with explicit `UNVERIFIED` metadata. This is not a finding that the
+project is open. The R0 runner passes the preflight-verified `q25` compiler profile to the
+support probe, which avoids that native command and records all 16 map/fit,
+global/instance assignment combinations as `available=0` with explicit
+`UNVERIFIED` metadata. Direct invocations without a verified profile also
+fail closed. The Q17 profile retains assignment discovery when its compiler
+version is verified as 17.0.2. This is not a finding that the
 assignments are unsupported. No capabilities or legal values are inferred.
 The pre-existing A1 overlay validator still rejects any unverified
 assignment; R0 and D1 do not depend on approving A1 assignments.

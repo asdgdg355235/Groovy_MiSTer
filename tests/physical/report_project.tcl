@@ -12,23 +12,28 @@ if {$mode eq "support"} {
     puts $raw "Installed version: $quartus(version)"
     puts $raw "Metadata availability is not proof of individual-register applicability."
     set tab [physical::table $dir/assignment_capabilities.tsv {module scope name available metadata}]
-    # Quartus Lite 25.1std.0 Build 1129 terminates inside sys_pjc when
-    # get_all_assignment_names is called, even after project_open. Tcl catch
-    # cannot intercept a native PJC Internal Error. R0 only needs truthful
-    # discovery evidence: never guess availability or supported values.
-    # A1 still requires independently verified compiler metadata before an
-    # assignment can be admitted by overlays.py.
-    set q25_broken_enumeration [string match {25.1std.0*} $quartus(version)]
-    if {$q25_broken_enumeration} {
-        puts $raw "UNVERIFIED: Quartus 25.1std.0 PJC crashes on get_all_assignment_names; enumeration deliberately not called."
-        puts $raw "This does not establish that any assignment is unsupported. A1 approval requires separate native capability evidence."
+    # Quartus 25.1std.0 Build 1129 crashes in native PJC when
+    # get_all_assignment_names is called, even after project_open. A Tcl catch
+    # cannot intercept that error. Do not guess quartus(version)'s format.
+    # The runner verifies each executable and explicitly exports the profile.
+    # Allow enumeration only for the exact Q17 profile AND verified Q17 version;
+    # unrecognised/direct invocations fail closed without calling native PJC.
+    set profile unknown
+    if {[info exists ::env(PHYSICAL_COMPILER_PROFILE)]} {
+        set profile $::env(PHYSICAL_COMPILER_PROFILE)
+    }
+    set safe_q17_enumeration [expr {$profile eq "q17" && [regexp {17\.0\.2} $quartus(version)]}]
+    puts $raw "Compiler profile: $profile"
+    if {!$safe_q17_enumeration} {
+        puts $raw "UNVERIFIED: assignment enumeration disabled for compiler profile $profile; get_all_assignment_names not invoked."
+        puts $raw "This does not imply the assignments are unsupported. A1 requires separate native capability evidence."
     }
     foreach phase {map fit} {
         foreach scope {global instance} {
-            if {$q25_broken_enumeration} {
+            if {!$safe_q17_enumeration} {
                 set names {}
                 set ok 0
-                set reason "UNVERIFIED: Quartus 25.1std.0 PJC assignment enumeration unavailable; scope and legal values not established"
+                set reason "UNVERIFIED: assignment enumeration disabled for compiler profile $profile; scope and legal values not established"
             } else {
                 set names {}
                 set ok [expr {![catch {get_all_assignment_names -family {Cyclone V} -module $phase -type $scope} names]}]
