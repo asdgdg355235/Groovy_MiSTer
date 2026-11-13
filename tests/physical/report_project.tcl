@@ -12,13 +12,32 @@ if {$mode eq "support"} {
     puts $raw "Installed version: $quartus(version)"
     puts $raw "Metadata availability is not proof of individual-register applicability."
     set tab [physical::table $dir/assignment_capabilities.tsv {module scope name available metadata}]
+    # Quartus Lite 25.1std.0 Build 1129 terminates inside sys_pjc when
+    # get_all_assignment_names is called, even after project_open. Tcl catch
+    # cannot intercept a native PJC Internal Error. R0 only needs truthful
+    # discovery evidence: never guess availability or supported values.
+    # A1 still requires independently verified compiler metadata before an
+    # assignment can be admitted by overlays.py.
+    set q25_broken_enumeration [string match {25.1std.0*} $quartus(version)]
+    if {$q25_broken_enumeration} {
+        puts $raw "UNVERIFIED: Quartus 25.1std.0 PJC crashes on get_all_assignment_names; enumeration deliberately not called."
+        puts $raw "This does not establish that any assignment is unsupported. A1 approval requires separate native capability evidence."
+    }
     foreach phase {map fit} {
         foreach scope {global instance} {
-            set ok [expr {![catch {get_all_assignment_names -family {Cyclone V} -module $phase -type $scope} names]}]
+            if {$q25_broken_enumeration} {
+                set names {}
+                set ok 0
+                set reason "UNVERIFIED: Quartus 25.1std.0 PJC assignment enumeration unavailable; scope and legal values not established"
+            } else {
+                set names {}
+                set ok [expr {![catch {get_all_assignment_names -family {Cyclone V} -module $phase -type $scope} names]}]
+                set reason "NOT_LISTED: applicability and value pending"
+            }
             puts $raw "MODULE $phase SCOPE $scope LIST_OK $ok\n$names"
             foreach name {PHYSICAL_SYNTHESIS_REGISTER_RETIMING ADV_NETLIST_OPT_ALLOWED MUX_RESTRUCTURE AUTO_SHIFT_REGISTER_RECOGNITION} {
                 set available [expr {$ok && [lsearch -exact $names $name] >= 0}]
-                set metadata "NOT_LISTED: applicability and value pending"
+                set metadata $reason
                 if {$available} {
                     if {[catch {get_assignment_name_info $name} metadata]} {set available 0}
                     if {[string match -nocase {*not supported*} $metadata]} {set available 0}

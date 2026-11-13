@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Compiler profile, manifest, PLL and preparation regression. No vendor tool execution."""
 import copy
+import csv
 import json
 import os
 from pathlib import Path
@@ -174,6 +175,53 @@ class CompilerProfile(unittest.TestCase):
             finally:
                 subprocess.run(['git','-C',str(ROOT),'worktree','remove','--force',str(linked)],
                                check=True,capture_output=True)
+
+
+class AssignmentDiscoveryNoVendor(unittest.TestCase):
+    """Exercise Quartus support-mode Tcl in a plain Tcl interpreter."""
+
+    def run_support(self, version, unsafe_enumeration=True):
+        with tempfile.TemporaryDirectory() as tmp:
+            script = f'''
+set quartus(args) {{support}}
+set quartus(version) {{{version}}}
+proc load_package {{args}} {{}}
+proc get_all_assignment_names {{args}} {{
+    {'error "unsafe Quartus enumeration invoked"' if unsafe_enumeration else 'return {PHYSICAL_SYNTHESIS_REGISTER_RETIMING}'}
+}}
+proc get_assignment_name_info {{name}} {{return "Accepted: OFF ON NEVER_ALLOW"}}
+source {{{ROOT/'tests/physical/report_project.tcl'}}}
+'''
+            result = subprocess.run(['tclsh'], input=script, cwd=tmp,
+                                    text=True, capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            root = Path(tmp) / 'output_files/closure_diagnostics'
+            with (root/'assignment_capabilities.tsv').open(newline='') as stream:
+                rows = list(csv.DictReader(stream, delimiter='\t'))
+            return rows, (root/'assignment_support.txt').read_text()
+
+    def test_q25_avoids_native_internal_error_and_fails_closed(self):
+        rows, log = self.run_support('25.1std.0 Build 1129 SC Lite Edition')
+        self.assertEqual(len(rows), 16)
+        self.assertTrue(all(r['available'] == '0' for r in rows))
+        self.assertTrue(all('UNVERIFIED' in r['metadata'] for r in rows))
+        self.assertIn('enumeration deliberately not called', log)
+        self.assertNotIn('unsafe Quartus enumeration invoked', log)
+
+    def test_q17_retains_original_metadata_discovery(self):
+        rows, log = self.run_support('17.0.2', unsafe_enumeration=False)
+        self.assertEqual(len(rows), 16)
+        self.assertEqual(sum(r['available'] == '1' for r in rows), 4)
+        self.assertEqual(sum(r['available'] == '0' for r in rows), 12)
+        self.assertIn('Accepted: OFF ON NEVER_ALLOW', log)
+
+    def test_nonmatching_q25_version_does_not_hide_discovery_errors(self):
+        # A future toolchain needs its own observed compatibility decision.
+        rows, log = self.run_support('25.2std.0')
+        self.assertEqual(len(rows), 16)
+        self.assertFalse(any(r['available'] == '1' for r in rows))
+        self.assertFalse(any('PJC assignment enumeration unavailable' in r['metadata'] for r in rows))
+        self.assertIn('unsafe Quartus enumeration invoked', log)
 
 
 if __name__ == '__main__':
