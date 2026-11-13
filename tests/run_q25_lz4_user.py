@@ -35,8 +35,15 @@ def main():
     parser.add_argument("--full",action="store_true",help="continue through fitter and eight-corner timing after map audit")
     parser.add_argument("--quartus",default="/home/taichi/altera_lite/25.1std")
     a=parser.parse_args()
-    if not (ROOT/".git").is_dir():
-        raise SystemExit("Use the actual Git checkout, not a source archive")
+    # In a linked git worktree, .git is a pointer *file*, not a directory.
+    # Query Git rather than assuming how the checkout stores its metadata.
+    git_root = subprocess.run(
+        ["git", "-C", str(ROOT), "rev-parse", "--show-toplevel"],
+        text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        check=False,
+    )
+    if git_root.returncode or Path(git_root.stdout.strip()).resolve() != ROOT.resolve():
+        raise SystemExit("Use a Git checkout or linked worktree (not a source archive)")
     if result(["git","status","--porcelain","--untracked-files=all"],ROOT,True).stdout.strip():
         raise SystemExit("Commit or clean the checkout before testing")
     result(["git","merge-base","--is-ancestor",PIN,"HEAD"],ROOT)
