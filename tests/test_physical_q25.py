@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT/'tests'))
 from physical.control import expected_build_id, hardware_hashes, verify_version, digest
 from physical.q25_ram_evidence import preflight, mapped
 from physical.overlays import validate_recipe
+from physical.diagnostics import collect
 from project_assignments import capture
 from test_physical_experiments import evidence
 
@@ -89,6 +90,66 @@ class CompilerProfile(unittest.TestCase):
             path, _ = evidence(Path(tmp)/'q17')
             with self.assertRaisesRegex(ValueError, 'new Q25 R0'):
                 validate_recipe(path, Path(tmp)/'q17', 'A1', profile='q25')
+
+    def test_incomplete_native_q25_reports_fail_diagnostic_gate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp)/'output_files'
+            output.mkdir()
+            (output/'provenance.json').write_text(json.dumps({
+                'compiler_profile': 'q25', 'experiment': {'name': 'R0'},
+                'hardware_manifest_sha256': 'fixture',
+                'source_commit': 'fixture-source'})+'\n')
+            result = collect(output)
+            self.assertFalse(result['export_queries_complete'])
+            self.assertEqual(result['unresolved_logical_bits'], 72)
+            self.assertFalse(result['logical_ram_bits_complete'])
+            self.assertFalse(result['q25_lz4_ram_evidence_present'])
+
+    def test_a1_q25_requires_resource_ram_and_diagnostic_passes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path, recipe = evidence(Path(tmp)/'q25')
+            root = path.parent/'q25'
+            seal_path = root/'evidence_manifest.json'
+            seal = json.loads(seal_path.read_text())
+            seal.update(compiler_profile='q25',
+                        hardware_baseline='248d48ab625b04418fab1bc369c4cb60ff47fff1',
+                        source_commit='fixture-q25-source',
+                        hardware_manifest_sha256=digest(
+                            (ROOT/'tests/physical/hardware_q25.json').read_bytes()))
+            recipe.update(compiler_profile='q25',
+                          r0_source_commit='fixture-q25-source')
+            (root/'tool_version.txt').write_text(
+                'Quartus Prime Shell\nVersion 25.1std.0 Build 1129 SJ Lite Edition\n')
+            for name in ('source_manifest_prepared.json',
+                         'source_manifest_before_map.json',
+                         'source_manifest_before_fit.json'):
+                (root/name).write_text('{}\n')
+            states = {
+                'resource_clock_gate.json': {'resource_clock_pass': False},
+                'q25_window_ram_gate.json': {'compiler_profile': 'q25',
+                                            'embedded_ram_inferred': False},
+                'diagnostic_status.json': {'export_queries_complete': False,
+                                           'video_requirements_pass': False},
+            }
+            def reseal():
+                for name, value in states.items():
+                    (root/name).write_text(json.dumps(value)+'\n')
+                seal['files'] = {p.name: digest(p.read_bytes())
+                                 for p in root.iterdir() if p.is_file() and p != seal_path}
+                seal_path.write_text(json.dumps(seal, sort_keys=True)+'\n')
+                recipe['r0_evidence_sha256'] = digest(seal_path.read_bytes())
+                path.write_text(json.dumps(recipe)+'\n')
+            reseal()
+            with self.assertRaisesRegex(ValueError, 'resource/clock gate'):
+                validate_recipe(path, root, 'A1', profile='q25')
+            states['resource_clock_gate.json']['resource_clock_pass'] = True
+            reseal()
+            with self.assertRaisesRegex(ValueError, 'memory inference'):
+                validate_recipe(path, root, 'A1', profile='q25')
+            states['q25_window_ram_gate.json']['embedded_ram_inferred'] = True
+            reseal()
+            with self.assertRaisesRegex(ValueError, 'physical/video diagnostics'):
+                validate_recipe(path, root, 'A1', profile='q25')
 
     def test_detached_worktree_nonquartus_prepare_only(self):
         with tempfile.TemporaryDirectory() as tmp:

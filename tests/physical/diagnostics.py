@@ -227,12 +227,24 @@ def collect(output, destination=None):
         if not routes: stream.write('PENDING: no native routing-utilization/hotspot panel exported. Do not infer congestion from ALM count.\n')
     status_rows = read_rows(out / 'fanout_export_status.tsv')
     complete = bool(status_rows and status_rows[0]['complete'] == '1' and edges and not graph_errors)
+    # Missing/native-query fields invalidate the export, not just its name.
+    query_error_files = [out / ('project_query_errors_' + phase + '.tsv')
+                         for phase in ('map', 'cmp')]
+    partial_nodes = [r for r in inventory if r.get('query_status') != 'OBSERVED']
+    query_errors = sum(len(read_rows(p)) for p in query_error_files if p.is_file())
+    logical_complete = len(bits) == 72 and all(r[3] != 'UNRESOLVED' for r in bits)
+    native_queries_complete = (all(p.is_file() for p in query_error_files)
+                               and not partial_nodes and query_errors == 0
+                               and logical_complete)
     # A complete graph can still contain unplaced/nonphysical nodes; D1 must
     # account for them rather than using one endpoint as the load distribution.
     status = {
         'format': 'physical-diagnostics-v1', 'fanout_graph_complete': complete,
-        'export_queries_complete': bool(complete and {'pre_synthesis', 'post_synthesis', 'post_fitter'} <= {r['stage'] for r in inventory}
+        'export_queries_complete': bool(complete and native_queries_complete
+                                        and {'pre_synthesis', 'post_synthesis', 'post_fitter'} <= {r['stage'] for r in inventory}
                                         and all((out / p).is_file() for p in ('atom_ports_map.tsv', 'atom_ports_cmp.tsv'))),
+        'query_error_count': query_errors, 'partial_inventory_nodes': len(partial_nodes),
+        'logical_ram_bits_complete': logical_complete,
         'graph_errors': graph_errors, 'unlocated_edges': sum(not r['destination_location'] for r in edges),
         'inventory_stages': dict(Counter(r['stage'] for r in inventory)),
         'unresolved_logical_bits': len({(r[0], r[1], r[2]) for r in bits if r[3] == 'UNRESOLVED'}),

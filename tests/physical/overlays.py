@@ -68,12 +68,25 @@ def validate_recipe(recipe_path, evidence_root, experiment, profile='q17'):
     verify_version(safe_path(evidence_root, 'tool_version.txt').read_text(), profile)
     must_seal = {'tool_version.txt', 'node_inventory.tsv', 'assignment_capabilities.tsv',
                  'input_gate_before_map.json', 'input_gate_before_fit.json'}
-    if profile == 'q25': must_seal |= {'resource_clock_gate.json', 'source_manifest_prepared.json', 'source_manifest_before_map.json', 'source_manifest_before_fit.json'}
+    if profile == 'q25':
+        must_seal |= {'resource_clock_gate.json', 'q25_window_ram_gate.json',
+                      'diagnostic_status.json', 'source_manifest_prepared.json',
+                      'source_manifest_before_map.json', 'source_manifest_before_fit.json'}
     if experiment == 'D1': must_seal |= {'diagnostic_status.json', 'fanout_locations.tsv', 'fanout_seeds.tsv'}
     if not must_seal <= set(seal['files']):
         raise ValueError('Required evidence was not sealed: ' + ', '.join(sorted(must_seal - set(seal['files']))))
     if seal.get('generated_input', {}).get('sha256') != digest(expected_build_id()):
         raise ValueError('R0 generated input is not the measured byte sequence')
+    if profile == 'q25':
+        resource = json.loads(safe_path(evidence_root, 'resource_clock_gate.json').read_text())
+        ram = json.loads(safe_path(evidence_root, 'q25_window_ram_gate.json').read_text())
+        diagnostics = json.loads(safe_path(evidence_root, 'diagnostic_status.json').read_text())
+        if not resource.get('resource_clock_pass'):
+            raise ValueError('Q25 R0 resource/clock gate is incomplete')
+        if not ram.get('embedded_ram_inferred') or ram.get('compiler_profile') != 'q25':
+            raise ValueError('Q25 R0 registered LZ4 memory inference is unproved')
+        if not diagnostics.get('export_queries_complete') or not diagnostics.get('video_requirements_pass'):
+            raise ValueError('Q25 R0 physical/video diagnostics are incomplete')
     for phase in ('before_map', 'before_fit'):
         if not json.loads(safe_path(evidence_root, f'input_gate_{phase}.json').read_text()).get('pass'):
             raise ValueError('R0 source/configuration stage failed')
