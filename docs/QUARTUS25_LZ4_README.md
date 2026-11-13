@@ -3,9 +3,7 @@
 ## Status
 
 The source has a candidate one-read/one-write synchronous memory interface.
-Icarus RTL equivalence and Quartus 25.1 inference **are not confirmed** by
-this branch's commits. Do not use the generated FPGA image on hardware until
-the functional, memory-resource, timing and interface checks pass.
+Icarus Verilog RTL equivalence **passed** in [RTL-only CI run 43494226729](https://github.com/asdgdg355235/Groovy_MiSTer/actions/runs/43494226729) for the frozen source reference. All 39 golden packets passed per mode, including a greater-than-65536-byte decompression window rollover test. The normal 64-bit mode exercised 134626 clocks; byte-only mode exercised 215939 clocks. The static schedule and source-expression tests also passed. **Quartus 25.1 synthesis, resource mapping and timing remain unverified.** Do not use a generated FPGA image on hardware until the memory, timing and interface checks pass.
 
 Quartus 25.1 initially reported Error 276003 because `emu|lz4|window`
 was not inferred as embedded RAM. The original LZ4 declaration contains
