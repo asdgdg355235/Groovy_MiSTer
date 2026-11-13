@@ -35,12 +35,19 @@ module tb_lz4_timing;
     reg [7:0] packet[0:4095], expected[0:8191];
     reg checking=0, emitted;
     reg [31:0] old_count;
+    reg old_window_write;
+    reg [12:0] old_window_write_addr;
     reg [3:0] increment;
     reg [7:0] expected_sum;
     always @(posedge clk) begin
         old_count=count;
+        old_window_write=dut.window_write_enable;
+        old_window_write_addr=dut.window_addr13;
         emitted=run && (!long_valid || !stop);
         #1;
+        if (old_window_write &&
+            dut.window[old_window_write_addr] !== baseline.window[old_window_write_addr])
+            $fatal(1,"LZ4 window mismatch cycle=%0d address=%0d",cycles,old_window_write_addr);
         cycles=cycles+1;
         states_seen=states_seen | (1 << state);
         if ({ready,byte_out,byte_valid,long_out,long_valid,count,paused,done,error,state,written,read_count,read_ready}
