@@ -99,7 +99,7 @@ def create(source, output, experiment='R0', overlay=None, evidence=None, profile
         'hardware_manifest_sha256': digest(Path(__file__).with_name(profile_spec(profile)['manifest']).read_bytes()),
     })
     from project_assignments import capture
-    write_json(out / 'control_project_calls_prepared.json', capture(output))
+    write_json(out / 'control_project_calls_prepared.json', capture(output, profile))
     if accepted:
         from physical.overlays import materialize
         materialize(output, accepted, evidence)
@@ -145,7 +145,9 @@ def stage_inputs(root, phase):
         if rel in ('Groovy.qsf', 'Groovy.qpf'): continue
         if not (root / rel).is_file() or digest((root / rel).read_bytes()) != wanted:
             raise ValueError('Unexpected hardware/source change at ' + phase + ': ' + rel)
-    actual = capture(root)
+    actual = capture(root, provenance.get('compiler_profile', 'q17'))
+    if actual['missing_qip_files']:
+        raise ValueError('Missing QIP source inputs: ' + ', '.join(actual['missing_qip_files']))
     write_json(out / ('project_calls_' + phase + '.json'), actual)
     experiment = provenance['experiment']['name']
     if experiment == 'R0':

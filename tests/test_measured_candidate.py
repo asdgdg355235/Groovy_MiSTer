@@ -21,7 +21,15 @@ class MeasuredCandidateTest(unittest.TestCase):
         for name in ('rtl/CRT/crt_vsize_fixed.sv','rtl/CRT/crt_packed_ram.sv','rtl/lz4.v','rtl/vga.v'):
             row=next(r for r in records if r['path']==name)
             self.assertTrue(row['equal'])
-            self.assertEqual(hashlib.sha256((ROOT/name).read_bytes()).hexdigest(), row['archived_sha256'])
+            # Keep published Q17 evidence immutable. Q25 swaps only the
+            # independently approved LZ4 RTL, never the historical report.
+            current = ((subprocess.check_output(['git','show',
+                       'c8d4b3897c4ed98165d3ee862cabbdd9ab9a4f17:rtl/lz4.v'],cwd=ROOT))
+                       if name == 'rtl/lz4.v' else (ROOT/name).read_bytes())
+            self.assertEqual(hashlib.sha256(current).hexdigest(), row['archived_sha256'])
+        q25=json.loads((ROOT/'tests/physical/hardware_q25.json').read_text())
+        self.assertEqual(hashlib.sha256((ROOT/'rtl/lz4.v').read_bytes()).hexdigest(),
+                         q25['files']['rtl/lz4.v'])
 
     def test_effective_configuration(self):
         c=capture(ROOT)

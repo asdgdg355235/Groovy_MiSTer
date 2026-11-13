@@ -22,6 +22,7 @@ else:
 # The approved Q25 decoder changes only the window RAM schedule. The delta
 # selector is checked here, while the full decoder gets a separate
 # original-source differential simulation in both modes.
+sys.path.insert(0, str(root / 'tests'))
 from physical.control import hardware_hashes
 hardware_hashes(root, 'q25')
 task=src[src.index('task decode_pixel;'):src.index('endtask',src.index('task decode_pixel;'))+7]

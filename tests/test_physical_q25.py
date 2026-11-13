@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT/'tests'))
 from physical.control import expected_build_id, hardware_hashes, verify_version, digest
 from physical.q25_ram_evidence import preflight, mapped
 from physical.overlays import validate_recipe
+from project_assignments import capture
 from test_physical_experiments import evidence
 
 
@@ -41,6 +42,13 @@ class CompilerProfile(unittest.TestCase):
         self.assertEqual(len(hardware_hashes(ROOT, 'q25')), 93)
         self.assertEqual(newer['files']['rtl/lz4.v'], digest((ROOT/'rtl/lz4.v').read_bytes()))
         self.assertEqual(newer['files']['sys/pll_q25.qip'], digest((ROOT/'sys/pll_q25.qip').read_bytes()))
+
+    def test_compiler_specific_pll_qip_selection(self):
+        q17 = capture(ROOT, 'q17')
+        q25 = capture(ROOT, 'q25')
+        self.assertIn(['global', '-name', 'QIP_FILE', 'sys/pll_q17.qip'], q17['events'])
+        self.assertIn(['global', '-name', 'QIP_FILE', 'sys/pll_q25.qip'], q25['events'])
+        self.assertFalse(q25['missing_qip_files'])
 
     def test_preflight_and_unsanctioned_hardware_change(self):
         self.assertEqual(preflight(ROOT, 'q25')['hardware_files'], 93)

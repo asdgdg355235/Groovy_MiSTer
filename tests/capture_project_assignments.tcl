@@ -16,6 +16,6 @@ foreach kind {global instance location} {
     proc set_${kind}_assignment {args} [format {emit [linsert $args 0 %s]} $kind]
 }
 proc set_hps_location_assignment {args} {emit [linsert $args 0 hps_location]}
-set quartus(version) 17.0.2
+set quartus(version) [expr {[llength $argv] > 1 ? [lindex $argv 1] : "17.0.2"}]
 set quartus(qip_path) "[file dirname [file normalize [lindex $argv 0]]]/"
 source [lindex $argv 0]

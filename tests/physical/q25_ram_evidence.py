@@ -27,6 +27,11 @@ def preflight(root, profile):
         if not line.strip(): continue
         if not line.startswith('set_global_assignment -name QIP_FILE'):
             raise ValueError('Unexpected PLL QIP assignment: ' + line)
+    from project_assignments import capture
+    expanded = capture(root, profile)
+    selected_qip = ['global', '-name', 'QIP_FILE', spec['pll_qip']]
+    if selected_qip not in expanded['events'] or expanded['missing_qip_files']:
+        raise ValueError('Selected PLL QIP not expanded or another QIP file missing')
     result = {'compiler_profile': profile, 'manifest': spec['manifest'],
               'pll_qip': spec['pll_qip'], 'pll_sha256': validated[spec['pll_qip']],
               'hardware_files': len(validated), 'quartus_executed': False}

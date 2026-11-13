@@ -77,6 +77,12 @@ class RestartWorkflow(unittest.TestCase):
   self.assertIn('former sized cast rejected in Verilog, accepted in SystemVerilog',result['checks'])
 
  def test_default_hardware_is_unmodified_baseline(self):
-  for p in PROTECTED+CORE:self.assertEqual((ROOT/p).read_bytes(),baseline(p))
+  q25=json.loads((ROOT/'tests/physical/hardware_q25.json').read_text())
+  for p in PROTECTED+CORE:
+   observed=(ROOT/p).read_bytes()
+   if p=='rtl/lz4.v':
+    self.assertEqual(sha(observed),q25['files'][p])
+    self.assertNotEqual(observed,baseline(p))
+   else:self.assertEqual(observed,baseline(p))
 
 if __name__=='__main__':unittest.main()
