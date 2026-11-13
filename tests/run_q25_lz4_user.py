@@ -49,8 +49,18 @@ def main():
     parser.add_argument("--quartus",default="/home/taichi/altera_lite/25.1std")
     a=parser.parse_args()
     require_git_worktree(ROOT)
-    if result(["git","status","--porcelain","--untracked-files=all"],ROOT,True).stdout.strip():
-        raise SystemExit("Commit or clean the checkout before testing")
+    # Python test imports may leave untracked bytecode in an otherwise clean
+    # checkout. Ignore only these generated files, not source/config changes.
+    status = result(["git","status","--porcelain","--untracked-files=all"],ROOT,True).stdout
+    unexpected = []
+    for row in status.splitlines():
+        path = row[3:].strip().replace("\\\\", "/")
+        if path.endswith(".pyc") or "__pycache__/" in path:
+            continue
+        unexpected.append(row)
+    if unexpected:
+        raise SystemExit("Commit or clean the checkout before testing:\n" +
+                         "\n".join(unexpected))
     result(["git","merge-base","--is-ancestor",PIN,"HEAD"],ROOT)
     if "window_prefetch_data <= window[window_prefetch_addr];" not in (ROOT/"rtl/lz4.v").read_text():
         raise SystemExit("Missing LZ4 window candidate")
