@@ -87,7 +87,7 @@ has no PATH-based fallback. The runner checks the version/edition of all six
 selected executables. Quartus 25.1 fails preflight before synthesis.
 
 ```bash
-git fetch origin work/physical-timing-r0
+git fetch origin refs/heads/work/physical-timing-r0:refs/remotes/origin/work/physical-timing-r0
 git worktree add --detach ../Groovy-physical-source origin/work/physical-timing-r0
 cd ../Groovy-physical-source
 
