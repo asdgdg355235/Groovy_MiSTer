@@ -1,0 +1,111 @@
+{
+  "description": "Selected actual Q25 3b8d1ed native atom rows; dependency observations, not functional proof",
+  "fitted": [
+    {
+      "direction": "INPUT",
+      "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[2].even_ram|altsyncram:block_ram.mem_rtl_0|altsyncram_jpk1:auto_generated|ram_block1a8",
+      "port": "PORTBADDR",
+      "bit": "11",
+      "peer": "emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_even[11]~4",
+      "peer_port": "COMBOUT",
+      "peer_bit": "",
+      "fanout": "22"
+    },
+    {
+      "direction": "INPUT",
+      "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[31]_NEW_REG150",
+      "port": "SDATA",
+      "bit": "",
+      "peer": "emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_even[11]~4",
+      "peer_port": "COMBOUT",
+      "peer_bit": "",
+      "fanout": "22"
+    },
+    {
+      "direction": "INPUT",
+      "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[31]_NEW_REG150",
+      "port": "CLK",
+      "bit": "",
+      "peer": "emu:emu|pll:pll|pll_0002:pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|divclk[0]~CLKENA0",
+      "peer_port": "OUTCLK",
+      "peer_bit": "",
+      "fanout": "44569"
+    },
+    {
+      "direction": "INPUT",
+      "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[0].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l7_w8_n0_mux_dataout~0",
+      "port": "DATAC",
+      "bit": "",
+      "peer": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[31]_NEW_REG150",
+      "peer_port": "Q",
+      "peer_bit": "",
+      "fanout": "41"
+    },
+    {
+      "direction": "INPUT",
+      "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[2].odd_ram|altsyncram:block_ram.mem_rtl_0|altsyncram_jpk1:auto_generated|ram_block1a8",
+      "port": "PORTBADDR",
+      "bit": "11",
+      "peer": "emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[11]~14",
+      "peer_port": "COMBOUT",
+      "peer_bit": "",
+      "fanout": "22"
+    },
+    {
+      "direction": "INPUT",
+      "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[31]_NEW_REG646",
+      "port": "SDATA",
+      "bit": "",
+      "peer": "emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[11]~14",
+      "peer_port": "COMBOUT",
+      "peer_bit": "",
+      "fanout": "22"
+    },
+    {
+      "direction": "INPUT",
+      "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[31]_NEW_REG646",
+      "port": "CLK",
+      "bit": "",
+      "peer": "emu:emu|pll:pll|pll_0002:pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|divclk[0]~CLKENA0",
+      "peer_port": "OUTCLK",
+      "peer_bit": "",
+      "fanout": "44569"
+    },
+    {
+      "direction": "INPUT",
+      "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[0].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l7_w8_n0_mux_dataout~0",
+      "port": "DATAA",
+      "bit": "",
+      "peer": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[31]_NEW_REG646",
+      "peer_port": "Q",
+      "peer_bit": "",
+      "fanout": "46"
+    }
+  ],
+  "mapped": [
+    {
+      "direction": "INPUT",
+      "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[0].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l7_w24_n0_mux_dataout~0",
+      "port": "DATAC",
+      "bit": "",
+      "peer": "emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_even[11]~4",
+      "peer_port": "COMBOUT",
+      "peer_bit": "",
+      "fanout": "120"
+    },
+    {
+      "direction": "INPUT",
+      "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[0].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l7_w24_n0_mux_dataout~0",
+      "port": "DATAC",
+      "bit": "",
+      "peer": "emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[11]~14",
+      "peer_port": "COMBOUT",
+      "peer_bit": "",
+      "fanout": "120"
+    }
+  ],
+  "source_sha256": {
+    "atom_ports_cmp.tsv": "afd229a450b6dd2591833c9eceeff7fe8c3e7f1b1d5b95b2ff21171afbf9ae0f",
+    "atom_ports_map.tsv": "07f19d2fd8f77c3aaa56ac2950308cf84900deedac1df43bbd6af2e4d251301f"
+  }
+}
