@@ -33,10 +33,16 @@ def profile_spec(profile='q25'):
     return profiles[profile]
 
 
-def hardware_hashes(root, profile='q25'):
+def hardware_hashes(root, profile='q25', experiment='R0'):
     """Check all recorded hardware/IP/config inputs, not only the edited modules."""
     root = Path(root)
     spec = json.loads(Path(__file__).with_name(profile_spec(profile)['manifest']).read_text())
+    if experiment == 'V1':
+        from physical.variants import variant
+        v = variant()
+        if profile != 'q25' or spec['files'][v['path']] != v['baseline_sha256']: raise ValueError('Variant baseline mismatch')
+        spec['files'][v['path']] = v['result_sha256']
+    elif experiment not in ('R0','A1','D1','C1'): raise ValueError('Unknown source experiment')
     actual = {}
     for rel, wanted in spec['files'].items():
         path = root / rel
@@ -77,7 +83,7 @@ def create(source, output, experiment='R0', overlay=None, evidence=None, profile
         raise ValueError('R0 cannot contain a physical overlay')
     hardware_hashes(source, profile)
     accepted = None
-    if experiment != 'R0':
+    if experiment not in ('R0','V1'):
         from physical.overlays import validate_recipe
         if not overlay or not evidence:
             raise ValueError(experiment + ' evidence gate pending: supply reviewed recipe and complete R0 evidence')
@@ -85,6 +91,11 @@ def create(source, output, experiment='R0', overlay=None, evidence=None, profile
     # Existing clean-source preparation refuses dirty/unknown source and old databases.
     provenance = prepare(source, output, 'baseline', verified_physical=True)
     output = Path(output).resolve()
+    variant_identity = None
+    if experiment == 'V1':
+        if profile != 'q25' or overlay or evidence: raise ValueError('V1 permits only its reviewed source patch under Q25')
+        from physical.variants import apply_variant
+        variant_identity = apply_variant(output)
     out = output / 'output_files'
     (out / 'closure_diagnostics').mkdir()
     (out / 'build_variant.txt').write_text(experiment + '\n')
@@ -94,7 +105,9 @@ def create(source, output, experiment='R0', overlay=None, evidence=None, profile
         'actual_preparation_timestamp_utc': datetime.now(timezone.utc).isoformat(),
         'generated_input': {'path': 'build_id.v', 'sha256': digest(expected_build_id()),
                             'policy': 'restore exact measured bytes after pre-flow; never change system clock'},
-        'hardware_hashes': hardware_hashes(output, profile),
+        'hardware_hashes': hardware_hashes(output, profile, experiment),
+        'control_hardware_hashes': hardware_hashes(source, profile),
+        'source_variant': variant_identity,
         'compiler_profile': profile,
         'hardware_manifest_sha256': digest(Path(__file__).with_name(profile_spec(profile)['manifest']).read_bytes()),
     })
@@ -237,7 +250,7 @@ def stage_inputs(root, phase):
         raise ValueError('Missing QIP source inputs: ' + ', '.join(actual['missing_qip_files']))
     write_json(out / ('project_calls_' + phase + '.json'), actual)
     experiment = provenance['experiment']['name']
-    if experiment == 'R0':
+    if experiment in ('R0','V1'):
         control = json.loads((out / 'control_project_calls_prepared.json').read_text())
         additions = []
     else:
@@ -267,7 +280,7 @@ def stage_inputs(root, phase):
         observed, compiler_version_metadata = accepted_compiler_version_metadata(
             wanted, observed, provenance.get('compiler_profile', 'q17'))
         observed, postmap_serialization = accepted_q25_postmap_serialization(
-            wanted, observed, provenance.get('compiler_profile', 'q17'), experiment, phase)
+            wanted, observed, provenance.get('compiler_profile', 'q17'), 'R0' if experiment == 'V1' else experiment, phase)
         if observed != wanted:
             write_json(out / ('assignment_difference_' + phase + '.json'), {'expected': wanted, 'actual': policy(actual['events'])})
             raise ValueError('Unapproved effective assignment difference at ' + phase)
@@ -286,7 +299,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     sub = p.add_subparsers(dest='command', required=True)
     q = sub.add_parser('prepare')
-    q.add_argument('source'); q.add_argument('output'); q.add_argument('experiment', choices=['R0', 'A1', 'D1'])
+    q.add_argument('source'); q.add_argument('output'); q.add_argument('experiment', choices=['R0', 'A1', 'D1', 'V1', 'C1'])
     q.add_argument('--overlay'); q.add_argument('--evidence')
     q.add_argument('--profile', choices=['q17','q25'], default='q25')
     for name in ['freeze', 'verify-generated', 'verify-hardware']:

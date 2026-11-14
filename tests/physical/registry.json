@@ -29,6 +29,25 @@
         "legal_site_and_target"
       ],
       "reason": "A 914-load launch and two endpoint locations do not establish a legal beneficial placement."
+    },
+    "V1": {
+      "kind": "source-variant",
+      "status": "source-recipe-not-on-this-branch",
+      "allowed_changes": [
+        "rtl/vga.v"
+      ]
+    },
+    "C1": {
+      "kind": "crt-placement",
+      "status": "evidence-required",
+      "requires": [
+        "complete_hb_footprint",
+        "complete_bank_footprint",
+        "upstream_and_output_mux_paths",
+        "legal_site_and_target",
+        "assignment_stage_applicability"
+      ],
+      "reason": "Fresh native legal-site, stage applicability and full CRT footprint review required; no placement approved."
     }
   },
   "default_compiler_profile": "q25",

@@ -49,7 +49,7 @@ def family(source, sink):
     return 'other:' + sink.split('|')[0]
 
 
-def logical_bits(atom_rows):
+def logical_bits(atom_rows, mapped_rows=None):
     result = []
     known = defaultdict(set)
     for r in atom_rows:
@@ -80,7 +80,8 @@ def logical_bits(atom_rows):
                     if part < 2 and bit > 4:
                         reason += '; MLAB physical address width is five bits'
                     result.append([part, bank, bit, 'UNRESOLVED', '', '', '', '', '', reason])
-    return result
+    from physical.logical import resolve_registered
+    return resolve_registered(result, atom_rows, mapped_rows or [])[0]
 
 
 def retiming(inventory, panels):
@@ -171,7 +172,14 @@ def collect(output, destination=None):
     if out != raw and raw.exists():
         for p in raw.iterdir():
             if p.is_file() and p.name != 'evidence_manifest.json': shutil.copy2(p, out / p.name)
-    inventory = read_rows(out / 'node_inventory.tsv')
+    inventory = []; inventory_counts = Counter(); partial_count = 0
+    if (out / 'node_inventory.tsv').is_file():
+        with (out / 'node_inventory.tsv').open() as stream:
+            for row in csv.DictReader(stream, delimiter='\t'):
+                inventory_counts[row['stage']] += 1
+                partial_count += row.get('query_status') != 'OBSERVED'
+                if row['stage'] == 'pre_synthesis' or (row['stage']=='post_fitter' and row['type'] in ('reg','register')):
+                    inventory.append(row)
     if not (out / 'node_inventory.tsv').exists():
         table(out / 'node_inventory.tsv', ['stage', 'name', 'short_name', 'type', 'creator', 'source_file', 'query_status'], [])
     if not (out / 'assignment_support.txt').exists():
@@ -180,21 +188,25 @@ def collect(output, destination=None):
         table(out / 'assignment_capabilities.tsv', ['module', 'scope', 'name', 'available', 'metadata'], [])
     panels = read_rows(out / 'report_panels_map.tsv') + read_rows(out / 'report_panels_cmp.tsv')
     atoms = read_rows(out / 'atom_ports_cmp.tsv')
-    bits = logical_bits(atoms)
+    from physical.logical import resolve_registered, summarize
+    direct_bits = logical_bits(atoms)
+    bits, chains = resolve_registered(direct_bits, atoms, read_rows(out / 'atom_ports_map.tsv'))
+    logical_summary, logical_complete = summarize(bits, chains)
+    table(out / 'crt_logical_read_summary.tsv', ['part','bank','logical_bit','status','physical_rows','observed_statuses','observed_drivers','registered_dependencies','conditions'], logical_summary)
+    write_json(out / 'registered_selector_chains.json', chains)
     table(out / 'crt_logical_read_bits.tsv', ['part', 'bank', 'logical_bit', 'status', 'destination', 'port', 'driver', 'driver_port', 'fanout', 'reason'], bits)
     table(out / 'retiming_correspondence.tsv', ['rtl_register', 'physical_register', 'source_file', 'status', 'movement_report', 'required_confirmation'], retiming(inventory, panels))
     table(out / 'metadata_bit_map.tsv', ['direction', 'memory', 'port', 'physical_bit', 'peer', 'peer_port', 'peer_bit', 'rtl_stage', 'status', 'evidence'], metadata(atoms, panels))
-    edges = read_rows(out / 'fanout_locations.tsv')
+    from physical.graph import normalize
+    edges, graph_audit = normalize(out / 'fanout_locations.tsv', out,
+        out / 'fanout_processed_sources.tsv', out / 'fanout_export_status.tsv')
     if not (out / 'fanout_locations.tsv').exists():
         table(out / 'fanout_locations.tsv', ['source', 'source_type', 'source_location', 'destination', 'destination_type', 'destination_location', 'edge_type', 'expected_fanout', 'edge_id'], [])
     grouped = defaultdict(list)
     for r in edges: grouped[r['source']].append(r)
     footprints = []
-    graph_errors = []
+    graph_errors = graph_audit['errors']
     for source, connections in grouped.items():
-        expected = {int(r['expected_fanout']) for r in connections}
-        if len(expected) != 1 or len(connections) != next(iter(expected)) or len({r['edge_id'] for r in connections}) != len(connections):
-            graph_errors.append(source + ': incomplete or duplicate fanout')
         coords = [xy(r['destination_location']) for r in connections]
         located = [v for v in coords if v is not None]
         bounds = [min(p[0] for p in located), max(p[0] for p in located), min(p[1] for p in located), max(p[1] for p in located)] if located else ['', '', '', '']
@@ -230,9 +242,9 @@ def collect(output, destination=None):
     # Missing/native-query fields invalidate the export, not just its name.
     query_error_files = [out / ('project_query_errors_' + phase + '.tsv')
                          for phase in ('map', 'cmp')]
-    partial_nodes = [r for r in inventory if r.get('query_status') != 'OBSERVED']
+    partial_nodes = partial_count
     query_errors = sum(len(read_rows(p)) for p in query_error_files if p.is_file())
-    logical_complete = len(bits) == 72 and all(r[3] != 'UNRESOLVED' for r in bits)
+    # Logical completeness uses the exact key set; details retain every physical row.
     native_queries_complete = (all(p.is_file() for p in query_error_files)
                                and not partial_nodes and query_errors == 0
                                and logical_complete)
@@ -241,12 +253,12 @@ def collect(output, destination=None):
     status = {
         'format': 'physical-diagnostics-v1', 'fanout_graph_complete': complete,
         'export_queries_complete': bool(complete and native_queries_complete
-                                        and {'pre_synthesis', 'post_synthesis', 'post_fitter'} <= {r['stage'] for r in inventory}
+                                        and {'pre_synthesis', 'post_synthesis', 'post_fitter'} <= set(inventory_counts)
                                         and all((out / p).is_file() for p in ('atom_ports_map.tsv', 'atom_ports_cmp.tsv'))),
-        'query_error_count': query_errors, 'partial_inventory_nodes': len(partial_nodes),
+        'query_error_count': query_errors, 'partial_inventory_nodes': partial_nodes,
         'logical_ram_bits_complete': logical_complete,
-        'graph_errors': graph_errors, 'unlocated_edges': sum(not r['destination_location'] for r in edges),
-        'inventory_stages': dict(Counter(r['stage'] for r in inventory)),
+        'graph_normalization': graph_audit, 'graph_errors': graph_errors, 'unlocated_edges': sum(not r['destination_location'] for r in edges),
+        'inventory_stages': dict(inventory_counts),
         'unresolved_logical_bits': len({(r[0], r[1], r[2]) for r in bits if r[3] == 'UNRESOLVED'}),
         'retiming_correspondence': 'PENDING_SOURCE_CROSS_PROBE',
         'metadata_stage_correspondence': 'PENDING_DATAA_TO_TAP_MAPPING',

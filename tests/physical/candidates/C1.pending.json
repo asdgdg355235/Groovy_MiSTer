@@ -1,0 +1,13 @@
+{
+  "format": "physical-overlay-v1",
+  "experiment": "C1",
+  "compiler_profile": "q25",
+  "review_status": "pending",
+  "reviewed_by": null,
+  "rationale": "Complete hb footprint, native legal site, post-map target and output-pin binding are not established.",
+  "r0_evidence_sha256": null,
+  "mechanism_evidence": {},
+  "correspondence": [],
+  "assignments": [],
+  "legal_sites": {}
+}
