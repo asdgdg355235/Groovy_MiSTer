@@ -156,7 +156,21 @@ def compare(control, candidate, timing_only=False, published_control=None):
             cp = json.loads((control / 'provenance.json').read_text())
             np = json.loads((candidate / 'provenance.json').read_text())
             if cp['experiment']['name'] != 'R0': invalid.append('Control is not R0')
-            if cp['hardware_hashes'] != np['hardware_hashes']: invalid.append('Hardware baseline hashes changed')
+            if cp['hardware_hashes'] != np['hardware_hashes']:
+                target = np.get('targeted_q25_source')
+                changes = [k for k in sorted(set(cp['hardware_hashes']) | set(np['hardware_hashes']))
+                           if cp['hardware_hashes'].get(k) != np['hardware_hashes'].get(k)]
+                approved = (isinstance(target, dict)
+                            and np['experiment']['name'] in ('V1', 'C1')
+                            and np['experiment']['name'] == target.get('experiment')
+                            and cp['source_commit'] == target.get('r0_source_commit')
+                            and changes == [target.get('rtl_path')]
+                            and cp['hardware_hashes'].get(changes[0]) == target.get('r0_file_sha256')
+                            and np['hardware_hashes'].get(changes[0]) == target.get('candidate_file_sha256'))
+                if not approved:
+                    invalid.append('Hardware baseline hashes changed outside the approved V1/C1 file')
+                else:
+                    pending.append('V1/C1 RTL source delta accepted; source-cycle and mapped physical equivalence must be reviewed')
             if cp.get('compiler_profile', 'q17') != np.get('compiler_profile', 'q17'):
                 invalid.append('Cross-version candidate comparison is prohibited; use --cross-version')
             if cp.get('hardware_manifest_sha256') != np.get('hardware_manifest_sha256'):

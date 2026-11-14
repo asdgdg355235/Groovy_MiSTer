@@ -356,7 +356,9 @@ class PostMapQ25SerializationGate(unittest.TestCase):
     def test_stage_gate_accepts_only_native_block_and_preserves_raw_calls(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = Path(tmp)/'build'
-            create(ROOT, out, profile='q25')
+            target = ROOT/'tests/physical/q25_targeted_experiment.json'
+            experiment = json.loads(target.read_text())['experiment'] if target.is_file() else 'R0'
+            create(ROOT, out, experiment=experiment, profile='q25')
             freeze_generated(out)
             stage_inputs(out, 'before_map')
             qsf = out/'Groovy.qsf'
