@@ -1,0 +1,3295 @@
+{
+  "format": "q25-r0-physical-review-v1",
+  "r0_source_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "exporter_commit": "9275020236af5f37068073b73f2b76c3cc534280",
+  "file_hashes": {
+    "export_state.json": "6216c39944614bf27c2dec8174ac12ce2005a130767ced6fddd3e7b494379f3d",
+    "provenance.json": "8672bf29cb37aaccd5a6a16d2692e4143bda142ef1fe255fd8b674cc6603bb27",
+    "source_correspondence.tsv": "e4077c0a377881d99b0e571cd3a69395892762978df3f5b73951bc8a773f4ece",
+    "atom_ports_map.tsv": "c13af9558acc00ac91d10ecef2cf282974627872cbaa938c09281b8987d0a06c",
+    "atom_ports_cmp.tsv": "f81d9143a89a080b340e57bad764f1ba89b7ad4388e072bfcb77aa5b7a43d804",
+    "fanout_locations.tsv": "33206432ca9962af5a7ab0ee5de97e9db2c8d9e50f1227d8b5f9230c70b160f7",
+    "recovery_paths/endpoints.tsv": "3cf1a4745975039981386c7cdf1be3b4256f9db1a752d598f3d0b8ba3ce34df6",
+    "recovery_paths/filters.tsv": "6e34c8de1f8e8e9ae27ae8294a4d8f63e661723c5fb9bbd66822f4d448f73ed1",
+    "recovery_paths/query_errors.tsv": "20c8e0b99f64f488d59203ff96721e1a32d92d496dbb294ea8d8b5723a2c0e4a",
+    "corrected_diagnostics/diagnostic_status.json": "9e533a0383d9955b33173da70148b269cab415aaeaf86970090ecc8e2a2fd7d5"
+  },
+  "graph": {
+    "format": "fanout-normalization-v1",
+    "raw_rows": 592564,
+    "duplicate_rows": 0,
+    "unique_rows": 592564,
+    "repeated_sources": 0,
+    "sources": 350271,
+    "errors": [],
+    "raw_sha256": "33206432ca9962af5a7ab0ee5de97e9db2c8d9e50f1227d8b5f9230c70b160f7",
+    "normalized_sha256": "b459f9e20381ddc22aeab9a6d8ef6fcd4c2525f2d97fcd45c4456ff10eecc223",
+    "explicit_zero_fanout_sources": 28,
+    "historical_unidentified_zero_edge_visits": null,
+    "zero_source_identities_complete": true,
+    "edge_identity_scope": "one native timing netlist; not comparable across compilations"
+  },
+  "root_witness": {
+    "source_observation": {
+      "stage": "pre_synthesis",
+      "native_id": "48560",
+      "name": "emu:emu|Add17",
+      "short_name": "emu|Add17",
+      "type": "comb",
+      "creator": "user_entered",
+      "source_file": "/home/taichi/src/groovy-crt-build/Groovy-Q25-R0-postmapgate-R0_PHYS-native-query/Groovy.sv(1078)",
+      "status": "OBSERVED_SOURCE_LOCATION_NOT_REGISTER_ANCESTRY"
+    },
+    "mapped_counter_inputs": [
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~1",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[15]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "16",
+        "node_id": "4464",
+        "peer_id": "476"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~9",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[14]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "16",
+        "node_id": "4466",
+        "peer_id": "477"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~13",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[13]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "17",
+        "node_id": "4467",
+        "peer_id": "478"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~17",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[12]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "17",
+        "node_id": "4468",
+        "peer_id": "479"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~21",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[9]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "20",
+        "node_id": "4469",
+        "peer_id": "485"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~25",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[11]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "17",
+        "node_id": "4470",
+        "peer_id": "480"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~29",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[10]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "18",
+        "node_id": "4471",
+        "peer_id": "481"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~33",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[8]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "19",
+        "node_id": "4472",
+        "peer_id": "488"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~37",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[5]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "20",
+        "node_id": "4473",
+        "peer_id": "487"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~41",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[7]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "20",
+        "node_id": "4474",
+        "peer_id": "474"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~45",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[6]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "19",
+        "node_id": "4475",
+        "peer_id": "486"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~49",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[4]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "20",
+        "node_id": "4476",
+        "peer_id": "475"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~53",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[3]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "17",
+        "node_id": "4477",
+        "peer_id": "482"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~57",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[2]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "15",
+        "node_id": "4478",
+        "peer_id": "484"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~61",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[1]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "14",
+        "node_id": "4479",
+        "peer_id": "483"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|Add17~65",
+        "port": "DATAD",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[0]",
+        "peer_port": "Q",
+        "peer_bit": "",
+        "fanout": "15",
+        "node_id": "4480",
+        "peer_id": "28026"
+      }
+    ],
+    "fitted_root_captures": [
+      {
+        "D": {
+          "direction": "INPUT",
+          "node": "emu:emu|Add17~5_NEW_REG5722",
+          "port": "D",
+          "bit": "",
+          "peer": "emu:emu|Add17~5",
+          "peer_port": "SUMOUT",
+          "peer_bit": "",
+          "fanout": "2",
+          "node_id": "80549",
+          "peer_id": "4465"
+        },
+        "CLK": {
+          "direction": "INPUT",
+          "node": "emu:emu|Add17~5_NEW_REG5722",
+          "port": "CLK",
+          "bit": "",
+          "peer": "emu:emu|pll:pll|pll_0002:pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|divclk[0]~CLKENA0",
+          "peer_port": "OUTCLK",
+          "peer_bit": "",
+          "fanout": "44569",
+          "node_id": "80549",
+          "peer_id": "77354"
+        },
+        "Q_connections": [
+          {
+            "direction": "OUTPUT",
+            "node": "emu:emu|Add17~5_NEW_REG5722",
+            "port": "Q",
+            "bit": "",
+            "peer": "emu:emu|Mult0~8",
+            "peer_port": "AY",
+            "peer_bit": "16",
+            "fanout": "1",
+            "node_id": "80549",
+            "peer_id": "2535"
+          }
+        ]
+      },
+      {
+        "D": {
+          "direction": "INPUT",
+          "node": "emu:emu|Add17~5_OTERM5723DUPLICATE",
+          "port": "D",
+          "bit": "",
+          "peer": "emu:emu|Add17~5",
+          "peer_port": "SUMOUT",
+          "peer_bit": "",
+          "fanout": "2",
+          "node_id": "248330",
+          "peer_id": "4465"
+        },
+        "CLK": {
+          "direction": "INPUT",
+          "node": "emu:emu|Add17~5_OTERM5723DUPLICATE",
+          "port": "CLK",
+          "bit": "",
+          "peer": "emu:emu|pll:pll|pll_0002:pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|divclk[0]~CLKENA0",
+          "peer_port": "OUTCLK",
+          "peer_bit": "",
+          "fanout": "44569",
+          "node_id": "248330",
+          "peer_id": "77354"
+        },
+        "Q_connections": [
+          {
+            "direction": "OUTPUT",
+            "node": "emu:emu|Add17~5_OTERM5723DUPLICATE",
+            "port": "Q",
+            "bit": "",
+            "peer": "emu:emu|Add18~5",
+            "peer_port": "DATAB",
+            "peer_bit": "",
+            "fanout": "1",
+            "node_id": "248330",
+            "peer_id": "2519"
+          }
+        ]
+      }
+    ],
+    "counter_bit15_connections": [
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|vga:vga|v_cnt[15]",
+        "port": "CLK",
+        "bit": "",
+        "peer": "emu:emu|pll:pll|pll_0002:pll_inst|altera_pll:altera_pll_i|altera_cyclonev_pll:cyclonev_pll|divclk[0]~CLKENA0",
+        "peer_port": "OUTCLK",
+        "peer_bit": "",
+        "fanout": "44569",
+        "node_id": "476",
+        "peer_id": "77354"
+      },
+      {
+        "direction": "INPUT",
+        "node": "emu:emu|vga:vga|v_cnt[15]",
+        "port": "D",
+        "bit": "",
+        "peer": "emu:emu|vga:vga|v_cnt[15]_NEW1480",
+        "peer_port": "COMBOUT",
+        "peer_bit": "",
+        "fanout": "2",
+        "node_id": "476",
+        "peer_id": "78103"
+      }
+    ],
+    "scope": "Observed root increment and consumers. Not complete original-register ancestry or a retiming-assignment approval."
+  },
+  "selected_driver_summary": {
+    "emu|u_vsize|crt_read_1_even_bit3|combout": {
+      "source_location": "LABCELL_X37_Y35_N24",
+      "source_type": "pin",
+      "unique_pin_arcs": 3840,
+      "location_count": 3840,
+      "scope": "Observed load coordinates, not routed length or legal placement sites"
+    },
+    "emu|u_vsize|packed_ram[1].local_ra_even[10]~2|combout": {
+      "source_location": "LABCELL_X35_Y22_N57",
+      "source_type": "pin",
+      "unique_pin_arcs": 1302,
+      "location_count": 1302,
+      "scope": "Observed load coordinates, not routed length or legal placement sites"
+    },
+    "emu|u_vsize|wa[3]~3|combout": {
+      "source_location": "LABCELL_X37_Y22_N18",
+      "source_type": "pin",
+      "unique_pin_arcs": 15406,
+      "location_count": 15406,
+      "scope": "Observed load coordinates, not routed length or legal placement sites"
+    },
+    "emu|vga|hb|q": {
+      "source_location": "FF_X36_Y22_N59",
+      "source_type": "pin",
+      "unique_pin_arcs": 34,
+      "location_count": 34,
+      "scope": "Observed load coordinates, not routed length or legal placement sites"
+    }
+  },
+  "paths": {
+    "corner_01": {
+      "vga_root": [
+        {
+          "launch": "emu:emu|vga:vga|Add1~105_OTERM3868",
+          "capture": "emu:emu|Add17~5_OTERM5723",
+          "slack_ns": 0.542,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.112,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.227,
+          "logic_levels": 7,
+          "cell_delay_ns": 6.787,
+          "routing_delay_ns": 4.44,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X56_Y23_N55",
+            "node": "emu|vga|Add1~105_NEW_REG3867|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X60_Y26_N50",
+            "node": "emu:emu|Add17~5_OTERM5723"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X56_Y23_N55",
+              "node": "emu|vga|Add1~105_NEW_REG3867|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y22_N12",
+              "node": "emu|vga|Add1~41|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y22_N15",
+              "node": "emu|vga|Add1~53|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X55_Y22_N18",
+              "node": "emu|vga|Add1~49|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y22_N18",
+              "node": "emu|vga|Add0~49|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y22_N21",
+              "node": "emu|vga|Add0~25|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y22_N24",
+              "node": "emu|vga|Add0~61|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X57_Y22_N24",
+              "node": "emu|vga|Add54~65|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X57_Y22_N27",
+              "node": "emu|vga|Add54~61|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X57_Y22_N30",
+              "node": "emu|vga|Add54~25|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y22_N27",
+              "node": "emu|vga|LessThan19~14|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 17,
+              "location": "LABCELL_X61_Y22_N30",
+              "node": "emu|vga|LessThan19~15|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3,
+              "location": "LABCELL_X60_Y24_N33",
+              "node": "emu|vga|v_cnt~17|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N0",
+              "node": "emu|Add17~65|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N3",
+              "node": "emu|Add17~61|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N6",
+              "node": "emu|Add17~57|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N9",
+              "node": "emu|Add17~53|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N12",
+              "node": "emu|Add17~49|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N15",
+              "node": "emu|Add17~37|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N18",
+              "node": "emu|Add17~45|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N21",
+              "node": "emu|Add17~41|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N24",
+              "node": "emu|Add17~33|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N27",
+              "node": "emu|Add17~21|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N30",
+              "node": "emu|Add17~29|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N33",
+              "node": "emu|Add17~25|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N36",
+              "node": "emu|Add17~17|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N39",
+              "node": "emu|Add17~13|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N42",
+              "node": "emu|Add17~9|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N45",
+              "node": "emu|Add17~1|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X60_Y26_N48",
+              "node": "emu|Add17~5|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N50",
+              "node": "emu:emu|Add17~5_OTERM5723"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X56_Y23_N55",
+              "node": "emu|vga|Add1~105_NEW_REG3867|q"
+            },
+            {
+              "type": "IC",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N50",
+              "node": "emu|Add17~5_NEW_REG5722|d"
+            }
+          ]
+        },
+        {
+          "launch": "emu:emu|vga:vga|Add1~105_OTERM3868",
+          "capture": "emu:emu|Add17~5_OTERM5723DUPLICATE",
+          "slack_ns": 0.549,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.108,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.224,
+          "logic_levels": 7,
+          "cell_delay_ns": 6.784,
+          "routing_delay_ns": 4.44,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X56_Y23_N55",
+            "node": "emu|vga|Add1~105_NEW_REG3867|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X60_Y26_N49",
+            "node": "emu:emu|Add17~5_OTERM5723DUPLICATE"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X56_Y23_N55",
+              "node": "emu|vga|Add1~105_NEW_REG3867|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y22_N12",
+              "node": "emu|vga|Add1~41|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y22_N15",
+              "node": "emu|vga|Add1~53|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X55_Y22_N18",
+              "node": "emu|vga|Add1~49|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y22_N18",
+              "node": "emu|vga|Add0~49|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y22_N21",
+              "node": "emu|vga|Add0~25|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y22_N24",
+              "node": "emu|vga|Add0~61|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X57_Y22_N24",
+              "node": "emu|vga|Add54~65|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X57_Y22_N27",
+              "node": "emu|vga|Add54~61|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X57_Y22_N30",
+              "node": "emu|vga|Add54~25|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y22_N27",
+              "node": "emu|vga|LessThan19~14|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 17,
+              "location": "LABCELL_X61_Y22_N30",
+              "node": "emu|vga|LessThan19~15|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3,
+              "location": "LABCELL_X60_Y24_N33",
+              "node": "emu|vga|v_cnt~17|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N0",
+              "node": "emu|Add17~65|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N3",
+              "node": "emu|Add17~61|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N6",
+              "node": "emu|Add17~57|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N9",
+              "node": "emu|Add17~53|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N12",
+              "node": "emu|Add17~49|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N15",
+              "node": "emu|Add17~37|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N18",
+              "node": "emu|Add17~45|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N21",
+              "node": "emu|Add17~41|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N24",
+              "node": "emu|Add17~33|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N27",
+              "node": "emu|Add17~21|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N30",
+              "node": "emu|Add17~29|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N33",
+              "node": "emu|Add17~25|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N36",
+              "node": "emu|Add17~17|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N39",
+              "node": "emu|Add17~13|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N42",
+              "node": "emu|Add17~9|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N45",
+              "node": "emu|Add17~1|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X60_Y26_N48",
+              "node": "emu|Add17~5|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N49",
+              "node": "emu:emu|Add17~5_OTERM5723DUPLICATE"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X56_Y23_N55",
+              "node": "emu|vga|Add1~105_NEW_REG3867|q"
+            }
+          ]
+        }
+      ],
+      "root_consumers": [
+        {
+          "launch": "emu:emu|Add17~41_OTERM5705",
+          "capture": "emu:emu|PoC_px_frameskip[21]",
+          "slack_ns": 1.803,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.122,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 9.956,
+          "logic_levels": 4,
+          "cell_delay_ns": 6.197,
+          "routing_delay_ns": 3.759,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X60_Y26_N23",
+            "node": "emu|Add17~41_NEW_REG5704|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X56_Y25_N4",
+            "node": "emu:emu|PoC_px_frameskip[21]"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N23",
+              "node": "emu|Add17~41_NEW_REG5704|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "DSP_X54_Y26_N0",
+              "node": "emu|Mult0~8|resulta[8]"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3,
+              "location": "LABCELL_X53_Y26_N3",
+              "node": "emu|ShiftRight0~14|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y26_N51",
+              "node": "emu|Add16~29|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y26_N54",
+              "node": "emu|Add16~25|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y26_N57",
+              "node": "emu|Add16~21|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N0",
+              "node": "emu|Add16~61|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N3",
+              "node": "emu|Add16~65|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N6",
+              "node": "emu|Add16~69|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N9",
+              "node": "emu|Add16~73|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N12",
+              "node": "emu|Add16~85|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N15",
+              "node": "emu|Add16~81|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N18",
+              "node": "emu|Add16~77|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N21",
+              "node": "emu|Add16~93|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N24",
+              "node": "emu|Add16~89|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N27",
+              "node": "emu|Add16~5|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N30",
+              "node": "emu|Add16~9|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N33",
+              "node": "emu|Add16~17|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y25_N3",
+              "node": "emu|PoC_px_frameskip[21]_NEW6196|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X56_Y25_N4",
+              "node": "emu:emu|PoC_px_frameskip[21]"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N23",
+              "node": "emu|Add17~41_NEW_REG5704|q"
+            }
+          ]
+        },
+        {
+          "launch": "emu:emu|Add17~41_OTERM5705",
+          "capture": "emu:emu|PoC_px_frameskip[22]",
+          "slack_ns": 1.868,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.117,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 9.896,
+          "logic_levels": 4,
+          "cell_delay_ns": 6.403,
+          "routing_delay_ns": 3.493,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X60_Y26_N23",
+            "node": "emu|Add17~41_NEW_REG5704|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X56_Y25_N31",
+            "node": "emu:emu|PoC_px_frameskip[22]"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N23",
+              "node": "emu|Add17~41_NEW_REG5704|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "DSP_X54_Y26_N0",
+              "node": "emu|Mult0~8|resulta[8]"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3,
+              "location": "LABCELL_X53_Y26_N3",
+              "node": "emu|ShiftRight0~14|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y26_N51",
+              "node": "emu|Add16~29|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y26_N54",
+              "node": "emu|Add16~25|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y26_N57",
+              "node": "emu|Add16~21|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N0",
+              "node": "emu|Add16~61|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N3",
+              "node": "emu|Add16~65|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N6",
+              "node": "emu|Add16~69|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N9",
+              "node": "emu|Add16~73|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N12",
+              "node": "emu|Add16~85|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N15",
+              "node": "emu|Add16~81|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N18",
+              "node": "emu|Add16~77|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N21",
+              "node": "emu|Add16~93|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N24",
+              "node": "emu|Add16~89|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N27",
+              "node": "emu|Add16~5|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N30",
+              "node": "emu|Add16~9|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N33",
+              "node": "emu|Add16~17|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N36",
+              "node": "emu|Add16~13|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y25_N30",
+              "node": "emu|PoC_px_frameskip[22]_NEW6198|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X56_Y25_N31",
+              "node": "emu:emu|PoC_px_frameskip[22]"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N23",
+              "node": "emu|Add17~41_NEW_REG5704|q"
+            }
+          ]
+        }
+      ],
+      "lz4_window_capture": [
+        {
+          "launch": "emu:emu|lz4:lz4|block_read_total[10]",
+          "capture": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5",
+          "slack_ns": 0.618,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.164,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.099,
+          "logic_levels": 8,
+          "cell_delay_ns": 3.063,
+          "routing_delay_ns": 8.039,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 11,
+            "location": "FF_X37_Y62_N2",
+            "node": "emu|lz4|block_read_total[10]|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 0,
+            "location": "M10K_X26_Y67_N0",
+            "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 11,
+              "location": "FF_X37_Y62_N2",
+              "node": "emu|lz4|block_read_total[10]|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X40_Y61_N3",
+              "node": "emu|lz4|LessThan10~6|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X40_Y61_N12",
+              "node": "emu|lz4|LessThan10~7|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X35_Y61_N30",
+              "node": "emu|lz4|LessThan10~25_RESYN8511|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 43,
+              "location": "MLABCELL_X34_Y65_N36",
+              "node": "emu|lz4|LessThan10~25|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 9,
+              "location": "LABCELL_X40_Y65_N30",
+              "node": "emu|lz4|window_write_value[27]~189|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 13,
+              "location": "LABCELL_X40_Y72_N57",
+              "node": "emu|lz4|window_write_value[39]~221|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X42_Y67_N42",
+              "node": "emu|lz4|window_write_value[44]~272_RESYN7765|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 17,
+              "location": "LABCELL_X42_Y67_N30",
+              "node": "emu|lz4|window_write_value[44]~272|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 0,
+              "location": "M10K_X26_Y67_N0",
+              "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5"
+            }
+          ],
+          "generated_register_ports": []
+        },
+        {
+          "launch": "emu:emu|lz4:lz4|block_read_total[10]",
+          "capture": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg6",
+          "slack_ns": 0.624,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.162,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.095,
+          "logic_levels": 8,
+          "cell_delay_ns": 3.061,
+          "routing_delay_ns": 8.036,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 11,
+            "location": "FF_X37_Y62_N2",
+            "node": "emu|lz4|block_read_total[10]|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 0,
+            "location": "M10K_X26_Y67_N0",
+            "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg6"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 11,
+              "location": "FF_X37_Y62_N2",
+              "node": "emu|lz4|block_read_total[10]|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X40_Y61_N3",
+              "node": "emu|lz4|LessThan10~6|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X40_Y61_N12",
+              "node": "emu|lz4|LessThan10~7|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X35_Y61_N30",
+              "node": "emu|lz4|LessThan10~25_RESYN8511|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 43,
+              "location": "MLABCELL_X34_Y65_N36",
+              "node": "emu|lz4|LessThan10~25|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 9,
+              "location": "LABCELL_X40_Y65_N30",
+              "node": "emu|lz4|window_write_value[27]~189|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 13,
+              "location": "LABCELL_X40_Y72_N57",
+              "node": "emu|lz4|window_write_value[39]~221|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X42_Y67_N42",
+              "node": "emu|lz4|window_write_value[44]~272_RESYN7765|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 17,
+              "location": "LABCELL_X42_Y67_N30",
+              "node": "emu|lz4|window_write_value[44]~272|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 0,
+              "location": "M10K_X26_Y67_N0",
+              "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg6"
+            }
+          ],
+          "generated_register_ports": []
+        }
+      ],
+      "lz4_window_counter": [
+        {
+          "launch": "emu:emu|lz4:lz4|block_read_total[10]",
+          "capture": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5",
+          "slack_ns": 0.618,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.164,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.099,
+          "logic_levels": 8,
+          "cell_delay_ns": 3.063,
+          "routing_delay_ns": 8.039,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 11,
+            "location": "FF_X37_Y62_N2",
+            "node": "emu|lz4|block_read_total[10]|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 0,
+            "location": "M10K_X26_Y67_N0",
+            "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 11,
+              "location": "FF_X37_Y62_N2",
+              "node": "emu|lz4|block_read_total[10]|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X40_Y61_N3",
+              "node": "emu|lz4|LessThan10~6|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X40_Y61_N12",
+              "node": "emu|lz4|LessThan10~7|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X35_Y61_N30",
+              "node": "emu|lz4|LessThan10~25_RESYN8511|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 43,
+              "location": "MLABCELL_X34_Y65_N36",
+              "node": "emu|lz4|LessThan10~25|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 9,
+              "location": "LABCELL_X40_Y65_N30",
+              "node": "emu|lz4|window_write_value[27]~189|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 13,
+              "location": "LABCELL_X40_Y72_N57",
+              "node": "emu|lz4|window_write_value[39]~221|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X42_Y67_N42",
+              "node": "emu|lz4|window_write_value[44]~272_RESYN7765|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 17,
+              "location": "LABCELL_X42_Y67_N30",
+              "node": "emu|lz4|window_write_value[44]~272|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 0,
+              "location": "M10K_X26_Y67_N0",
+              "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5"
+            }
+          ],
+          "generated_register_ports": []
+        },
+        {
+          "launch": "emu:emu|lz4:lz4|block_read_total[10]",
+          "capture": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg6",
+          "slack_ns": 0.624,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.162,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.095,
+          "logic_levels": 8,
+          "cell_delay_ns": 3.061,
+          "routing_delay_ns": 8.036,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 11,
+            "location": "FF_X37_Y62_N2",
+            "node": "emu|lz4|block_read_total[10]|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 0,
+            "location": "M10K_X26_Y67_N0",
+            "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg6"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 11,
+              "location": "FF_X37_Y62_N2",
+              "node": "emu|lz4|block_read_total[10]|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X40_Y61_N3",
+              "node": "emu|lz4|LessThan10~6|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X40_Y61_N12",
+              "node": "emu|lz4|LessThan10~7|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X35_Y61_N30",
+              "node": "emu|lz4|LessThan10~25_RESYN8511|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 43,
+              "location": "MLABCELL_X34_Y65_N36",
+              "node": "emu|lz4|LessThan10~25|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 9,
+              "location": "LABCELL_X40_Y65_N30",
+              "node": "emu|lz4|window_write_value[27]~189|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 13,
+              "location": "LABCELL_X40_Y72_N57",
+              "node": "emu|lz4|window_write_value[39]~221|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X42_Y67_N42",
+              "node": "emu|lz4|window_write_value[44]~272_RESYN7765|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 17,
+              "location": "LABCELL_X42_Y67_N30",
+              "node": "emu|lz4|window_write_value[44]~272|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 0,
+              "location": "M10K_X26_Y67_N0",
+              "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg6"
+            }
+          ],
+          "generated_register_ports": []
+        }
+      ],
+      "crt_hb": [
+        {
+          "launch": "emu:emu|vga:vga|hb",
+          "capture": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[2]_OTERM377",
+          "slack_ns": -0.077,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.475,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.483,
+          "logic_levels": 6,
+          "cell_delay_ns": 2.59,
+          "routing_delay_ns": 8.892,
+          "family": "crt-read",
+          "source_mapping": "Confirmed read-address/MLAB/output cone. Generated register aliases and RAM output packing remain physical artifacts.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 34,
+            "location": "FF_X36_Y22_N59",
+            "node": "emu|vga|hb|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X53_Y36_N17",
+            "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[2]_OTERM377"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 34,
+              "location": "FF_X36_Y22_N59",
+              "node": "emu|vga|hb|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 345,
+              "location": "LABCELL_X36_Y22_N42",
+              "node": "emu|u_vsize|line_begin~0_Duplicate|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 15406,
+              "location": "LABCELL_X37_Y22_N18",
+              "node": "emu|u_vsize|wa[3]~3|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3840,
+              "location": "LABCELL_X37_Y35_N24",
+              "node": "emu|u_vsize|crt_read_1_even_bit3|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "MLABCELL_X15_Y39_N33",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|lutrama3802|portbdataout[0]"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X53_Y36_N30",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w2_n5_mux_dataout~3|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X53_Y36_N15",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w2_n5_mux_dataout~4|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X53_Y36_N17",
+              "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[2]_OTERM377"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "IC",
+              "fanout": 1,
+              "location": "FF_X53_Y36_N17",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|dataout_reg[2]_NEW_REG376|d"
+            }
+          ]
+        },
+        {
+          "launch": "emu:emu|vga:vga|hb",
+          "capture": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[38]_OTERM251",
+          "slack_ns": 0.042,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.484,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.355,
+          "logic_levels": 6,
+          "cell_delay_ns": 2.779,
+          "routing_delay_ns": 8.578,
+          "family": "crt-read",
+          "source_mapping": "Confirmed read-address/MLAB/output cone. Generated register aliases and RAM output packing remain physical artifacts.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 34,
+            "location": "FF_X36_Y22_N59",
+            "node": "emu|vga|hb|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X23_Y36_N55",
+            "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[38]_OTERM251"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 34,
+              "location": "FF_X36_Y22_N59",
+              "node": "emu|vga|hb|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 345,
+              "location": "LABCELL_X36_Y22_N42",
+              "node": "emu|u_vsize|line_begin~0_Duplicate|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 15406,
+              "location": "LABCELL_X37_Y22_N18",
+              "node": "emu|u_vsize|wa[3]~3|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3840,
+              "location": "LABCELL_X37_Y35_N24",
+              "node": "emu|u_vsize|crt_read_1_even_bit3|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "MLABCELL_X3_Y41_N3",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|lutrama3518|portbdataout[0]"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X9_Y39_N27",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w38_n5_mux_dataout~1|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X23_Y36_N54",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w38_n5_mux_dataout~4|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X23_Y36_N55",
+              "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[38]_OTERM251"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "IC",
+              "fanout": 1,
+              "location": "FF_X23_Y36_N55",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|dataout_reg[38]_NEW_REG250|d"
+            }
+          ]
+        }
+      ],
+      "crt_advance": [
+        {
+          "launch": "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[0]~57_OTERM4232",
+          "capture": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w5_n0_mux_dataout~20_OTERM5641",
+          "slack_ns": -0.017,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.434,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.464,
+          "logic_levels": 7,
+          "cell_delay_ns": 2.827,
+          "routing_delay_ns": 8.637,
+          "family": "crt-read",
+          "source_mapping": "Confirmed read-address/MLAB/output cone. Generated register aliases and RAM output packing remain physical artifacts.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 4,
+            "location": "FF_X36_Y19_N1",
+            "node": "emu|u_vsize|advance_rows[0]~57_NEW_REG4231|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X30_Y50_N26",
+            "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w5_n0_mux_dataout~20_OTERM5641"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 4,
+              "location": "FF_X36_Y19_N1",
+              "node": "emu|u_vsize|advance_rows[0]~57_NEW_REG4231|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X35_Y20_N42",
+              "node": "emu|u_vsize|next_aslot[0]~5|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 9,
+              "location": "LABCELL_X35_Y19_N54",
+              "node": "emu|u_vsize|next_aslot[0]~6|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3,
+              "location": "LABCELL_X35_Y20_N21",
+              "node": "emu|u_vsize|next_aslot[3]~18|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1302,
+              "location": "LABCELL_X35_Y22_N57",
+              "node": "emu|u_vsize|packed_ram[1].local_ra_even[10]~2|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X29_Y57_N0",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w5_n0_mux_dataout~3|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X30_Y50_N42",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w5_n0_mux_dataout~4|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X30_Y50_N24",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w5_n0_mux_dataout~20|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X30_Y50_N26",
+              "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w5_n0_mux_dataout~20_OTERM5641"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "CELL",
+              "fanout": 4,
+              "location": "FF_X36_Y19_N1",
+              "node": "emu|u_vsize|advance_rows[0]~57_NEW_REG4231|q"
+            },
+            {
+              "type": "IC",
+              "fanout": 1,
+              "location": "FF_X30_Y50_N26",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w5_n0_mux_dataout~20_NEW_REG5640|d"
+            }
+          ]
+        },
+        {
+          "launch": "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[0]~57_OTERM4232",
+          "capture": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w14_n0_mux_dataout~20_OTERM5627",
+          "slack_ns": 0.085,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.427,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.369,
+          "logic_levels": 7,
+          "cell_delay_ns": 3.099,
+          "routing_delay_ns": 8.27,
+          "family": "crt-read",
+          "source_mapping": "Confirmed read-address/MLAB/output cone. Generated register aliases and RAM output packing remain physical artifacts.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 4,
+            "location": "FF_X36_Y19_N1",
+            "node": "emu|u_vsize|advance_rows[0]~57_NEW_REG4231|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X30_Y54_N43",
+            "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w14_n0_mux_dataout~20_OTERM5627"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 4,
+              "location": "FF_X36_Y19_N1",
+              "node": "emu|u_vsize|advance_rows[0]~57_NEW_REG4231|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X35_Y20_N42",
+              "node": "emu|u_vsize|next_aslot[0]~5|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 9,
+              "location": "LABCELL_X35_Y19_N54",
+              "node": "emu|u_vsize|next_aslot[0]~6|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3,
+              "location": "LABCELL_X35_Y20_N21",
+              "node": "emu|u_vsize|next_aslot[3]~18|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1302,
+              "location": "LABCELL_X35_Y22_N57",
+              "node": "emu|u_vsize|packed_ram[1].local_ra_even[10]~2|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X31_Y57_N57",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w14_n0_mux_dataout~0|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X30_Y54_N54",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w14_n0_mux_dataout~4|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X30_Y54_N42",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w14_n0_mux_dataout~20|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X30_Y54_N43",
+              "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w14_n0_mux_dataout~20_OTERM5627"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "CELL",
+              "fanout": 4,
+              "location": "FF_X36_Y19_N1",
+              "node": "emu|u_vsize|advance_rows[0]~57_NEW_REG4231|q"
+            },
+            {
+              "type": "IC",
+              "fanout": 1,
+              "location": "FF_X30_Y54_N43",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w14_n0_mux_dataout~20_NEW_REG5626|d"
+            }
+          ]
+        }
+      ]
+    },
+    "corner_02": {
+      "vga_root": [
+        {
+          "launch": "emu:emu|vga:vga|Add1~105_OTERM3868",
+          "capture": "emu:emu|Add17~5_OTERM5723",
+          "slack_ns": -0.097,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.11,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.868,
+          "logic_levels": 7,
+          "cell_delay_ns": 7.719,
+          "routing_delay_ns": 4.148,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X56_Y23_N55",
+            "node": "emu|vga|Add1~105_NEW_REG3867|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X60_Y26_N50",
+            "node": "emu:emu|Add17~5_OTERM5723"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X56_Y23_N55",
+              "node": "emu|vga|Add1~105_NEW_REG3867|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y22_N12",
+              "node": "emu|vga|Add1~41|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y22_N15",
+              "node": "emu|vga|Add1~53|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X55_Y22_N18",
+              "node": "emu|vga|Add1~49|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y22_N18",
+              "node": "emu|vga|Add0~49|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y22_N21",
+              "node": "emu|vga|Add0~25|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y22_N24",
+              "node": "emu|vga|Add0~61|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X57_Y22_N24",
+              "node": "emu|vga|Add54~65|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X57_Y22_N27",
+              "node": "emu|vga|Add54~61|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X57_Y22_N30",
+              "node": "emu|vga|Add54~25|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y22_N27",
+              "node": "emu|vga|LessThan19~14|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 17,
+              "location": "LABCELL_X61_Y22_N30",
+              "node": "emu|vga|LessThan19~15|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3,
+              "location": "LABCELL_X61_Y24_N54",
+              "node": "emu|vga|v_cnt[12]_NEW1474|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N36",
+              "node": "emu|Add17~17|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N39",
+              "node": "emu|Add17~13|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N42",
+              "node": "emu|Add17~9|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N45",
+              "node": "emu|Add17~1|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X60_Y26_N48",
+              "node": "emu|Add17~5|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N50",
+              "node": "emu:emu|Add17~5_OTERM5723"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X56_Y23_N55",
+              "node": "emu|vga|Add1~105_NEW_REG3867|q"
+            },
+            {
+              "type": "IC",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N50",
+              "node": "emu|Add17~5_NEW_REG5722|d"
+            }
+          ]
+        },
+        {
+          "launch": "emu:emu|vga:vga|Add1~105_OTERM3868",
+          "capture": "emu:emu|Add17~5_OTERM5723DUPLICATE",
+          "slack_ns": -0.089,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.103,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.867,
+          "logic_levels": 7,
+          "cell_delay_ns": 7.718,
+          "routing_delay_ns": 4.148,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X56_Y23_N55",
+            "node": "emu|vga|Add1~105_NEW_REG3867|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X60_Y26_N49",
+            "node": "emu:emu|Add17~5_OTERM5723DUPLICATE"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X56_Y23_N55",
+              "node": "emu|vga|Add1~105_NEW_REG3867|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y22_N12",
+              "node": "emu|vga|Add1~41|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y22_N15",
+              "node": "emu|vga|Add1~53|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X55_Y22_N18",
+              "node": "emu|vga|Add1~49|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y22_N18",
+              "node": "emu|vga|Add0~49|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y22_N21",
+              "node": "emu|vga|Add0~25|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y22_N24",
+              "node": "emu|vga|Add0~61|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X57_Y22_N24",
+              "node": "emu|vga|Add54~65|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X57_Y22_N27",
+              "node": "emu|vga|Add54~61|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X57_Y22_N30",
+              "node": "emu|vga|Add54~25|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y22_N27",
+              "node": "emu|vga|LessThan19~14|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 17,
+              "location": "LABCELL_X61_Y22_N30",
+              "node": "emu|vga|LessThan19~15|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3,
+              "location": "LABCELL_X61_Y24_N54",
+              "node": "emu|vga|v_cnt[12]_NEW1474|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N36",
+              "node": "emu|Add17~17|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N39",
+              "node": "emu|Add17~13|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N42",
+              "node": "emu|Add17~9|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X60_Y26_N45",
+              "node": "emu|Add17~1|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X60_Y26_N48",
+              "node": "emu|Add17~5|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N49",
+              "node": "emu:emu|Add17~5_OTERM5723DUPLICATE"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X56_Y23_N55",
+              "node": "emu|vga|Add1~105_NEW_REG3867|q"
+            }
+          ]
+        }
+      ],
+      "root_consumers": [
+        {
+          "launch": "emu:emu|Add17~41_OTERM5705",
+          "capture": "emu:emu|PoC_px_frameskip[22]",
+          "slack_ns": 1.496,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.111,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 10.274,
+          "logic_levels": 4,
+          "cell_delay_ns": 6.954,
+          "routing_delay_ns": 3.32,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X60_Y26_N23",
+            "node": "emu|Add17~41_NEW_REG5704|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X56_Y25_N31",
+            "node": "emu:emu|PoC_px_frameskip[22]"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N23",
+              "node": "emu|Add17~41_NEW_REG5704|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "DSP_X54_Y26_N0",
+              "node": "emu|Mult0~8|resulta[8]"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3,
+              "location": "LABCELL_X53_Y26_N3",
+              "node": "emu|ShiftRight0~14|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y26_N51",
+              "node": "emu|Add16~29|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y26_N54",
+              "node": "emu|Add16~25|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y26_N57",
+              "node": "emu|Add16~21|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N0",
+              "node": "emu|Add16~61|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N3",
+              "node": "emu|Add16~65|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N6",
+              "node": "emu|Add16~69|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N9",
+              "node": "emu|Add16~73|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N12",
+              "node": "emu|Add16~85|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N15",
+              "node": "emu|Add16~81|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N18",
+              "node": "emu|Add16~77|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N21",
+              "node": "emu|Add16~93|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N24",
+              "node": "emu|Add16~89|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N27",
+              "node": "emu|Add16~5|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N30",
+              "node": "emu|Add16~9|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N33",
+              "node": "emu|Add16~17|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N36",
+              "node": "emu|Add16~13|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y25_N30",
+              "node": "emu|PoC_px_frameskip[22]_NEW6198|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X56_Y25_N31",
+              "node": "emu:emu|PoC_px_frameskip[22]"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N23",
+              "node": "emu|Add17~41_NEW_REG5704|q"
+            }
+          ]
+        },
+        {
+          "launch": "emu:emu|Add17~41_OTERM5705",
+          "capture": "emu:emu|PoC_px_frameskip[21]",
+          "slack_ns": 1.548,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.118,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 10.215,
+          "logic_levels": 4,
+          "cell_delay_ns": 6.667,
+          "routing_delay_ns": 3.549,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X60_Y26_N23",
+            "node": "emu|Add17~41_NEW_REG5704|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X56_Y25_N4",
+            "node": "emu:emu|PoC_px_frameskip[21]"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N23",
+              "node": "emu|Add17~41_NEW_REG5704|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "DSP_X54_Y26_N0",
+              "node": "emu|Mult0~8|resulta[8]"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3,
+              "location": "LABCELL_X53_Y26_N3",
+              "node": "emu|ShiftRight0~14|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y26_N51",
+              "node": "emu|Add16~29|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y26_N54",
+              "node": "emu|Add16~25|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y26_N57",
+              "node": "emu|Add16~21|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N0",
+              "node": "emu|Add16~61|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N3",
+              "node": "emu|Add16~65|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N6",
+              "node": "emu|Add16~69|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N9",
+              "node": "emu|Add16~73|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N12",
+              "node": "emu|Add16~85|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N15",
+              "node": "emu|Add16~81|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N18",
+              "node": "emu|Add16~77|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N21",
+              "node": "emu|Add16~93|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N24",
+              "node": "emu|Add16~89|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N27",
+              "node": "emu|Add16~5|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N30",
+              "node": "emu|Add16~9|cout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X55_Y25_N33",
+              "node": "emu|Add16~17|sumout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X56_Y25_N3",
+              "node": "emu|PoC_px_frameskip[21]_NEW6196|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X56_Y25_N4",
+              "node": "emu:emu|PoC_px_frameskip[21]"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X60_Y26_N23",
+              "node": "emu|Add17~41_NEW_REG5704|q"
+            }
+          ]
+        }
+      ],
+      "lz4_window_capture": [
+        {
+          "launch": "emu:emu|lz4:lz4|block_write_total[22]",
+          "capture": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5",
+          "slack_ns": 0.928,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.135,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 10.818,
+          "logic_levels": 8,
+          "cell_delay_ns": 4.053,
+          "routing_delay_ns": 6.765,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 11,
+            "location": "FF_X40_Y60_N29",
+            "node": "emu|lz4|block_write_total[22]|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 0,
+            "location": "M10K_X26_Y67_N0",
+            "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 11,
+              "location": "FF_X40_Y60_N29",
+              "node": "emu|lz4|block_write_total[22]|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X35_Y61_N36",
+              "node": "emu|lz4|LessThan10~16|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 4,
+              "location": "LABCELL_X35_Y61_N24",
+              "node": "emu|lz4|LessThan10~18|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X35_Y61_N30",
+              "node": "emu|lz4|LessThan10~25_RESYN8511|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 43,
+              "location": "MLABCELL_X34_Y65_N36",
+              "node": "emu|lz4|LessThan10~25|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 9,
+              "location": "LABCELL_X40_Y65_N30",
+              "node": "emu|lz4|window_write_value[27]~189|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 13,
+              "location": "LABCELL_X40_Y72_N57",
+              "node": "emu|lz4|window_write_value[39]~221|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X42_Y67_N42",
+              "node": "emu|lz4|window_write_value[44]~272_RESYN7765|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 17,
+              "location": "LABCELL_X42_Y67_N30",
+              "node": "emu|lz4|window_write_value[44]~272|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 0,
+              "location": "M10K_X26_Y67_N0",
+              "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5"
+            }
+          ],
+          "generated_register_ports": []
+        },
+        {
+          "launch": "emu:emu|lz4:lz4|block_write_total[22]",
+          "capture": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg12",
+          "slack_ns": 0.934,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.129,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 10.818,
+          "logic_levels": 8,
+          "cell_delay_ns": 4.052,
+          "routing_delay_ns": 6.765,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 11,
+            "location": "FF_X40_Y60_N29",
+            "node": "emu|lz4|block_write_total[22]|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 0,
+            "location": "M10K_X26_Y67_N0",
+            "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg12"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 11,
+              "location": "FF_X40_Y60_N29",
+              "node": "emu|lz4|block_write_total[22]|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X35_Y61_N36",
+              "node": "emu|lz4|LessThan10~16|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 4,
+              "location": "LABCELL_X35_Y61_N24",
+              "node": "emu|lz4|LessThan10~18|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X35_Y61_N30",
+              "node": "emu|lz4|LessThan10~25_RESYN8511|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 43,
+              "location": "MLABCELL_X34_Y65_N36",
+              "node": "emu|lz4|LessThan10~25|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 9,
+              "location": "LABCELL_X40_Y65_N30",
+              "node": "emu|lz4|window_write_value[27]~189|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 13,
+              "location": "LABCELL_X40_Y72_N57",
+              "node": "emu|lz4|window_write_value[39]~221|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X42_Y67_N42",
+              "node": "emu|lz4|window_write_value[44]~272_RESYN7765|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 17,
+              "location": "LABCELL_X42_Y67_N30",
+              "node": "emu|lz4|window_write_value[44]~272|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 0,
+              "location": "M10K_X26_Y67_N0",
+              "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg12"
+            }
+          ],
+          "generated_register_ports": []
+        }
+      ],
+      "lz4_window_counter": [
+        {
+          "launch": "emu:emu|lz4:lz4|block_write_total[22]",
+          "capture": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5",
+          "slack_ns": 0.928,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.135,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 10.818,
+          "logic_levels": 8,
+          "cell_delay_ns": 4.053,
+          "routing_delay_ns": 6.765,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 11,
+            "location": "FF_X40_Y60_N29",
+            "node": "emu|lz4|block_write_total[22]|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 0,
+            "location": "M10K_X26_Y67_N0",
+            "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 11,
+              "location": "FF_X40_Y60_N29",
+              "node": "emu|lz4|block_write_total[22]|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X35_Y61_N36",
+              "node": "emu|lz4|LessThan10~16|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 4,
+              "location": "LABCELL_X35_Y61_N24",
+              "node": "emu|lz4|LessThan10~18|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X35_Y61_N30",
+              "node": "emu|lz4|LessThan10~25_RESYN8511|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 43,
+              "location": "MLABCELL_X34_Y65_N36",
+              "node": "emu|lz4|LessThan10~25|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 9,
+              "location": "LABCELL_X40_Y65_N30",
+              "node": "emu|lz4|window_write_value[27]~189|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 13,
+              "location": "LABCELL_X40_Y72_N57",
+              "node": "emu|lz4|window_write_value[39]~221|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X42_Y67_N42",
+              "node": "emu|lz4|window_write_value[44]~272_RESYN7765|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 17,
+              "location": "LABCELL_X42_Y67_N30",
+              "node": "emu|lz4|window_write_value[44]~272|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 0,
+              "location": "M10K_X26_Y67_N0",
+              "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5"
+            }
+          ],
+          "generated_register_ports": []
+        },
+        {
+          "launch": "emu:emu|lz4:lz4|block_write_total[22]",
+          "capture": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg12",
+          "slack_ns": 0.934,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.129,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 10.818,
+          "logic_levels": 8,
+          "cell_delay_ns": 4.052,
+          "routing_delay_ns": 6.765,
+          "family": "row-retimed",
+          "source_mapping": "Partial: delay_lines comparison/output qualification feeds position mux/Add1 carry then retimed advance_rows/Add2 capture, not a literal advance_rows RTL register.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 11,
+            "location": "FF_X40_Y60_N29",
+            "node": "emu|lz4|block_write_total[22]|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 0,
+            "location": "M10K_X26_Y67_N0",
+            "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg12"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 11,
+              "location": "FF_X40_Y60_N29",
+              "node": "emu|lz4|block_write_total[22]|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X35_Y61_N36",
+              "node": "emu|lz4|LessThan10~16|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 4,
+              "location": "LABCELL_X35_Y61_N24",
+              "node": "emu|lz4|LessThan10~18|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X35_Y61_N30",
+              "node": "emu|lz4|LessThan10~25_RESYN8511|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 43,
+              "location": "MLABCELL_X34_Y65_N36",
+              "node": "emu|lz4|LessThan10~25|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 9,
+              "location": "LABCELL_X40_Y65_N30",
+              "node": "emu|lz4|window_write_value[27]~189|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 13,
+              "location": "LABCELL_X40_Y72_N57",
+              "node": "emu|lz4|window_write_value[39]~221|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X42_Y67_N42",
+              "node": "emu|lz4|window_write_value[44]~272_RESYN7765|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 17,
+              "location": "LABCELL_X42_Y67_N30",
+              "node": "emu|lz4|window_write_value[44]~272|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 0,
+              "location": "M10K_X26_Y67_N0",
+              "node": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg12"
+            }
+          ],
+          "generated_register_ports": []
+        }
+      ],
+      "crt_hb": [
+        {
+          "launch": "emu:emu|vga:vga|hb",
+          "capture": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w14_n0_mux_dataout~20_OTERM5627",
+          "slack_ns": 0.12,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.429,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.332,
+          "logic_levels": 7,
+          "cell_delay_ns": 4.154,
+          "routing_delay_ns": 7.179,
+          "family": "crt-read",
+          "source_mapping": "Confirmed read-address/MLAB/output cone. Generated register aliases and RAM output packing remain physical artifacts.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 34,
+            "location": "FF_X36_Y22_N59",
+            "node": "emu|vga|hb|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X30_Y54_N43",
+            "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w14_n0_mux_dataout~20_OTERM5627"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 34,
+              "location": "FF_X36_Y22_N59",
+              "node": "emu|vga|hb|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 345,
+              "location": "LABCELL_X36_Y22_N42",
+              "node": "emu|u_vsize|line_begin~0_Duplicate|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 15406,
+              "location": "LABCELL_X36_Y22_N51",
+              "node": "emu|u_vsize|wa[1]~1|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3840,
+              "location": "LABCELL_X35_Y26_N45",
+              "node": "emu|u_vsize|crt_read_1_even_bit1|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "MLABCELL_X39_Y58_N21",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|lutrama1294|portbdataout[0]"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X31_Y57_N57",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w14_n0_mux_dataout~0|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X30_Y54_N54",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w14_n0_mux_dataout~4|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X30_Y54_N42",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w14_n0_mux_dataout~20|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X30_Y54_N43",
+              "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w14_n0_mux_dataout~20_OTERM5627"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "IC",
+              "fanout": 1,
+              "location": "FF_X30_Y54_N43",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w14_n0_mux_dataout~20_NEW_REG5626|d"
+            }
+          ]
+        },
+        {
+          "launch": "emu:emu|vga:vga|hb",
+          "capture": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[2]_OTERM377",
+          "slack_ns": 0.152,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.466,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.263,
+          "logic_levels": 6,
+          "cell_delay_ns": 2.898,
+          "routing_delay_ns": 8.363,
+          "family": "crt-read",
+          "source_mapping": "Confirmed read-address/MLAB/output cone. Generated register aliases and RAM output packing remain physical artifacts.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 34,
+            "location": "FF_X36_Y22_N59",
+            "node": "emu|vga|hb|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X53_Y36_N17",
+            "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[2]_OTERM377"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 34,
+              "location": "FF_X36_Y22_N59",
+              "node": "emu|vga|hb|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 345,
+              "location": "LABCELL_X36_Y22_N42",
+              "node": "emu|u_vsize|line_begin~0_Duplicate|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 15406,
+              "location": "LABCELL_X37_Y22_N18",
+              "node": "emu|u_vsize|wa[3]~3|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3840,
+              "location": "LABCELL_X37_Y35_N24",
+              "node": "emu|u_vsize|crt_read_1_even_bit3|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "MLABCELL_X15_Y39_N33",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|lutrama3802|portbdataout[0]"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X53_Y36_N30",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w2_n5_mux_dataout~3|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X53_Y36_N15",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l4_w2_n5_mux_dataout~4|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X53_Y36_N17",
+              "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[2]_OTERM377"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "IC",
+              "fanout": 1,
+              "location": "FF_X53_Y36_N17",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|dataout_reg[2]_NEW_REG376|d"
+            }
+          ]
+        }
+      ],
+      "crt_advance": [
+        {
+          "launch": "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[0]~57_OTERM4232",
+          "capture": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w5_n0_mux_dataout~20_OTERM5641",
+          "slack_ns": 0.152,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.43,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.299,
+          "logic_levels": 7,
+          "cell_delay_ns": 3.222,
+          "routing_delay_ns": 8.083,
+          "family": "crt-read",
+          "source_mapping": "Confirmed read-address/MLAB/output cone. Generated register aliases and RAM output packing remain physical artifacts.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 4,
+            "location": "FF_X36_Y19_N1",
+            "node": "emu|u_vsize|advance_rows[0]~57_NEW_REG4231|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X30_Y50_N26",
+            "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w5_n0_mux_dataout~20_OTERM5641"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 4,
+              "location": "FF_X36_Y19_N1",
+              "node": "emu|u_vsize|advance_rows[0]~57_NEW_REG4231|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X35_Y20_N42",
+              "node": "emu|u_vsize|next_aslot[0]~5|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 9,
+              "location": "LABCELL_X35_Y19_N54",
+              "node": "emu|u_vsize|next_aslot[0]~6|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3,
+              "location": "LABCELL_X35_Y20_N21",
+              "node": "emu|u_vsize|next_aslot[3]~18|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1302,
+              "location": "LABCELL_X35_Y22_N57",
+              "node": "emu|u_vsize|packed_ram[1].local_ra_even[10]~2|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X29_Y57_N0",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w5_n0_mux_dataout~3|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X30_Y50_N42",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w5_n0_mux_dataout~4|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X30_Y50_N24",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w5_n0_mux_dataout~20|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X30_Y50_N26",
+              "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w5_n0_mux_dataout~20_OTERM5641"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "CELL",
+              "fanout": 4,
+              "location": "FF_X36_Y19_N1",
+              "node": "emu|u_vsize|advance_rows[0]~57_NEW_REG4231|q"
+            },
+            {
+              "type": "IC",
+              "fanout": 1,
+              "location": "FF_X30_Y50_N26",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w5_n0_mux_dataout~20_NEW_REG5640|d"
+            }
+          ]
+        },
+        {
+          "launch": "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[0]~57_OTERM4232",
+          "capture": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w9_n0_mux_dataout~20_OTERM5617",
+          "slack_ns": 0.215,
+          "launch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "latch_clock": "emu|pll|pll_inst|altera_pll_i|cyclonev_pll|counter[0].output_counter|divclk",
+          "clock_skew_ns": -0.444,
+          "setup_relationship_ns": 12.081,
+          "setup_uncertainty_ns": 0.2,
+          "data_delay_ns": 11.222,
+          "logic_levels": 7,
+          "cell_delay_ns": 3.837,
+          "routing_delay_ns": 7.387,
+          "family": "crt-read",
+          "source_mapping": "Confirmed read-address/MLAB/output cone. Generated register aliases and RAM output packing remain physical artifacts.",
+          "launch_cell": {
+            "type": "CELL",
+            "fanout": 4,
+            "location": "FF_X36_Y19_N1",
+            "node": "emu|u_vsize|advance_rows[0]~57_NEW_REG4231|q"
+          },
+          "capture_cell": {
+            "type": "CELL",
+            "fanout": 1,
+            "location": "FF_X24_Y45_N20",
+            "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w9_n0_mux_dataout~20_OTERM5617"
+          },
+          "data_cells": [
+            {
+              "type": "CELL",
+              "fanout": 4,
+              "location": "FF_X36_Y19_N1",
+              "node": "emu|u_vsize|advance_rows[0]~57_NEW_REG4231|q"
+            },
+            {
+              "type": "CELL",
+              "fanout": 2,
+              "location": "LABCELL_X35_Y20_N42",
+              "node": "emu|u_vsize|next_aslot[0]~5|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 9,
+              "location": "LABCELL_X35_Y19_N54",
+              "node": "emu|u_vsize|next_aslot[0]~6|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 3,
+              "location": "LABCELL_X35_Y20_N21",
+              "node": "emu|u_vsize|next_aslot[3]~18|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1302,
+              "location": "LABCELL_X35_Y22_N57",
+              "node": "emu|u_vsize|packed_ram[1].local_ra_even[10]~2|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X7_Y45_N48",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w9_n0_mux_dataout~10|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X7_Y45_N15",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w9_n0_mux_dataout~14|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "LABCELL_X24_Y45_N18",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w9_n0_mux_dataout~20|combout"
+            },
+            {
+              "type": "CELL",
+              "fanout": 1,
+              "location": "FF_X24_Y45_N20",
+              "node": "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|mux_4jb:rd_mux|l6_w9_n0_mux_dataout~20_OTERM5617"
+            }
+          ],
+          "generated_register_ports": [
+            {
+              "type": "CELL",
+              "fanout": 4,
+              "location": "FF_X36_Y19_N1",
+              "node": "emu|u_vsize|advance_rows[0]~57_NEW_REG4231|q"
+            },
+            {
+              "type": "IC",
+              "fanout": 1,
+              "location": "FF_X24_Y45_N20",
+              "node": "emu|u_vsize|packed_ram[1].even_ram|distributed.mem_rtl_0|auto_generated|rd_mux|l6_w9_n0_mux_dataout~20_NEW_REG5616|d"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "physical_assignment_approved": false,
+  "C1": "BLOCKED_LEGAL_SITE_AND_ASSIGNMENT_SCOPE",
+  "V2_source_scope": "Root next-line operand only; no counter or register-control change",
+  "coverage_release_qualified": false,
+  "timing_closure": false,
+  "archive_sha256": "ec067377ace04da1e7ce444b91f6dcd4639a4e8e11f9c6331f8b41f63cb29011",
+  "original_timing_reports_unchanged": {
+    "files": 324,
+    "endpoint_summary_sha256": "125d2aa82a9a273489ed002a54173fa427d6c629654c68b7ee9ad22e9c9b6223"
+  }
+}
