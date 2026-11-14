@@ -14,9 +14,30 @@ if '// Independent experiment:' in src:
  expected=old.replace('(PoC_lz4_delta_FB[PoC_lz4_delta_index])      ','(delta_read_value)')
  assert src[:a]+src[b:]==expected
 else:
- # The physical experiments keep the original selector. Exercise that actual
- # binding without applying either rejected hierarchical-selector patch.
- assert src==old,'Flat-selector test requires untouched baseline root state/decode'
+ # V1 changes only four root next-line uses; the historical decoder selector
+ # and every other Groovy.sv byte still have to match the original source.
+ target_path = root/'tests/physical/q25_targeted_experiment.json'
+ target = None
+ if target_path.is_file():
+  import hashlib,json
+  target = json.loads(target_path.read_text())
+ if target and target['experiment']=='V1':
+  assert target['rtl_path']=='Groovy.sv'
+  assert hashlib.sha256((root/'Groovy.sv').read_bytes()).hexdigest()==target['candidate_file_sha256']
+  decl="\n// V1: one widened next-line increment feeds the frame-skip comparisons and\n// pixel target. It retains values 0..65537, including 16-bit rollover.\nwire[16:0] vga_next_line = {1'b0,vga_vcount} + (PoC_interlaced ? 17'd2 : 17'd1);"
+  assert src.count(decl)==1
+  reconstructed=src.replace(decl,'')
+  for new,original in [
+      ('vga_next_line >= PoC_V', 'vga_vcount + 1 + PoC_interlaced >= PoC_V'),
+      ('vga_next_line < PoC_V', 'vga_vcount + 1 + PoC_interlaced < PoC_V'),
+      ('PoC_H * (vga_next_line)', "PoC_H * (vga_vcount + 10'd1 + PoC_interlaced)")
+  ]:
+   expected_count = 2 if new.startswith('PoC_H') else 1
+   assert reconstructed.count(new)==expected_count, (new,reconstructed.count(new))
+   reconstructed=reconstructed.replace(new,original)
+  assert reconstructed==old,'V1 root delta differs from approved next-line arithmetic'
+ else:
+  assert src==old,'Flat-selector test requires untouched baseline root state/decode'
  assert src.count('(PoC_lz4_delta_FB[PoC_lz4_delta_index])')==1
  select='wire [63:0] delta_read_value=PoC_lz4_delta_FB[PoC_lz4_delta_index];\n'
 # The approved Q25 decoder changes only the window RAM schedule. The delta
