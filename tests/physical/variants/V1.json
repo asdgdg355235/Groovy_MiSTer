@@ -1,0 +1,12 @@
+{
+  "experiment": "V1",
+  "control_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "path": "rtl/vga.v",
+  "baseline_sha256": "7a3da33eb3543d7fdd497bcfed6a1866918d9b15785fd35f450a6af9552d0502",
+  "result_sha256": "2d57aefd360d10bd8b61ecf94627f2a2c7d92064f75e6a090cf87c1a4646d0ed",
+  "patch_sha256": "0f8e7a124cd4e691bb133a89d8082c176a1a661966a967ab0f1a3accfc036d1d",
+  "mechanism": "10-bit independent blanking sum before one V-dependent 16-bit addition",
+  "proof": "tests/prove_v1_blanking.py",
+  "cycle_test": "tests/run_v1_vga_compare.py",
+  "physical_status": "PENDING_USER_QUARTUS"
+}

@@ -1,0 +1,14 @@
+--- a/rtl/vga.v
++++ b/rtl/vga.v
+@@ -106,7 +106,10 @@
+ wire[15:0] V_pulse_end;
+ 
+ assign H_pulse_start = (interlaced && field) ? (H+HFP) >> 1 : H+HFP;
+-assign V_total       = (interlaced && field) ? V+VBP+VFP+VS - 1'b1 : V+VBP+VFP+VS;
++// V1: compute independent porch arithmetic before the V-dependent carry chain.
++wire [9:0] V_blank_sum = {2'b00,VBP} + {2'b00,VFP} + {2'b00,VS};
++wire [15:0] V_total_base = V + {6'b000000,V_blank_sum};
++assign V_total       = (interlaced && field) ? V_total_base - 16'd1 : V_total_base;
+ assign V_pulse_start = (interlaced && field) ? V+VFP + 1'b1 : V+VFP;
+ assign V_pulse_end   = (interlaced && field) ? V+VFP+VS + 1'b1 : V+VFP+VS;
+ 

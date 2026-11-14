@@ -13,7 +13,9 @@ from physical.control import digest, hardware_hashes, profile_spec, write_json
 def preflight(root, profile):
     root = Path(root)
     spec = profile_spec(profile)
-    validated = hardware_hashes(root, profile)
+    provenance_path = root/'output_files/provenance.json'
+    experiment = json.loads(provenance_path.read_text()).get('experiment',{}).get('name','R0') if provenance_path.is_file() else 'R0'
+    validated = hardware_hashes(root, profile, experiment)
     qip = root / spec['pll_qip']
     q17 = root / 'sys/pll_q17.qip'
     if not qip.is_file() or not q17.is_file():

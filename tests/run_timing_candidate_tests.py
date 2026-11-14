@@ -14,6 +14,8 @@ parser.add_argument('--main', type=Path)
 args = parser.parse_args()
 commands = [
     [sys.executable, 'tests/restart/language_gate.py'],
+    [sys.executable, 'tests/prove_v1_blanking.py'],
+    [sys.executable, 'tests/run_v1_vga_compare.py'],
     [sys.executable, 'tests/restart/prove.py', 'row', 'qualify', 'address', 'vga', 'sync'],
     [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_*.py'],
     [sys.executable, 'tests/check_crt_ram_extraction.py'],

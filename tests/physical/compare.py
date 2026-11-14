@@ -156,7 +156,14 @@ def compare(control, candidate, timing_only=False, published_control=None):
             cp = json.loads((control / 'provenance.json').read_text())
             np = json.loads((candidate / 'provenance.json').read_text())
             if cp['experiment']['name'] != 'R0': invalid.append('Control is not R0')
-            if cp['hardware_hashes'] != np['hardware_hashes']: invalid.append('Hardware baseline hashes changed')
+            if cp['hardware_hashes'] != np['hardware_hashes']:
+                if np.get('experiment',{}).get('name') == 'V1':
+                    from physical.variants import variant
+                    v=variant();wanted=dict(cp['hardware_hashes'])
+                    if wanted.get(v['path'])!=v['baseline_sha256']:invalid.append('V1 control source mismatch')
+                    wanted[v['path']]=v['result_sha256']
+                    if wanted!=np['hardware_hashes'] or np.get('source_variant')!=v:invalid.append('Unapproved source variant')
+                else:invalid.append('Hardware baseline hashes changed')
             if cp.get('compiler_profile', 'q17') != np.get('compiler_profile', 'q17'):
                 invalid.append('Cross-version candidate comparison is prohibited; use --cross-version')
             if cp.get('hardware_manifest_sha256') != np.get('hardware_manifest_sha256'):

@@ -14,7 +14,12 @@ from physical.control import write_json
 def audit(output, phase):
     output = Path(output)
     recipe = output / 'physical_recipe.json'
-    if not recipe.exists(): return {'experiment': 'R0', 'target_gate_pass': True, 'mechanism_status': 'control'}
+    if not recipe.exists():
+        provenance=output/'provenance.json'
+        experiment=json.loads(provenance.read_text()).get('experiment',{}).get('name','R0') if provenance.exists() else 'R0'
+        result={'experiment':experiment,'target_gate_pass':True,'mechanism_status':'source-variant-postfit-review-required' if experiment=='V1' else 'control'}
+        write_json(output / f'application_{phase}.json', result)
+        return result
     spec = json.loads(recipe.read_text())
     matches_path = output / 'closure_diagnostics' / f'target_matches_{phase}.tsv'
     if not matches_path.exists(): raise ValueError('Missing observed assignment-target matches')

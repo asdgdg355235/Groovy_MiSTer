@@ -45,7 +45,7 @@ def exact_target(value):
 
 def validate_recipe(recipe_path, evidence_root, experiment, profile='q17'):
     recipe = json.loads(Path(recipe_path).read_text())
-    if experiment not in ('A1', 'D1') or recipe.get('format') != 'physical-overlay-v1' or recipe.get('experiment') != experiment:
+    if experiment not in ('A1', 'D1', 'C1') or recipe.get('format') != 'physical-overlay-v1' or recipe.get('experiment') != experiment:
         raise ValueError('Unknown or mismatched physical overlay')
     if recipe.get('review_status') != 'reviewed' or not recipe.get('reviewed_by') or not recipe.get('rationale'):
         raise ValueError('Physical correspondence/site review is pending')
@@ -72,7 +72,8 @@ def validate_recipe(recipe_path, evidence_root, experiment, profile='q17'):
         must_seal |= {'resource_clock_gate.json', 'q25_window_ram_gate.json',
                       'diagnostic_status.json', 'source_manifest_prepared.json',
                       'source_manifest_before_map.json', 'source_manifest_before_fit.json'}
-    if experiment == 'D1': must_seal |= {'diagnostic_status.json', 'fanout_locations.tsv', 'fanout_seeds.tsv'}
+    if experiment in ('D1', 'C1'): must_seal |= {'diagnostic_status.json', 'fanout_locations.tsv', 'fanout_seeds.tsv'}
+    if experiment == 'C1': must_seal |= {'placement_binding.tsv', 'fanout_processed_sources.tsv'}
     if not must_seal <= set(seal['files']):
         raise ValueError('Required evidence was not sealed: ' + ', '.join(sorted(must_seal - set(seal['files']))))
     if seal.get('generated_input', {}).get('sha256') != digest(expected_build_id()):
@@ -164,7 +165,7 @@ def validate_recipe(recipe_path, evidence_root, experiment, profile='q17'):
             if not graph.get('fanout_graph_complete'):
                 raise ValueError('D1 selector footprint is incomplete')
             drivers = {r['source'] for r in rows(safe_path(evidence_root, 'fanout_locations.tsv'))}
-            if fitted not in drivers:
+            if experiment == 'D1' and fitted not in drivers:
                 raise ValueError('Placement target has no complete exported load footprint')
             seeds = {r['node'] for r in rows(safe_path(evidence_root, 'fanout_seeds.tsv')) if r['family'] == 'delta'}
             adjacent = {}
@@ -174,10 +175,29 @@ def validate_recipe(recipe_path, evidence_root, experiment, profile='q17'):
             while todo:
                 for dst in adjacent.get(todo.pop(), set()):
                     if dst not in reachable: reachable.add(dst); todo.append(dst)
-            if fitted not in reachable:
+            if experiment == 'D1' and fitted not in reachable:
                 raise ValueError('D1 target is outside the observed original delta selector cone')
     if len(group_names) != 1:
         raise ValueError('Do not stack physical factors in one independent experiment')
+    if experiment == 'C1':
+        if profile != 'q25' or seal.get('source_commit') != '3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a':
+            raise ValueError('C1 requires the exact measured Q25 R0')
+        if len(assignments) != 1:raise ValueError('C1 permits exactly one placement factor')
+        target=assignments[0]['target'];fitted=mappings[0]['fitted_node']
+        if ('post_synthesis',target) not in identities:raise ValueError('C1 target does not exist at post-map assignment application')
+        if 'crt_read_1_even_bit3' not in fitted:raise ValueError('C1 requires the reviewed bank-1 even bit-3 driver')
+        support=[r for r in caps if r['name']=='LOCATION' and r['scope']=='instance' and r['available']=='1']
+        if not support or not any('25.1' in r['metadata'] and 'Lite' in r['metadata'] for r in support):
+            raise ValueError('C1 placement scope is unverified for installed Q25 Lite')
+        footprint=recipe.get('footprint_source_node','')
+        bindings=rows(safe_path(evidence_root,'placement_binding.tsv'))
+        if not any(r['fitted_node']==fitted and r['footprint_source_node']==footprint and r.get('status')=='OBSERVED' for r in bindings):
+            raise ValueError('No native placement-object/output-pin binding')
+        graph=rows(safe_path(evidence_root,'fanout_locations.tsv'))
+        loads={tuple(sorted(r.items())) for r in graph if r['source']==footprint}
+        if len(loads)!=3840:raise ValueError('Complete 3840-load CRT footprint required')
+        if not any('vga' in r['node'] and 'hb' in r['node'] for r in rows(safe_path(evidence_root,'fanout_seeds.tsv'))):
+            raise ValueError('C1 requires a fresh hb footprint')
     return recipe
 
 

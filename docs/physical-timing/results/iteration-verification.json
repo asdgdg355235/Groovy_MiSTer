@@ -1,0 +1,24 @@
+{
+  "control_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "full_regression_command": "python3 tests/run_timing_candidate_tests.py",
+  "full_regression_pass": true,
+  "unit_command": "python3 -m unittest discover -s tests -p 'test_*.py'",
+  "unit_tests": 97,
+  "unit_pass": true,
+  "unit_log_sha256": "467661c73941c51e51568fd34ac03bba5c167131b481e464fe0536844ffcc316",
+  "full_log_sha256": "d5daa198623e50fbf00d4e25d05420f00ccbf2be98f617fcb01d879d7da4a269",
+  "quartus_executed": false,
+  "timing_closure": false,
+  "c1_assignment_approved": false,
+  "vga_cycles": 180000,
+  "hs_transitions": 8299,
+  "field_transitions": 316,
+  "ce_stalls": 25714,
+  "frame_skip_first_end_line": [
+    30500,
+    6524,
+    52383
+  ],
+  "finite_width_z3": "unsat",
+  "candidate_language_and_top_elaboration": true
+}
