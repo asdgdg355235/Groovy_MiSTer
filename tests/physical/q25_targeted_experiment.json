@@ -1,0 +1,11 @@
+{
+  "format": "q25-targeted-source-v1",
+  "experiment": "V1",
+  "r0_source_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "r0_manifest_sha256": "506023cbda24aa83c97fee26bd8057e1c3dd0b12131b86fab79729ce729a5b55",
+  "rtl_path": "Groovy.sv",
+  "r0_file_sha256": "62e0e7bdf221f7060340a4a1a7a9942baf0ea3482f4469c088b01626998139ca",
+  "candidate_file_sha256": "8280a89a670dd3b5e2c87dcd89fd329b99f791c0852f542e201d7acd95841466",
+  "physical_evidence": "Groovy-Q25-R0-postmapgate-reports.tar.gz",
+  "hypothesis": "Shared exact 17-bit next-line increment instead of repeated serial carry additions; source-to-retimed-register correspondence remains unresolved."
+}

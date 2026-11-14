@@ -167,8 +167,9 @@ class CompilerProfile(unittest.TestCase):
                 env['CRT_READ_BUILD_DIR'] = str(out)
                 # Guard against an accidental tool launch: the directory does not exist.
                 env['QUARTUS_25_BIN'] = str(root/'nonexistent_vendor_bin')
+                mode = 'V1' if (linked/'tests/physical/q25_targeted_experiment.json').exists() and json.loads((linked/'tests/physical/q25_targeted_experiment.json').read_text())['experiment'] == 'V1' else 'C1' if (linked/'tests/physical/q25_targeted_experiment.json').exists() else 'R0'
                 result = subprocess.run(['bash',str(linked/'tests/run_physical_timing_quartus.sh'),
-                                         'R0','--profile','q25','--prepare-only'],
+                                         mode,'--profile','q25','--prepare-only'],
                                         cwd=linked,env=env,text=True,capture_output=True)
                 self.assertEqual(result.returncode,0,result.stdout+'\n'+result.stderr)
                 self.assertEqual((out/'build_id.v').read_bytes(),expected_build_id())

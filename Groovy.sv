@@ -822,11 +822,11 @@ always @(posedge clk_sys) begin
         PoC_state_frameskip   <= S_Blit_Auto_First;     
       end else
       if (!vblank_core) begin
-        if (vga_vcount + 1 + PoC_interlaced >= PoC_V && PoC_H > vram_queue && vram_queue + 20 < vram_pixels && vga_pixels > vram_pixels && vram_pixels > (PoC_H << 2)) begin // last line interlaced
+        if (vga_next_line >= PoC_V && PoC_H > vram_queue && vram_queue + 20 < vram_pixels && vga_pixels > vram_pixels && vram_pixels > (PoC_H << 2)) begin // last line interlaced
             cmd_fskip           <= 1'b1;     
             PoC_state_frameskip <= S_Blit_Auto_End;
         end else
-        if (vga_vcount + 1 + PoC_interlaced < PoC_V && PoC_H > vram_queue && vram_queue + 20 < vram_pixels && ((PoC_H * (vga_vcount + 10'd1 + PoC_interlaced)) >> PoC_FB_interlaced) > vram_pixels) begin // next line
+        if (vga_next_line < PoC_V && PoC_H > vram_queue && vram_queue + 20 < vram_pixels && ((PoC_H * (vga_next_line)) >> PoC_FB_interlaced) > vram_pixels) begin // next line
             cmd_fskip           <= 1'b1;                 
             PoC_state_frameskip <= S_Blit_Auto_Line;
         end 
@@ -1075,7 +1075,7 @@ always @(posedge clk_sys) begin
          begin                                                               
            if (PoC_state_frameskip == S_Blit_Auto_First) PoC_px_frameskip <= (PoC_H << PoC_interlaced) + 24'd3;
            else if (PoC_state_frameskip == S_Blit_Auto_End) PoC_px_frameskip <= vga_pixels;
-                else PoC_px_frameskip <= ((PoC_H * (vga_vcount + 10'd1 + PoC_interlaced)) >> PoC_FB_interlaced) + 24'd3;                               
+                else PoC_px_frameskip <= ((PoC_H * (vga_next_line)) >> PoC_FB_interlaced) + 24'd3;                               
            state <= PoC_state_frameskip == S_Blit_Auto_First ? S_Blit_Auto_First : S_Blit_Auto_Line;                                                                               
          end            
          
@@ -1571,6 +1571,9 @@ wire[7:0] r_core, g_core, b_core;
 wire hsync_core, vsync_core,  vblank_core, hblank_core, vga_de_core;
 wire vga_field_core;
 wire[15:0] vga_vcount;
+// V1: one widened next-line increment feeds the frame-skip comparisons and
+// pixel target. It retains values 0..65537, including 16-bit rollover.
+wire[16:0] vga_next_line = {1'b0,vga_vcount} + (PoC_interlaced ? 17'd2 : 17'd1);
 wire[23:0] vga_frame;
 
 reg[7:0] r_in = 8'h00, g_in = 8'h00, b_in = 8'h00; 

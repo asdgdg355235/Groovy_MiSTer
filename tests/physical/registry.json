@@ -8,6 +8,18 @@
       "assignments": [],
       "status": "ready-user-run"
     },
+    "V1": {
+      "kind": "targeted-source-vga",
+      "assignments": [],
+      "status": "source-and-user-fit-required",
+      "control_source_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a"
+    },
+    "C1": {
+      "kind": "targeted-source-crt-mlab",
+      "assignments": [],
+      "status": "source-and-user-fit-required",
+      "control_source_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a"
+    },
     "A1": {
       "kind": "register-boundary",
       "status": "evidence-required",

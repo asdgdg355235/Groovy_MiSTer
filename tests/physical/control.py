@@ -33,12 +33,43 @@ def profile_spec(profile='q25'):
     return profiles[profile]
 
 
+def targeted_q25_spec(profile='q25'):
+    """Read the checked source-only V1/C1 deviation from Q25 R0."""
+    if profile != 'q25':
+        return None
+    path = Path(__file__).with_name('q25_targeted_experiment.json')
+    if not path.is_file():
+        return None
+    spec = json.loads(path.read_text())
+    allowed = {'V1': 'Groovy.sv', 'C1': 'rtl/CRT/crt_vsize_fixed.sv'}
+    if (spec.get('format') != 'q25-targeted-source-v1'
+            or spec.get('experiment') not in allowed
+            or spec.get('rtl_path') != allowed[spec['experiment']]
+            or spec.get('r0_source_commit') != '3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a'):
+        raise ValueError('Unapproved Q25 experiment identity')
+    baseline_path = Path(__file__).with_name('hardware_q25.json')
+    baseline_data = baseline_path.read_bytes()
+    if digest(baseline_data) != spec.get('r0_manifest_sha256'):
+        raise ValueError('Q25 R0 control manifest has changed')
+    baseline = json.loads(baseline_data)
+    if baseline['files'][spec['rtl_path']] != spec.get('r0_file_sha256'):
+        raise ValueError('Q25 R0 source hash differs from experiment reference')
+    value = spec.get('candidate_file_sha256')
+    if not isinstance(value, str) or not re.fullmatch(r'[0-9a-f]{64}', value) or value == spec['r0_file_sha256']:
+        raise ValueError('Missing or unchanged Q25 targeted source hash')
+    return spec
+
+
 def hardware_hashes(root, profile='q25'):
     """Check all recorded hardware/IP/config inputs, not only the edited modules."""
     root = Path(root)
     spec = json.loads(Path(__file__).with_name(profile_spec(profile)['manifest']).read_text())
+    target = targeted_q25_spec(profile)
+    expected = dict(spec['files'])
+    if target:
+        expected[target['rtl_path']] = target['candidate_file_sha256']
     actual = {}
-    for rel, wanted in spec['files'].items():
+    for rel, wanted in expected.items():
         path = root / rel
         if not path.is_file() or path.is_symlink():
             raise ValueError('Missing or symlink hardware input: ' + rel)
@@ -75,9 +106,15 @@ def create(source, output, experiment='R0', overlay=None, evidence=None, profile
         raise ValueError('Unknown physical experiment: ' + experiment)
     if experiment == 'R0' and (overlay or evidence):
         raise ValueError('R0 cannot contain a physical overlay')
+    target = targeted_q25_spec(profile)
+    if experiment in ('V1', 'C1'):
+        if not target or experiment != target['experiment'] or overlay or evidence:
+            raise ValueError('Mismatched targeted Q25 source experiment')
+    elif target and experiment == 'R0' and Path(source).resolve() == ROOT:
+        raise ValueError('Targeted source branch cannot be labeled R0')
     hardware_hashes(source, profile)
     accepted = None
-    if experiment != 'R0':
+    if experiment not in ('R0', 'V1', 'C1'):
         from physical.overlays import validate_recipe
         if not overlay or not evidence:
             raise ValueError(experiment + ' evidence gate pending: supply reviewed recipe and complete R0 evidence')
@@ -97,6 +134,8 @@ def create(source, output, experiment='R0', overlay=None, evidence=None, profile
         'hardware_hashes': hardware_hashes(output, profile),
         'compiler_profile': profile,
         'hardware_manifest_sha256': digest(Path(__file__).with_name(profile_spec(profile)['manifest']).read_bytes()),
+        'targeted_q25_source': target,
+        'targeted_q25_spec_sha256': digest(Path(__file__).with_name('q25_targeted_experiment.json').read_bytes()) if target else None,
     })
     from project_assignments import capture
     write_json(out / 'control_project_calls_prepared.json', capture(output, profile))
@@ -172,7 +211,7 @@ def accepted_q25_postmap_serialization(wanted, observed, profile, experiment, ph
     calls remain in project_calls_before_fit.json for audits. Never normalize
     across Q17, before_map, or reviewed A1/D1 experiment comparisons.
     """
-    if (profile, experiment, phase) != ('q25', 'R0', 'before_fit'):
+    if (profile, phase) != ('q25', 'before_fit') or experiment not in ('R0', 'V1', 'C1'):
         return observed, None
     anchor = ['global', '-name', 'QIP_FILE', 'sys/pll_q25.qip']
     if wanted.count(anchor) != 1:
@@ -237,7 +276,7 @@ def stage_inputs(root, phase):
         raise ValueError('Missing QIP source inputs: ' + ', '.join(actual['missing_qip_files']))
     write_json(out / ('project_calls_' + phase + '.json'), actual)
     experiment = provenance['experiment']['name']
-    if experiment == 'R0':
+    if experiment in ('R0', 'V1', 'C1'):
         control = json.loads((out / 'control_project_calls_prepared.json').read_text())
         additions = []
     else:
@@ -286,7 +325,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     sub = p.add_subparsers(dest='command', required=True)
     q = sub.add_parser('prepare')
-    q.add_argument('source'); q.add_argument('output'); q.add_argument('experiment', choices=['R0', 'A1', 'D1'])
+    q.add_argument('source'); q.add_argument('output'); q.add_argument('experiment', choices=['R0', 'A1', 'D1', 'V1', 'C1'])
     q.add_argument('--overlay'); q.add_argument('--evidence')
     q.add_argument('--profile', choices=['q17','q25'], default='q25')
     for name in ['freeze', 'verify-generated', 'verify-hardware']:
