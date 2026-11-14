@@ -1,0 +1,26 @@
+{
+  "quartus_executed_by_agent": false,
+  "full_regression_command": "python3 tests/run_timing_candidate_tests.py",
+  "full_regression_pass": true,
+  "final_unit_tests": 108,
+  "review_branch_unit_tests": 104,
+  "finite_width_proof": "compositional UNSAT, plus a SAT negative control for 16-bit wrap",
+  "exhaustive_next_line_cases": 131072,
+  "product_contexts": 1048576,
+  "cycle_comparison_clocks": 180000,
+  "hs_transitions": 8299,
+  "field_transitions": 316,
+  "ce_stalls": 25714,
+  "candidate_mixed_language_elaboration": true,
+  "before_map_and_before_fit_static_input_gates": true,
+  "frozen_input_sha256": "21c1651fc5ab1eaa30f93df3a5fd169f4ed71ceb79c8b2dfda6b881aad1ac88a",
+  "timing_closure": false,
+  "C1_approved": false,
+  "logs_sha256": {
+    "full_regression": "c748e2e3a65e8ec9d723254ab2d81244f152d7c5a31ddc8b008af22f2dab1afa",
+    "final_unit": "6d554826fd068a80c3f279da795d22662e47506fd195f937be1d93c0207fd43f",
+    "proof": "91a1401fb22cb67d241f662a047f0f06335ef45dae252445adc9eebb8c08a700",
+    "cycle": "e8fdd91d07ed1cc36411ba68a983d2cd9bbbb4d81400325273e07c0845cbd2d8",
+    "preparation": "87797348ba66087e6c05994ebc8544aeea4cee696037609ab31b99fe806306dd"
+  }
+}

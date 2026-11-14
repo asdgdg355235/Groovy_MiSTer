@@ -16,6 +16,8 @@ commands = [
     [sys.executable, 'tests/restart/language_gate.py'],
     [sys.executable, 'tests/restart/prove.py', 'row', 'qualify', 'address', 'vga', 'sync'],
     [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-p', 'test_*.py'],
+    [sys.executable, 'tests/prove_v2_nextline.py'],
+    [sys.executable, 'tests/run_v2_frameskip_compare.py'],
     [sys.executable, 'tests/check_crt_ram_extraction.py'],
     ['tclsh', 'tests/test_crt_address_duplication.tcl'],
     [sys.executable, 'tests/run_crt_read_address_rtl.py'],

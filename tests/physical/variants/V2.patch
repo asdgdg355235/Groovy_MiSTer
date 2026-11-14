@@ -1,0 +1,34 @@
+--- a/Groovy.sv
++++ b/Groovy.sv
+@@ -826,7 +826,7 @@
+             cmd_fskip           <= 1'b1;     
+             PoC_state_frameskip <= S_Blit_Auto_End;
+         end else
+-        if (vga_vcount + 1 + PoC_interlaced < PoC_V && PoC_H > vram_queue && vram_queue + 20 < vram_pixels && ((PoC_H * (vga_vcount + 10'd1 + PoC_interlaced)) >> PoC_FB_interlaced) > vram_pixels) begin // next line
++        if (vga_vcount + 1 + PoC_interlaced < PoC_V && PoC_H > vram_queue && vram_queue + 20 < vram_pixels && ((PoC_H * {7'd0, frame_skip_next_line}) >> PoC_FB_interlaced) > vram_pixels) begin // next line
+             cmd_fskip           <= 1'b1;                 
+             PoC_state_frameskip <= S_Blit_Auto_Line;
+         end 
+@@ -1075,7 +1075,7 @@
+          begin                                                               
+            if (PoC_state_frameskip == S_Blit_Auto_First) PoC_px_frameskip <= (PoC_H << PoC_interlaced) + 24'd3;
+            else if (PoC_state_frameskip == S_Blit_Auto_End) PoC_px_frameskip <= vga_pixels;
+-                else PoC_px_frameskip <= ((PoC_H * (vga_vcount + 10'd1 + PoC_interlaced)) >> PoC_FB_interlaced) + 24'd3;                               
++                else PoC_px_frameskip <= ((PoC_H * {7'd0, frame_skip_next_line}) >> PoC_FB_interlaced) + 24'd3;
+            state <= PoC_state_frameskip == S_Blit_Auto_First ? S_Blit_Auto_First : S_Blit_Auto_Line;                                                                               
+          end            
+          
+@@ -1571,6 +1571,13 @@
+ wire hsync_core, vsync_core,  vblank_core, hblank_core, vga_de_core;
+ wire vga_field_core;
+ wire[15:0] vga_vcount;
++// V2: preserve the 17-bit next-line value, including count 65535 + 1 + parity.
++// The low bit supplies one carry to the upper field; no register or new cycle.
++wire [15:0] frame_skip_line_upper = {1'b0, vga_vcount[15:1]}
++                                 + {15'd0, (vga_vcount[0] | PoC_interlaced)};
++wire [16:0] frame_skip_next_line = {frame_skip_line_upper,
++                                   ~(vga_vcount[0] ^ PoC_interlaced)};
++
+ wire[23:0] vga_frame;
+ 
+ reg[7:0] r_in = 8'h00, g_in = 8'h00, b_in = 8'h00; 

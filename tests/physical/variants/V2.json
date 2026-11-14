@@ -1,0 +1,12 @@
+{
+  "format": "q25-source-variant-v1",
+  "experiment": "V2",
+  "kind": "root-next-line-operand",
+  "control_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "path": "Groovy.sv",
+  "baseline_sha256": "62e0e7bdf221f7060340a4a1a7a9942baf0ea3482f4469c088b01626998139ca",
+  "result_sha256": "61cd3fb8edc58a68428f2a6026fb3b2b1bc356d701ff47fec1e82398bf1b0dbd",
+  "patch_sha256": "525e346c56974f43c9f30f3c1242fb3798ecf3ae2cab58fd996faf187cd67aa1",
+  "r0_phys_review_sha256": "7f811b5e023fa878109c22af27b40848a8147f0652f9712d70db8e11dc19c541",
+  "scope": "One shared next-line operand used by the decision product and pixel-count update. No VGA counter or register change."
+}

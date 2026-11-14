@@ -29,6 +29,12 @@
         "legal_site_and_target"
       ],
       "reason": "A 914-load launch and two endpoint locations do not establish a legal beneficial placement."
+    },
+    "V2": {
+      "kind": "root-next-line-operand",
+      "status": "ready-user-source-experiment",
+      "assignments": [],
+      "reason": "Observed R0 Add17 D/Q multiplier and parity consumers support one root operand experiment; physical timing remains unverified."
     }
   },
   "default_compiler_profile": "q25",

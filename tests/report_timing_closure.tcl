@@ -130,6 +130,8 @@ foreach_in_collection op $corners {
     family $dir $corner hb {*vga*hb* *u_vsize*hb_d*} {} $filters
     family $dir $corner poc_v {*|PoC_V*} {} $filters
     family $dir $corner vga {*vga*v_cnt* *|PoC_V*} {} $filters
+    # V2 can rename root arithmetic; keep capture coverage beyond historical Add17.
+    family $dir $corner frame_skip_capture {} {*frame_skip_line_upper* *frame_skip_next_line* *PoC_px_frameskip*} $filters
     # Capture-direction reports find paths absent from the launch-only filters.
     family $dir $corner crt_capture {} {*u_vsize*} $filters
     family $dir $corner vga_capture {} {*vga* *Add17*} $filters

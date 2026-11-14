@@ -20,7 +20,7 @@ foreach {family patterns} {
     lz4_window {*lz4*block_read_total* *lz4*block_write_total* *lz4*window_write* *lz4*window_addr* *lz4*state*}
     delta {*PoC_lz4_delta_index* *PoC_lz4_delta_FB*}
     metadata {*u_vsize*control* *u_vsize*hb_d* *dv_hs1*}
-    vga {*vga*v_cnt* *vga*hb* *vga*Add0* *vga*Add1* *vga*Add54* *vga*LessThan19* *|PoC_V* *Add17* *PoC_px_frameskip*}
+    vga {*vga*v_cnt* *vga*hb* *vga*Add0* *vga*Add1* *vga*Add54* *vga*LessThan19* *|PoC_V* *Add17* *frame_skip_line_upper* *frame_skip_next_line* *PoC_px_frameskip*}
 } {
     foreach_in_collection id [get_nodes $patterns] {
         physical::row $seeds [list $family [get_node_info -name $id] [get_node_info -type $id] [get_node_info -location $id] $id]

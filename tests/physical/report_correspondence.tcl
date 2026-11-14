@@ -9,7 +9,7 @@ set errors [physical::table $dir/correspondence_errors.tsv {stage native_id fiel
 foreach stage {pre_synthesis post_synthesis post_fitter} {
     array unset seen
     array set seen {}
-    foreach pattern {*vga*v_cnt* *vga*hb* *vga*Add0* *vga*Add1* *vga*Add54* *vga*LessThan19* *Add17* *PoC_px_frameskip* *Mult0* *Add18* *PoC_V* *lz4*window* *lz4*block_read_total* *lz4*state* *u_vsize*wa* *u_vsize*next_aslot* *u_vsize*local_ra* *u_vsize*advance_rows* *u_vsize*dataout_reg*} {
+    foreach pattern {*vga*v_cnt* *vga*hb* *vga*Add0* *vga*Add1* *vga*Add54* *vga*LessThan19* *Add17* *PoC_px_frameskip* *frame_skip_line_upper* *frame_skip_next_line* *Mult0* *Add18* *PoC_V* *lz4*window* *lz4*block_read_total* *lz4*state* *u_vsize*wa* *u_vsize*next_aslot* *u_vsize*local_ra* *u_vsize*advance_rows* *u_vsize*dataout_reg*} {
         foreach_in_collection id [get_names -filter $pattern -observable_type $stage] {
             if {[info exists seen($id)]} {continue}
             set seen($id) 1

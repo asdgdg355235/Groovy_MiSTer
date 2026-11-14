@@ -19,7 +19,7 @@ close $help
 set out [physical::table $dir/atom_ports_${mode}.tsv {direction node port bit peer peer_port peer_bit fanout node_id peer_id}]
 foreach_in_collection node [get_atom_nodes] {
     set name [get_atom_node_info -node $node -key name]
-    if {![regexp {u_vsize|PoC_lz4_delta|r_vram_in2|vga:vga|Add17|Add18|Mult0|PoC_H|PoC_V|PoC_px_frameskip|lz4:lz4|dv_hs|dv_vs|hdmi_dv_hs|yc_out} $name]} {continue}
+    if {![regexp {u_vsize|PoC_lz4_delta|r_vram_in2|vga:vga|Add17|Add18|Mult0|frame_skip_line_upper|frame_skip_next_line|PoC_H|PoC_V|PoC_px_frameskip|lz4:lz4|dv_hs|dv_vs|hdmi_dv_hs|yc_out} $name]} {continue}
     foreach port [get_atom_iports -node $node] {
         set type [get_atom_port_info -node $node -type iport -port_id $port -key type]
         set bit [get_atom_port_info -node $node -type iport -port_id $port -key literal_index]
