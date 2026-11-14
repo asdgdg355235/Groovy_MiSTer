@@ -23,9 +23,13 @@ class MeasuredCandidateTest(unittest.TestCase):
             self.assertTrue(row['equal'])
             # Keep published Q17 evidence immutable. Q25 swaps only the
             # independently approved LZ4 RTL, never the historical report.
-            current = ((subprocess.check_output(['git','show',
-                       'c8d4b3897c4ed98165d3ee862cabbdd9ab9a4f17:rtl/lz4.v'],cwd=ROOT))
-                       if name == 'rtl/lz4.v' else (ROOT/name).read_bytes())
+            targeted_path = ROOT/'tests/physical/q25_targeted_experiment.json'
+            target = json.loads(targeted_path.read_text()) if targeted_path.is_file() else None
+            archived_source = (name == 'rtl/lz4.v' or
+                               (target is not None and name == target['rtl_path']))
+            current = (subprocess.check_output(['git','show',
+                       'c8d4b3897c4ed98165d3ee862cabbdd9ab9a4f17:'+name],cwd=ROOT)
+                       if archived_source else (ROOT/name).read_bytes())
             self.assertEqual(hashlib.sha256(current).hexdigest(), row['archived_sha256'])
         q25=json.loads((ROOT/'tests/physical/hardware_q25.json').read_text())
         self.assertEqual(hashlib.sha256((ROOT/'rtl/lz4.v').read_bytes()).hexdigest(),
