@@ -29,6 +29,18 @@
         "legal_site_and_target"
       ],
       "reason": "A 914-load launch and two endpoint locations do not establish a legal beneficial placement."
+    },
+    "V2": {
+      "kind": "vga-counter-boundary",
+      "status": "blocked-evidence",
+      "assignments": [],
+      "requires": [
+        "R0 mapped and fitted D/Q clock correspondence for v_cnt and Add17",
+        "Confirmed Add17 consumers Mult0/Add18 and original frame-skip expression",
+        "Installed Q25 Lite assignment scope/value and exact implementation-stage target",
+        "Reviewed single-factor mechanism with capture-enable and cycle proof"
+      ],
+      "reason": "R0-PHYS native correspondence has not been returned; no new RTL or assignment is approved."
     }
   },
   "default_compiler_profile": "q25",

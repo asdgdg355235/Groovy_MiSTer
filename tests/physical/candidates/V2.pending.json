@@ -1,0 +1,12 @@
+{
+  "experiment": "V2",
+  "hardware_control": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "compiler_profile": "q25",
+  "review_status": "blocked-evidence",
+  "r0_phys_evidence_sha256": null,
+  "source_register": null,
+  "fitted_register": null,
+  "assignments": [],
+  "rtl_patch": null,
+  "reason": "Native D/Q, CLK and capture-enable correspondence plus installed assignment scope remain unreviewed."
+}

@@ -76,6 +76,8 @@ def create(source, output, experiment='R0', overlay=None, evidence=None, profile
     if experiment == 'R0' and (overlay or evidence):
         raise ValueError('R0 cannot contain a physical overlay')
     hardware_hashes(source, profile)
+    if reg['experiments'][experiment].get('status') == 'blocked-evidence':
+        raise ValueError(experiment + ' blocked: ' + reg['experiments'][experiment]['reason'])
     accepted = None
     if experiment != 'R0':
         from physical.overlays import validate_recipe
@@ -286,7 +288,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     sub = p.add_subparsers(dest='command', required=True)
     q = sub.add_parser('prepare')
-    q.add_argument('source'); q.add_argument('output'); q.add_argument('experiment', choices=['R0', 'A1', 'D1'])
+    q.add_argument('source'); q.add_argument('output'); q.add_argument('experiment', choices=['R0', 'A1', 'D1', 'V2'])
     q.add_argument('--overlay'); q.add_argument('--evidence')
     q.add_argument('--profile', choices=['q17','q25'], default='q25')
     for name in ['freeze', 'verify-generated', 'verify-hardware']:
