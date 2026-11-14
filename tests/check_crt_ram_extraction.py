@@ -33,8 +33,38 @@ class ExtractionChecks(unittest.TestCase):
         if BASELINE is not None:
             # Timing arithmetic changes before the memory region are checked
             # by RTL equivalence/SMT, not by a whole-prefix text comparison.
-            self.assertEqual(BASELINE[BASELINE.index(START):BASELINE.index(END)],
-                             NEW[NEW.index(START):NEW.index(END)])
+            reference_region = BASELINE[BASELINE.index(START):BASELINE.index(END)]
+            current_region = NEW[NEW.index(START):NEW.index(END)]
+            targeted = ROOT/'tests/physical/q25_targeted_experiment.json'
+            if targeted.is_file():
+                import hashlib
+                import json
+                target = json.loads(targeted.read_text())
+                if target['experiment'] == 'C1':
+                    self.assertEqual(target['rtl_path'], 'rtl/CRT/crt_vsize_fixed.sv')
+                    self.assertEqual(
+                        hashlib.sha256((ROOT/target['rtl_path']).read_bytes()).hexdigest(),
+                        target['candidate_file_sha256'])
+                    old_even = '        (* keep = "true" *) wire [AW-1:0] local_ra_even = line_begin ? ra_even_line : ra_even_current;'
+                    new_even = '''        (* keep = "true" *) wire [AW-1:0] local_ra_even;
+        // C1 is confined to the fitted critical packed_ram[1].even_ram port.
+        // LINE_WORDS=512 makes the low nine address bits the word offset;
+        // upper bits select the bank slot without a carry from the offset.
+        // Preserve the full-width implementation for all other geometries.
+        if (part == 1 && MLAB_PARTS > 1 && LINE_WORDS == 512 && AW == 12) begin : c1_even_read
+            assign local_ra_even = {
+                line_begin ? ra_even_line[11:9] : ra_even_current[11:9],
+                read_current_word[8:0] & {9{~line_begin}}
+            };
+        end else begin : normal_even_read
+            assign local_ra_even = line_begin ? ra_even_line : ra_even_current;
+        end'''
+                    self.assertEqual(reference_region.count(old_even), 1)
+                    self.assertEqual(current_region, reference_region.replace(old_even, new_even))
+                else:
+                    self.assertEqual(reference_region, current_region)
+            else:
+                self.assertEqual(reference_region, current_region)
             self.assertEqual(BASELINE[BASELINE.index(END):], NEW[NEW.index(END):])
         self.assertIn('wire write_even = write_pixel && flush_group && !write_slot[0];', NEW)
         self.assertIn('wire write_odd  = write_pixel && flush_group &&  write_slot[0];', NEW)
