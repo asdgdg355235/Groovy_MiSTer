@@ -1,0 +1,18 @@
+{
+  "control_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "full_regression_command": "python3 tests/run_timing_candidate_tests.py",
+  "full_regression_pass": true,
+  "unit_command": "python3 -m unittest discover -s tests -p 'test_*.py'",
+  "unit_tests": 93,
+  "unit_pass": true,
+  "unit_log_sha256": "b49ce6a15ea4997aa8cbe7c22bf7f5c93363dcb07825ecca6b6552d7d346113d",
+  "full_log_sha256": "b1c3a4e62f5dd711aecda90534598b9009724db3480fd03cdc137f32b7e04489",
+  "quartus_executed": false,
+  "timing_closure": false,
+  "c1_assignment_approved": false,
+  "additional_focused_after_metadata_change": {
+    "export_runner_tests": 3,
+    "native_alias_test": 1,
+    "pass": true
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "measured_control": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "graph": {
+    "format": "fanout-normalization-v1",
+    "raw_rows": 670422,
+    "duplicate_rows": 126919,
+    "unique_rows": 543503,
+    "repeated_sources": 24261,
+    "sources": 322215,
+    "errors": [],
+    "raw_sha256": "2afd773226c1ac7f5644c7229b7c32a3b7f57b07e71c4af4f8e83b3dce8919e7",
+    "normalized_sha256": "804b8c1e11978a58b00bb049d099b3a3ad3d839e17a66edc1948c09881600202",
+    "explicit_zero_fanout_sources": 0,
+    "historical_unidentified_zero_edge_visits": 28,
+    "zero_source_identities_complete": false,
+    "edge_identity_scope": "one native timing netlist; not comparable across compilations"
+  },
+  "logical_keys": 72,
+  "physical_dependency_pass": true,
+  "timing_closure": false,
+  "coverage_release_qualified": false,
+  "quartus_executed": false
+}
