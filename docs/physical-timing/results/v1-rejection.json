@@ -1,0 +1,921 @@
+{
+  "format": "q25-v1-rejection-v1",
+  "decision": "REJECT_V1_KEEP_R0",
+  "hardware_changes": [
+    "rtl/vga.v"
+  ],
+  "original_archives": {
+    "Groovy-Q25-R0-postmapgate-reports.tar.gz": "44bfb24ecd384d28099e9d3f3be9bb5c927191b61076cb48d6d23c2097e1117f",
+    "Groovy-Q25-V1-build-20261114-042113-reports.tar.gz": "caa1cbfa91c6a13835ac97351e799b9e7124a419fcdbe6a8ae5d52e5e6878b1f"
+  },
+  "limits": [
+    "Endpoint groups are comparisons, not cross-build register correspondence.",
+    "Bounded path reports do not establish all write-address/enable path details.",
+    "Positive R0 window-input slack is measured from complete endpoint inventories.",
+    "A physical regression in unchanged LZ4 does not prove a new decoder logic defect.",
+    "C1/V2 remain blocked pending R0 physical correspondence and installed assignment scope."
+  ],
+  "physical_subset_hashes": {
+    "r0": {
+      "raw_atoms_sha256": "afd229a450b6dd2591833c9eceeff7fe8c3e7f1b1d5b95b2ff21171afbf9ae0f",
+      "derived_sha256": "14ddfc5cb241914ad8677065f66d528823daac6a6dcf81da9f119ed8ca3f0f15",
+      "selected_fanout_sha256": "ecaabf3da5bb4276e4aea7dffa732c31c349ce94a591d57bb45a7c57dd9b42b6"
+    },
+    "v1": {
+      "raw_atoms_sha256": "d0b9ae22681a281ae4c32e5e47960289b310aef8a16c3f6a2d5d412dc01b1002",
+      "derived_sha256": "78eb8e2e59cbf7931f6ed7dfc724e0e24f45e976821fb2b4a4b59e4ad652ae74",
+      "selected_fanout_sha256": "1ad0c858252d2b30b40bc6bf355e0ada0534d2c2d389c699de4e64feb6de81eb"
+    }
+  },
+  "references": {
+    "r0": {
+      "source_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+      "provenance_sha256": "8672bf29cb37aaccd5a6a16d2692e4143bda142ef1fe255fd8b674cc6603bb27",
+      "hardware_hashes": {
+        "Groovy.qpf": "2ad0ea1151a690eba02090d1f6f5485d0366bc1fbb43a572c54f5b7849508e8b",
+        "Groovy.qsf": "934b4035dbfd45d4b372ec253ffd96e81ae2ce0d13417ee2243c3ac12a8e4de5",
+        "Groovy.sdc": "89cb176f5eeb8c2adf59d758e56a605bd711631a4bccb92e77c77f995b62e71f",
+        "Groovy.sv": "62e0e7bdf221f7060340a4a1a7a9942baf0ea3482f4469c088b01626998139ca",
+        "files.qip": "483f28defb2fabe9352d1739e2d1fbe71c84137704cbab44d1945bc3bed2d6a2",
+        "groovy_timing_debug.tcl": "420dd7ffb83745ba19ae332c07cbd7c2c70080e71a615cff14b0c56811741e47",
+        "rtl/CRT/crt_address_duplication.qsf": "37697018d2f073b8557cce3c90a7d5ecaf8c41750dbf7aad69acf8761435af65",
+        "rtl/CRT/crt_edge_mask.sv": "6315d37d8344214428e92b1b0faa94e6911b502fb5778bc9da0ef6ad99fdd006",
+        "rtl/CRT/crt_measured_hps.qsf": "44ca4754c4cacf529a547a9e1113e30146dc427d17e600fb65ea63e63167e0e0",
+        "rtl/CRT/crt_packed_ram.sv": "e184983bac0d30950d607b7f6ab4dfc704e787b176521fb7206dc5c80647dbbb",
+        "rtl/CRT/crt_vsize_fixed.sv": "efe58c15761e085490635049989ded292788d5dfb65ed80b153b579547df97c3",
+        "rtl/JTFRAME/jtframe_hsize.v": "47eb2cd944711d364c9b8ac3879cdea35f9961203561be4c92b8ad402fc7eae8",
+        "rtl/JTFRAME/jtframe_linebuf.v": "5a88e3132977ad7b8d787ae6bbafbd0fb097190b7ab0872f0cb9a74160bdb7cb",
+        "rtl/JTFRAME/jtframe_resync.v": "892cfd1ee1f37f66e74e2f5f8fbf27674f5ec375eebec09f4baae8a59630e0b4",
+        "rtl/JTFRAME/jtframe_rpwp_ram.v": "934177315f5356d38015033513f3ca8ac2d3e4263f7c958f022f282ab766e754",
+        "rtl/binary_to_bcd.v": "31957ab5a0f5b3a1ce83eb891b01d4fbbbc953c3f78ce8fd227f6add86aa59ee",
+        "rtl/cos.sv": "61730d01d331a3bbe448a67456a679bcfa5367d9ed133f807744c8fee6ab7bd7",
+        "rtl/ddram.sv": "889b6aa8c17af7204f77048f09f0cc6b16738b08f0ad1d3d6e60bcca37f9fcaa",
+        "rtl/fifo_sound.qip": "43660837e72e403c5b2345b5dd126d71b5f955b4f807b6eaf8c8b0058f289602",
+        "rtl/fifo_sound.v": "44b7d949dc19388c6d39180e24d1ab2692b59d0d5bda996b1f1cf82e7f232f24",
+        "rtl/fifo_vga.qip": "266fe3d926a8166478c9462f757c796b23a87638dd53f89dac19d2d8e38b88b0",
+        "rtl/fifo_vga.v": "4ec9d54ba765b26fabd5be7397f9f4cadfb95dadc7fd2bd04e8b08226ffbd526",
+        "rtl/hps_ext.v": "e2c088a760896497629ed0b1ecca8af333db48702d87070f6185ea8ead6bd71c",
+        "rtl/lfsr.v": "fd3d6d12127ed6cabfbd3d4fc3415affc40aee339e861631f7f840c63ba8fda7",
+        "rtl/lz4.v": "ad600f3d6ef3acc9bd2d45ae111925168dec18ac878f92c0163d339c1a6ca2eb",
+        "rtl/pll.qip": "42e5952fa1770e4463d2f3ad66c80c4a776ee04b7ffe118f12f88da69f96edfb",
+        "rtl/pll.v": "3dac25e1c62b30a65cd64d3673c94fcdc5317cd4a8e1dc24bda91610beb74200",
+        "rtl/pll/pll.mif": "1121314fa2d923e7274a654730df3a5f92e1cc0931c3b18f843fdc5179892dfe",
+        "rtl/pll/pll_0002.qip": "5e5966ee0b31f99e2825a5c1d30117eb6245df681edaea433c9d6641e85da3c4",
+        "rtl/pll/pll_0002.v": "dcfb10ebd6f93c307dab2df5929f5123baa1422a31f5174ed09ad95207e7364b",
+        "rtl/pll/pll_0002_q13.qip": "58d1281c86501f8926b2b156edeada9bc7c27c4156f456eb3568a5ba40baea0f",
+        "rtl/sound.v": "f57222b0d3254f0bfc9e6deb916442ffa7d2b9f9b68f57cbf7badae33d552c0a",
+        "rtl/vga.v": "7a3da33eb3543d7fdd497bcfed6a1866918d9b15785fd35f450a6af9552d0502",
+        "rtl/vga_overlay.vhd": "02e2b7b54088c43726c7e882775a5c2f96682a5fe2d747d3a0686c1df8e17657",
+        "sys/alsa.sv": "74943b658cd3f4adc5b74c72f225fb42b95122a1c5e453df860a4c6a9bf72fc9",
+        "sys/arcade_video.v": "f02e25a8b608577326caacb89af42727373484285c5e27b09227c832fd7b6d52",
+        "sys/ascal.vhd": "12e17ef4346101b9a2f7dd091d016d33c84585bf443dfb11da109f83dc690c32",
+        "sys/audio_out.v": "565dd9badb00052dbd324e70f7ab66e8c6ecd0c5c2791aebffe477a2c0669363",
+        "sys/build_id.tcl": "dd7c532721f85e0429fbcaa9c034d8e5b95f5d2aaab5692d55f0a639d7e2f846",
+        "sys/ddr_svc.sv": "cc67cf6aa9ac17f181498f44f86bf05e80189bb13ce70b3cc16657e035abf794",
+        "sys/f2sdram_safe_terminator.sv": "605cd81a43eb94eb34b4917455e7a4a2dbd87b2616ab8a026fb24f3cd9664d86",
+        "sys/gamma_corr.sv": "2754944c6fe05d921374d1fecc26621782520b3bc6fbf600ca561e9f37c7af88",
+        "sys/hps_io.sv": "1e96035560400b9b0fe68adcd6801d9836290957cd1fcddcb30c0b11dabe4cc2",
+        "sys/hq2x.sv": "2146b69cf63c26a4b41407e9ac1b4462db4d7e3ea6d8a99f31ba12712d68f975",
+        "sys/i2c.v": "c119d827783a40ba36a8cac53f0663d26fda4a5b081fac5a45ebfb89d072b06b",
+        "sys/i2s.v": "927d2aea6797fb837f383e5e8a3259609e132ed24883127240ab21601f467efa",
+        "sys/iir_filter.v": "c860abb26b2e79c9966a4e7edab53f8c6e7fb6e73892257e527611daee5e8b35",
+        "sys/ltc2308.sv": "825fa1197c8e9f31c19c2fef1b01693133fb7df3cfb2dd831f2848a98fc6899c",
+        "sys/math.sv": "74d7501a41886b0990cae4815b2583867bee1e0af9baebfae09d0581b30f96b3",
+        "sys/mcp23009.sv": "f168485e0b64c0545060f25b858c9f1c12b57024ce441754bb6a0cb0e9072e3f",
+        "sys/mt32pi.sv": "298147936fd96f5c80c33c1566d6c807f7937eb6b0205a64ca2e4c77df8c60b0",
+        "sys/osd.v": "4f391cfecb09e2ddc0bf993b9b01697886cee7175a858410fe5ced115ddc2238",
+        "sys/pll.13.qip": "f25f58e7c0290583f33ee0fdd729a4470cc69312686f0f1ecb95c61115d61cec",
+        "sys/pll_audio.13.qip": "60edce734c54e4b9f9d56f078bc797841e52c6817f4d27e0cfe77db5d77b2596",
+        "sys/pll_audio.qip": "278496eefe70d18f6b3ccf624c3a4595ccca74a9a6740eb4520200f1e929a236",
+        "sys/pll_audio.v": "82118b01e3c3ba8bed269b9eed7cf06bf6af69e028e40f2c4c184de0d7b9f227",
+        "sys/pll_audio/pll_audio_0002.qip": "4cedd5394006286e0be61acdcbb6455f35cdf5c1488f4eb4a76b60e20eb43fb8",
+        "sys/pll_audio/pll_audio_0002.v": "8625d01bb2581a56358afe4380e539524a1c8bc7661b97a8b1c94216ac19984d",
+        "sys/pll_cfg.qip": "7c1573f321012132479272242434d02058b1bcfe8d89843130ef11173a901eae",
+        "sys/pll_cfg.v": "89750669762947128e105736d82384587f1cf8ac2f9965090e483c20f7624d59",
+        "sys/pll_cfg/altera_pll_reconfig_core.v": "ec126715f09d512cae28101ba48f286079e8852d665ac30ce9fd3edbb10607d3",
+        "sys/pll_cfg/altera_pll_reconfig_top.v": "81134703e17a0e60bc6928dcbb8e5b13491b0293ee401649cdb1c22df01dc1bd",
+        "sys/pll_cfg/pll_cfg.v": "89750669762947128e105736d82384587f1cf8ac2f9965090e483c20f7624d59",
+        "sys/pll_cfg/pll_cfg_hdmi.v": "d3874dda124af03656054fa1ae1ee70f1a4d3cea6d4670795a5168325bb6760a",
+        "sys/pll_hdmi.13.qip": "625df824716313233400454bc1142615fb3a234a494225691c8a554753b1731b",
+        "sys/pll_hdmi.qip": "5571604010bf98858a0797a2286d2389e105d32a97b42508865b02ba4237dd0d",
+        "sys/pll_hdmi.v": "327d94e5e5d6568bcc4489ee279f752969f18aa62af088649ad27f34fa476617",
+        "sys/pll_hdmi/pll_hdmi_0002.qip": "de648286a832ee72839dd6abb444231a4238d32b2c26f29426399d2221d7bf5b",
+        "sys/pll_hdmi/pll_hdmi_0002.v": "45ec17829bf7a119136c8a5a9df98b59a87178a6e9ae71658a0e00bca91058b6",
+        "sys/pll_hdmi_adj.vhd": "ae18c82eef2f6b9c7783c68ac272d03f570eb1bdaddce14a1908c351da51a71b",
+        "sys/pll_q13.qip": "c2b9c95a49d9b1100b0640bbdeea1acff845b0a8cbc11a7259c0913d2c61cfa8",
+        "sys/pll_q17.qip": "7139faf33ae28066e805f290b15401eddb092d4b7d31b529a3ce1f0213fbc90a",
+        "sys/scandoubler.v": "d36181c5fde9df0a504c547e23f60bcf201420052ada2682f081b00fd9485e6b",
+        "sys/scanlines.v": "1fc7ac5359fd224a3fc06388f7671e07bf57cf6a39f35803a265661c56c564d4",
+        "sys/sd_card.sv": "65d2645216265955189ab5f7a00d54b7150a3ff2416d977303795b152daa10ce",
+        "sys/shadowmask.sv": "88429d137b4ce9f6538a052f03d874604f46decf6d69b3fc824cc795efcf3193",
+        "sys/sigma_delta_dac.v": "352d31dd185bce14d9d1e8a4999fbb5f2b5b2e42b048bdc9f4b828119cc5127a",
+        "sys/spdif.v": "a617bba332c4611caf81ba585b8f6828c7899aec5f81664a870f10419cb9b451",
+        "sys/sys.qip": "3854d7f172097e01a40037e0a82dfd1a4178391ea0964767492979216279f31d",
+        "sys/sys.tcl": "2c811c7cbed6766c82c5fad152e534569b8626a9f4c2c551f8f9bebb61bc6406",
+        "sys/sys_analog.tcl": "c84e6375325bd78299309ac3f31e109611e976b8f1b7999952e96c694fd8b669",
+        "sys/sys_dual_sdram.tcl": "826581b99447dd032deeaf21dc92b149a2a264d78b5c7ec3b366328751ad5c7f",
+        "sys/sys_top.sdc": "dfc7f576d52603bed2bf6accccdcf4d3e50e2f59cbb0354535ee9bf11c524ebe",
+        "sys/sys_top.v": "fc8e0ccaa84b263b25dfbe44acb38302c916b48c225b5982f4310efdf0242063",
+        "sys/sysmem.sv": "9f8cf78563cc31beb7dfc6d7048c51ba536ff4f1f9f640b4ff9f8d574456c94e",
+        "sys/vga_out.sv": "02a533c3dfd547afddea2946019ecc79bbe9c27bb6128c0999fa5fc9e78f8108",
+        "sys/vga_pwm.v": "ddeecd705ea128ea1e11f4dbabf2a33e8e0894c6a5639779e85eba51dc3da9ab",
+        "sys/video_cleaner.sv": "1dc01d4003fa37de57b794cf8ce3660a5137253d165279c94246c6c0de633380",
+        "sys/video_freak.sv": "1c331bd8aee90bd722e8d9e400a8305de73392cb00cae256b8fb710e4fc2d478",
+        "sys/video_freezer.sv": "f016d25480a8492744265f8da8164d50b01da09477f0101d0a212af65f96072f",
+        "sys/video_mixer.sv": "ca02e63c3e61d8a8c817fa10008a7a9873eb34a40ab89e2e2a596c590f9f0cf9",
+        "sys/yc_out.sv": "c52d7bfcc8dbc5a0cda2b3117172cbba790fb97b7de61722ddac205f6ec8bc20",
+        "sys/pll_q25.qip": "7139faf33ae28066e805f290b15401eddb092d4b7d31b529a3ce1f0213fbc90a"
+      },
+      "generated_input": {
+        "path": "build_id.v",
+        "sha256": "21c1651fc5ab1eaa30f93df3a5fd169f4ed71ceb79c8b2dfda6b881aad1ac88a",
+        "policy": "restore exact measured bytes after pre-flow; never change system clock"
+      },
+      "corners": {
+        "corner_01": {
+          "corner": {
+            "directory": "corner_01",
+            "name": "7_slow_1100mv_100c",
+            "model": "slow",
+            "speed": "7",
+            "voltage": "1100",
+            "temperature": "100"
+          },
+          "setup_summary": {
+            "corner": "corner_01",
+            "check": "setup",
+            "failing_endpoints": "2",
+            "endpoint_TNS_ns": "-0.094000",
+            "worst_slack_ns": "-0.077"
+          },
+          "negative_families": {
+            "crt-read": 2
+          },
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5",
+            "from": "emu:emu|lz4:lz4|block_read_total[10]",
+            "slack_ns": "0.618",
+            "data_delay_ns": "11.099",
+            "logic_levels": "8",
+            "clock_skew_ns": "-0.164"
+          },
+          "window_input_failures": 0
+        },
+        "corner_02": {
+          "corner": {
+            "directory": "corner_02",
+            "name": "7_slow_1100mv_-40c",
+            "model": "slow",
+            "speed": "7",
+            "voltage": "1100",
+            "temperature": "-40"
+          },
+          "setup_summary": {
+            "corner": "corner_02",
+            "check": "setup",
+            "failing_endpoints": "4",
+            "endpoint_TNS_ns": "-0.302000",
+            "worst_slack_ns": "-0.097"
+          },
+          "negative_families": {
+            "vga-root": 4
+          },
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5",
+            "from": "emu:emu|lz4:lz4|block_write_total[22]",
+            "slack_ns": "0.928",
+            "data_delay_ns": "10.818",
+            "logic_levels": "8",
+            "clock_skew_ns": "-0.135"
+          },
+          "window_input_failures": 0
+        },
+        "corner_03": {
+          "corner": {
+            "directory": "corner_03",
+            "name": "7_slow_1100mv_85c",
+            "model": "slow",
+            "speed": "7",
+            "voltage": "1100",
+            "temperature": "85"
+          },
+          "setup_summary": {
+            "corner": "corner_03",
+            "check": "setup",
+            "failing_endpoints": "1",
+            "endpoint_TNS_ns": "-0.001000",
+            "worst_slack_ns": "-0.001"
+          },
+          "negative_families": {
+            "crt-read": 1
+          },
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5",
+            "from": "emu:emu|lz4:lz4|block_read_total[10]",
+            "slack_ns": "0.746",
+            "data_delay_ns": "10.988",
+            "logic_levels": "8",
+            "clock_skew_ns": "-0.147"
+          },
+          "window_input_failures": 0
+        },
+        "corner_04": {
+          "corner": {
+            "directory": "corner_04",
+            "name": "7_slow_1100mv_0c",
+            "model": "slow",
+            "speed": "7",
+            "voltage": "1100",
+            "temperature": "0"
+          },
+          "setup_summary": {
+            "corner": "corner_04",
+            "check": "setup",
+            "failing_endpoints": "0",
+            "endpoint_TNS_ns": "0.000000",
+            "worst_slack_ns": "0.125"
+          },
+          "negative_families": {},
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a44~porta_datain_reg5",
+            "from": "emu:emu|lz4:lz4|block_write_total[22]",
+            "slack_ns": "0.999",
+            "data_delay_ns": "10.763",
+            "logic_levels": "8",
+            "clock_skew_ns": "-0.119"
+          },
+          "window_input_failures": 0
+        },
+        "corner_05": {
+          "corner": {
+            "directory": "corner_05",
+            "name": "MIN_fast_1100mv_-40c",
+            "model": "fast",
+            "speed": "M",
+            "voltage": "1100",
+            "temperature": "-40"
+          },
+          "setup_summary": {
+            "corner": "corner_05",
+            "check": "setup",
+            "failing_endpoints": "0",
+            "endpoint_TNS_ns": "0.000000",
+            "worst_slack_ns": "5.739"
+          },
+          "negative_families": {},
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a3~porta_datain_reg5",
+            "from": "emu:emu|lz4:lz4|MP13[2]",
+            "slack_ns": "6.678",
+            "data_delay_ns": "5.256",
+            "logic_levels": "7",
+            "clock_skew_ns": "0.053"
+          },
+          "window_input_failures": 0
+        },
+        "corner_06": {
+          "corner": {
+            "directory": "corner_06",
+            "name": "MIN_fast_1100mv_0c",
+            "model": "fast",
+            "speed": "M",
+            "voltage": "1100",
+            "temperature": "0"
+          },
+          "setup_summary": {
+            "corner": "corner_06",
+            "check": "setup",
+            "failing_endpoints": "0",
+            "endpoint_TNS_ns": "0.000000",
+            "worst_slack_ns": "5.427"
+          },
+          "negative_families": {},
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a3~porta_datain_reg5",
+            "from": "emu:emu|lz4:lz4|MP13[2]",
+            "slack_ns": "6.459",
+            "data_delay_ns": "5.475",
+            "logic_levels": "7",
+            "clock_skew_ns": "0.053"
+          },
+          "window_input_failures": 0
+        },
+        "corner_07": {
+          "corner": {
+            "directory": "corner_07",
+            "name": "MIN_fast_1100mv_85c",
+            "model": "fast",
+            "speed": "M",
+            "voltage": "1100",
+            "temperature": "85"
+          },
+          "setup_summary": {
+            "corner": "corner_07",
+            "check": "setup",
+            "failing_endpoints": "0",
+            "endpoint_TNS_ns": "0.000000",
+            "worst_slack_ns": "4.450"
+          },
+          "negative_families": {},
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a3~porta_datain_reg5",
+            "from": "emu:emu|lz4:lz4|window_last_write_addr[3]",
+            "slack_ns": "5.745",
+            "data_delay_ns": "6.173",
+            "logic_levels": "7",
+            "clock_skew_ns": "0.037"
+          },
+          "window_input_failures": 0
+        },
+        "corner_08": {
+          "corner": {
+            "directory": "corner_08",
+            "name": "MIN_fast_1100mv_100c",
+            "model": "fast",
+            "speed": "M",
+            "voltage": "1100",
+            "temperature": "100"
+          },
+          "setup_summary": {
+            "corner": "corner_08",
+            "check": "setup",
+            "failing_endpoints": "0",
+            "endpoint_TNS_ns": "0.000000",
+            "worst_slack_ns": "4.110"
+          },
+          "negative_families": {},
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a3~porta_datain_reg5",
+            "from": "emu:emu|lz4:lz4|window_last_write_addr[3]",
+            "slack_ns": "5.518",
+            "data_delay_ns": "6.393",
+            "logic_levels": "7",
+            "clock_skew_ns": "0.030"
+          },
+          "window_input_failures": 0
+        }
+      },
+      "report_hashes": {
+        "timing_closure/corners.tsv": "62f2b4db76d31709f082ee82c4adc6492ee3378fe5fb1f099c957bfd43512c32",
+        "timing_closure/endpoint_summary.tsv": "125d2aa82a9a273489ed002a54173fa427d6c629654c68b7ee9ad22e9c9b6223",
+        "timing_closure/corner_01/all_setup_endpoints.tsv": "f447a8dea8afd5bd48d01e6dea54dcfeea21bc6efd842ce5411ee1e0576274bf",
+        "timing_closure/corner_01/lz4_counter_launch_setup.txt": "ede9a6120bdf8b0f1e7da3a89f94ede43b7c75fb897d1f556899fb7cc352c89b",
+        "timing_closure/corner_01/hb_setup.txt": "e4da75ed4176aa4c9cb1eb15d6a04dba185b6d75b00c8e3ae04941c8eb27ccd1",
+        "timing_closure/corner_01/bank_1_even_setup.txt": "c53393c7a3ac8399a6f50987e990c1694a55b85da59dacda1cc9694c2c937c3c",
+        "timing_closure/corner_01/vga_setup.txt": "c2efefbdc79068bd3e820ea5db8faad0d1e03ee4e67be0b463d324fafadfb752",
+        "timing_closure/corner_01/negative_setup_paths.txt": "64325b4c7c029468c450b3feb041545fe7c035aafeaf914278febeb3d8e7b360",
+        "timing_closure/corner_02/all_setup_endpoints.tsv": "aac738b0a9282d75e786b29313876e551a39989b84d3437f295705b2a6939eec",
+        "timing_closure/corner_02/lz4_counter_launch_setup.txt": "2365d8926d0db7fc2135ef201db494c5ff7b71f11922a3ac2d74ebf0218d8030",
+        "timing_closure/corner_02/hb_setup.txt": "07cac38db6f4fb52fbe169ea7abd0875b3a32628d1321f6981de9f4f730a38d5",
+        "timing_closure/corner_02/bank_1_even_setup.txt": "2a74396ed1ed8851ca979003997d3973706712e0bca1a3030633cd6bfc68010d",
+        "timing_closure/corner_02/vga_setup.txt": "ba44a2b8b41c1bcc1bba89230d35697dfede4c1cb08126c99835838acb7d0880",
+        "timing_closure/corner_02/negative_setup_paths.txt": "fc7180546cbb5399e4ccc0978f7b93be9248784f7c17c04068d965df2132deb7",
+        "timing_closure/corner_03/all_setup_endpoints.tsv": "f0e4f37048bf4e7889875b7eaefe6fef954cb56a9e109861a2a2da64df29d14e",
+        "timing_closure/corner_03/lz4_counter_launch_setup.txt": "98ee17d14b0ce182a58699c3ffa68bd4c9362ed568d8be9879a5655e2ece57dc",
+        "timing_closure/corner_03/hb_setup.txt": "0f493b68b9f2a99cfde3849777e04b683f15ef23e803805c4309e7e3764b5720",
+        "timing_closure/corner_03/bank_1_even_setup.txt": "3f0b59c416cc9ecfd1442f66296fd26f025d6ff9d89bbb19be658f71e0a67059",
+        "timing_closure/corner_03/vga_setup.txt": "6c423248b77258fc6966e6ccc8e0842c55f64ba522c7265a62fc3b8b13c8a1e8",
+        "timing_closure/corner_03/negative_setup_paths.txt": "af90c6a5f4799fe66294160d15bd63ebb14efff99d00c396d721d27504dcbcf5",
+        "timing_closure/corner_04/all_setup_endpoints.tsv": "9a16167529f69283f1536a35966ed73ce9e55a7a11527e814f0edfbd8daa4df6",
+        "timing_closure/corner_04/lz4_counter_launch_setup.txt": "a2d951436b554aa6c654fd074dd2811531bceb67f628a6e0bb22c2d07c156162",
+        "timing_closure/corner_04/hb_setup.txt": "195ccd94d4836137257f9cf01313aef0c41b9b7aaf2dbfdc53cf270d59499bdf",
+        "timing_closure/corner_04/bank_1_even_setup.txt": "b1c8c6e34cb0f60c455e5eee25eced57776d526fb3d7098c69c1a2e7b3630c59",
+        "timing_closure/corner_04/vga_setup.txt": "edcfef7a5bf656655f0ddc188b8c511df7786c9ff34992bed5d58774f1bbb94f",
+        "timing_closure/corner_04/negative_setup_paths.txt": "cabd8f366c51d7b4534909948e8f712a1a82ba31c22c04d886da502e53b6fc52",
+        "timing_closure/corner_05/all_setup_endpoints.tsv": "4cccda837acab0719df500a15e894f1b061788591220ccdd9230beeeac5a2b12",
+        "timing_closure/corner_05/lz4_counter_launch_setup.txt": "f22ce645ae853a8f82e668f4b18df4e99e2f8b345ab1b479f9a51239003e0880",
+        "timing_closure/corner_05/hb_setup.txt": "d72aac77b30de68ab543571f656d4d4c40065b9d6923cfe161944b97aa06fb86",
+        "timing_closure/corner_05/bank_1_even_setup.txt": "6d5d3cfbc6aa23b79a155e80e877a880616245b16b8af857d03cb8ea84209de5",
+        "timing_closure/corner_05/vga_setup.txt": "659e839d66c1b8b1785d3d0638057593918d5853a2b9db40b103d4b84c7dae2d",
+        "timing_closure/corner_05/negative_setup_paths.txt": "cabd8f366c51d7b4534909948e8f712a1a82ba31c22c04d886da502e53b6fc52",
+        "timing_closure/corner_06/all_setup_endpoints.tsv": "fc56d066ca17775d423403bbb48204d9f894ae477f4368d0b87f21f6ad6c3e9f",
+        "timing_closure/corner_06/lz4_counter_launch_setup.txt": "a4bcb74ccffbfc2e8a90ed827918ef3e3fd26daa8b6dcc4a7d221e0e3951fd18",
+        "timing_closure/corner_06/hb_setup.txt": "88649782dca111543c5b0c92207b4234de56e335f4b080ec2ef778df4f7f7ff3",
+        "timing_closure/corner_06/bank_1_even_setup.txt": "be57bbbda2561c85144e7d4f86e62f541c873be97bae5c77a41423adcf789e74",
+        "timing_closure/corner_06/vga_setup.txt": "7667fd214ce63d82904e91e8eb748abf92b57e52857f641d47702f2d8ad8b7eb",
+        "timing_closure/corner_06/negative_setup_paths.txt": "cabd8f366c51d7b4534909948e8f712a1a82ba31c22c04d886da502e53b6fc52",
+        "timing_closure/corner_07/all_setup_endpoints.tsv": "a70a0ce3b6264610a7275438240b94ab4201c88557571d003fa14a6afe003701",
+        "timing_closure/corner_07/lz4_counter_launch_setup.txt": "618e66d205f6ff71ae66c772bdc7f362236b6b61517488cafff9b234bb0c98cf",
+        "timing_closure/corner_07/hb_setup.txt": "f0eaacd2e82cb537af6da7dad98471f26043c2014f7d4a9b1b1cafc1879dab3d",
+        "timing_closure/corner_07/bank_1_even_setup.txt": "3eecf9e7ada339ba545d45717154fd8f56c48bb6b42684571965f9fb25422829",
+        "timing_closure/corner_07/vga_setup.txt": "0d8849b3350c921a8cb00389e05114155c8758ab572b943241730e8bee6117a2",
+        "timing_closure/corner_07/negative_setup_paths.txt": "cabd8f366c51d7b4534909948e8f712a1a82ba31c22c04d886da502e53b6fc52",
+        "timing_closure/corner_08/all_setup_endpoints.tsv": "03f070fe1025612b31763c18e22ea3e096c98aab33b8c419db41b70d722f63e9",
+        "timing_closure/corner_08/lz4_counter_launch_setup.txt": "a7d4ff72c7008290e8d7e99b674e749388a22960b2ad7d221d446dec28bc8302",
+        "timing_closure/corner_08/hb_setup.txt": "9d38ff42eeb3e1a5fea6a7bd697ac90e5cfc57a4e043940c9113d0e2072e0f66",
+        "timing_closure/corner_08/bank_1_even_setup.txt": "a712840ab1f8e6355ad8a62811c4c2d4dbb26f83bd564e8b9d7fd0512d33058d",
+        "timing_closure/corner_08/vga_setup.txt": "65fee5bdb73e2de9a7d74aab2052f242b87814bc6e4e64c215877f2d56a5da48",
+        "timing_closure/corner_08/negative_setup_paths.txt": "cabd8f366c51d7b4534909948e8f712a1a82ba31c22c04d886da502e53b6fc52"
+      }
+    },
+    "v1": {
+      "source_commit": "26cb6b9b7528f14a7cbeed92740fa28c2c23fa1e",
+      "provenance_sha256": "2cbe81bb6fa5defb1608e523dbb289027fe89bcdb80b95512e63d4faf886c7ec",
+      "hardware_hashes": {
+        "Groovy.qpf": "2ad0ea1151a690eba02090d1f6f5485d0366bc1fbb43a572c54f5b7849508e8b",
+        "Groovy.qsf": "934b4035dbfd45d4b372ec253ffd96e81ae2ce0d13417ee2243c3ac12a8e4de5",
+        "Groovy.sdc": "89cb176f5eeb8c2adf59d758e56a605bd711631a4bccb92e77c77f995b62e71f",
+        "Groovy.sv": "62e0e7bdf221f7060340a4a1a7a9942baf0ea3482f4469c088b01626998139ca",
+        "files.qip": "483f28defb2fabe9352d1739e2d1fbe71c84137704cbab44d1945bc3bed2d6a2",
+        "groovy_timing_debug.tcl": "420dd7ffb83745ba19ae332c07cbd7c2c70080e71a615cff14b0c56811741e47",
+        "rtl/CRT/crt_address_duplication.qsf": "37697018d2f073b8557cce3c90a7d5ecaf8c41750dbf7aad69acf8761435af65",
+        "rtl/CRT/crt_edge_mask.sv": "6315d37d8344214428e92b1b0faa94e6911b502fb5778bc9da0ef6ad99fdd006",
+        "rtl/CRT/crt_measured_hps.qsf": "44ca4754c4cacf529a547a9e1113e30146dc427d17e600fb65ea63e63167e0e0",
+        "rtl/CRT/crt_packed_ram.sv": "e184983bac0d30950d607b7f6ab4dfc704e787b176521fb7206dc5c80647dbbb",
+        "rtl/CRT/crt_vsize_fixed.sv": "efe58c15761e085490635049989ded292788d5dfb65ed80b153b579547df97c3",
+        "rtl/JTFRAME/jtframe_hsize.v": "47eb2cd944711d364c9b8ac3879cdea35f9961203561be4c92b8ad402fc7eae8",
+        "rtl/JTFRAME/jtframe_linebuf.v": "5a88e3132977ad7b8d787ae6bbafbd0fb097190b7ab0872f0cb9a74160bdb7cb",
+        "rtl/JTFRAME/jtframe_resync.v": "892cfd1ee1f37f66e74e2f5f8fbf27674f5ec375eebec09f4baae8a59630e0b4",
+        "rtl/JTFRAME/jtframe_rpwp_ram.v": "934177315f5356d38015033513f3ca8ac2d3e4263f7c958f022f282ab766e754",
+        "rtl/binary_to_bcd.v": "31957ab5a0f5b3a1ce83eb891b01d4fbbbc953c3f78ce8fd227f6add86aa59ee",
+        "rtl/cos.sv": "61730d01d331a3bbe448a67456a679bcfa5367d9ed133f807744c8fee6ab7bd7",
+        "rtl/ddram.sv": "889b6aa8c17af7204f77048f09f0cc6b16738b08f0ad1d3d6e60bcca37f9fcaa",
+        "rtl/fifo_sound.qip": "43660837e72e403c5b2345b5dd126d71b5f955b4f807b6eaf8c8b0058f289602",
+        "rtl/fifo_sound.v": "44b7d949dc19388c6d39180e24d1ab2692b59d0d5bda996b1f1cf82e7f232f24",
+        "rtl/fifo_vga.qip": "266fe3d926a8166478c9462f757c796b23a87638dd53f89dac19d2d8e38b88b0",
+        "rtl/fifo_vga.v": "4ec9d54ba765b26fabd5be7397f9f4cadfb95dadc7fd2bd04e8b08226ffbd526",
+        "rtl/hps_ext.v": "e2c088a760896497629ed0b1ecca8af333db48702d87070f6185ea8ead6bd71c",
+        "rtl/lfsr.v": "fd3d6d12127ed6cabfbd3d4fc3415affc40aee339e861631f7f840c63ba8fda7",
+        "rtl/lz4.v": "ad600f3d6ef3acc9bd2d45ae111925168dec18ac878f92c0163d339c1a6ca2eb",
+        "rtl/pll.qip": "42e5952fa1770e4463d2f3ad66c80c4a776ee04b7ffe118f12f88da69f96edfb",
+        "rtl/pll.v": "3dac25e1c62b30a65cd64d3673c94fcdc5317cd4a8e1dc24bda91610beb74200",
+        "rtl/pll/pll.mif": "1121314fa2d923e7274a654730df3a5f92e1cc0931c3b18f843fdc5179892dfe",
+        "rtl/pll/pll_0002.qip": "5e5966ee0b31f99e2825a5c1d30117eb6245df681edaea433c9d6641e85da3c4",
+        "rtl/pll/pll_0002.v": "dcfb10ebd6f93c307dab2df5929f5123baa1422a31f5174ed09ad95207e7364b",
+        "rtl/pll/pll_0002_q13.qip": "58d1281c86501f8926b2b156edeada9bc7c27c4156f456eb3568a5ba40baea0f",
+        "rtl/sound.v": "f57222b0d3254f0bfc9e6deb916442ffa7d2b9f9b68f57cbf7badae33d552c0a",
+        "rtl/vga.v": "2d57aefd360d10bd8b61ecf94627f2a2c7d92064f75e6a090cf87c1a4646d0ed",
+        "rtl/vga_overlay.vhd": "02e2b7b54088c43726c7e882775a5c2f96682a5fe2d747d3a0686c1df8e17657",
+        "sys/alsa.sv": "74943b658cd3f4adc5b74c72f225fb42b95122a1c5e453df860a4c6a9bf72fc9",
+        "sys/arcade_video.v": "f02e25a8b608577326caacb89af42727373484285c5e27b09227c832fd7b6d52",
+        "sys/ascal.vhd": "12e17ef4346101b9a2f7dd091d016d33c84585bf443dfb11da109f83dc690c32",
+        "sys/audio_out.v": "565dd9badb00052dbd324e70f7ab66e8c6ecd0c5c2791aebffe477a2c0669363",
+        "sys/build_id.tcl": "dd7c532721f85e0429fbcaa9c034d8e5b95f5d2aaab5692d55f0a639d7e2f846",
+        "sys/ddr_svc.sv": "cc67cf6aa9ac17f181498f44f86bf05e80189bb13ce70b3cc16657e035abf794",
+        "sys/f2sdram_safe_terminator.sv": "605cd81a43eb94eb34b4917455e7a4a2dbd87b2616ab8a026fb24f3cd9664d86",
+        "sys/gamma_corr.sv": "2754944c6fe05d921374d1fecc26621782520b3bc6fbf600ca561e9f37c7af88",
+        "sys/hps_io.sv": "1e96035560400b9b0fe68adcd6801d9836290957cd1fcddcb30c0b11dabe4cc2",
+        "sys/hq2x.sv": "2146b69cf63c26a4b41407e9ac1b4462db4d7e3ea6d8a99f31ba12712d68f975",
+        "sys/i2c.v": "c119d827783a40ba36a8cac53f0663d26fda4a5b081fac5a45ebfb89d072b06b",
+        "sys/i2s.v": "927d2aea6797fb837f383e5e8a3259609e132ed24883127240ab21601f467efa",
+        "sys/iir_filter.v": "c860abb26b2e79c9966a4e7edab53f8c6e7fb6e73892257e527611daee5e8b35",
+        "sys/ltc2308.sv": "825fa1197c8e9f31c19c2fef1b01693133fb7df3cfb2dd831f2848a98fc6899c",
+        "sys/math.sv": "74d7501a41886b0990cae4815b2583867bee1e0af9baebfae09d0581b30f96b3",
+        "sys/mcp23009.sv": "f168485e0b64c0545060f25b858c9f1c12b57024ce441754bb6a0cb0e9072e3f",
+        "sys/mt32pi.sv": "298147936fd96f5c80c33c1566d6c807f7937eb6b0205a64ca2e4c77df8c60b0",
+        "sys/osd.v": "4f391cfecb09e2ddc0bf993b9b01697886cee7175a858410fe5ced115ddc2238",
+        "sys/pll.13.qip": "f25f58e7c0290583f33ee0fdd729a4470cc69312686f0f1ecb95c61115d61cec",
+        "sys/pll_audio.13.qip": "60edce734c54e4b9f9d56f078bc797841e52c6817f4d27e0cfe77db5d77b2596",
+        "sys/pll_audio.qip": "278496eefe70d18f6b3ccf624c3a4595ccca74a9a6740eb4520200f1e929a236",
+        "sys/pll_audio.v": "82118b01e3c3ba8bed269b9eed7cf06bf6af69e028e40f2c4c184de0d7b9f227",
+        "sys/pll_audio/pll_audio_0002.qip": "4cedd5394006286e0be61acdcbb6455f35cdf5c1488f4eb4a76b60e20eb43fb8",
+        "sys/pll_audio/pll_audio_0002.v": "8625d01bb2581a56358afe4380e539524a1c8bc7661b97a8b1c94216ac19984d",
+        "sys/pll_cfg.qip": "7c1573f321012132479272242434d02058b1bcfe8d89843130ef11173a901eae",
+        "sys/pll_cfg.v": "89750669762947128e105736d82384587f1cf8ac2f9965090e483c20f7624d59",
+        "sys/pll_cfg/altera_pll_reconfig_core.v": "ec126715f09d512cae28101ba48f286079e8852d665ac30ce9fd3edbb10607d3",
+        "sys/pll_cfg/altera_pll_reconfig_top.v": "81134703e17a0e60bc6928dcbb8e5b13491b0293ee401649cdb1c22df01dc1bd",
+        "sys/pll_cfg/pll_cfg.v": "89750669762947128e105736d82384587f1cf8ac2f9965090e483c20f7624d59",
+        "sys/pll_cfg/pll_cfg_hdmi.v": "d3874dda124af03656054fa1ae1ee70f1a4d3cea6d4670795a5168325bb6760a",
+        "sys/pll_hdmi.13.qip": "625df824716313233400454bc1142615fb3a234a494225691c8a554753b1731b",
+        "sys/pll_hdmi.qip": "5571604010bf98858a0797a2286d2389e105d32a97b42508865b02ba4237dd0d",
+        "sys/pll_hdmi.v": "327d94e5e5d6568bcc4489ee279f752969f18aa62af088649ad27f34fa476617",
+        "sys/pll_hdmi/pll_hdmi_0002.qip": "de648286a832ee72839dd6abb444231a4238d32b2c26f29426399d2221d7bf5b",
+        "sys/pll_hdmi/pll_hdmi_0002.v": "45ec17829bf7a119136c8a5a9df98b59a87178a6e9ae71658a0e00bca91058b6",
+        "sys/pll_hdmi_adj.vhd": "ae18c82eef2f6b9c7783c68ac272d03f570eb1bdaddce14a1908c351da51a71b",
+        "sys/pll_q13.qip": "c2b9c95a49d9b1100b0640bbdeea1acff845b0a8cbc11a7259c0913d2c61cfa8",
+        "sys/pll_q17.qip": "7139faf33ae28066e805f290b15401eddb092d4b7d31b529a3ce1f0213fbc90a",
+        "sys/scandoubler.v": "d36181c5fde9df0a504c547e23f60bcf201420052ada2682f081b00fd9485e6b",
+        "sys/scanlines.v": "1fc7ac5359fd224a3fc06388f7671e07bf57cf6a39f35803a265661c56c564d4",
+        "sys/sd_card.sv": "65d2645216265955189ab5f7a00d54b7150a3ff2416d977303795b152daa10ce",
+        "sys/shadowmask.sv": "88429d137b4ce9f6538a052f03d874604f46decf6d69b3fc824cc795efcf3193",
+        "sys/sigma_delta_dac.v": "352d31dd185bce14d9d1e8a4999fbb5f2b5b2e42b048bdc9f4b828119cc5127a",
+        "sys/spdif.v": "a617bba332c4611caf81ba585b8f6828c7899aec5f81664a870f10419cb9b451",
+        "sys/sys.qip": "3854d7f172097e01a40037e0a82dfd1a4178391ea0964767492979216279f31d",
+        "sys/sys.tcl": "2c811c7cbed6766c82c5fad152e534569b8626a9f4c2c551f8f9bebb61bc6406",
+        "sys/sys_analog.tcl": "c84e6375325bd78299309ac3f31e109611e976b8f1b7999952e96c694fd8b669",
+        "sys/sys_dual_sdram.tcl": "826581b99447dd032deeaf21dc92b149a2a264d78b5c7ec3b366328751ad5c7f",
+        "sys/sys_top.sdc": "dfc7f576d52603bed2bf6accccdcf4d3e50e2f59cbb0354535ee9bf11c524ebe",
+        "sys/sys_top.v": "fc8e0ccaa84b263b25dfbe44acb38302c916b48c225b5982f4310efdf0242063",
+        "sys/sysmem.sv": "9f8cf78563cc31beb7dfc6d7048c51ba536ff4f1f9f640b4ff9f8d574456c94e",
+        "sys/vga_out.sv": "02a533c3dfd547afddea2946019ecc79bbe9c27bb6128c0999fa5fc9e78f8108",
+        "sys/vga_pwm.v": "ddeecd705ea128ea1e11f4dbabf2a33e8e0894c6a5639779e85eba51dc3da9ab",
+        "sys/video_cleaner.sv": "1dc01d4003fa37de57b794cf8ce3660a5137253d165279c94246c6c0de633380",
+        "sys/video_freak.sv": "1c331bd8aee90bd722e8d9e400a8305de73392cb00cae256b8fb710e4fc2d478",
+        "sys/video_freezer.sv": "f016d25480a8492744265f8da8164d50b01da09477f0101d0a212af65f96072f",
+        "sys/video_mixer.sv": "ca02e63c3e61d8a8c817fa10008a7a9873eb34a40ab89e2e2a596c590f9f0cf9",
+        "sys/yc_out.sv": "c52d7bfcc8dbc5a0cda2b3117172cbba790fb97b7de61722ddac205f6ec8bc20",
+        "sys/pll_q25.qip": "7139faf33ae28066e805f290b15401eddb092d4b7d31b529a3ce1f0213fbc90a"
+      },
+      "generated_input": {
+        "path": "build_id.v",
+        "sha256": "21c1651fc5ab1eaa30f93df3a5fd169f4ed71ceb79c8b2dfda6b881aad1ac88a",
+        "policy": "restore exact measured bytes after pre-flow; never change system clock"
+      },
+      "corners": {
+        "corner_01": {
+          "corner": {
+            "directory": "corner_01",
+            "name": "7_slow_1100mv_100c",
+            "model": "slow",
+            "speed": "7",
+            "voltage": "1100",
+            "temperature": "100"
+          },
+          "setup_summary": {
+            "corner": "corner_01",
+            "check": "setup",
+            "failing_endpoints": "19",
+            "endpoint_TNS_ns": "-2.843000",
+            "worst_slack_ns": "-0.218"
+          },
+          "negative_families": {
+            "crt-read": 3,
+            "lz4-window-write": 16
+          },
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a54~porta_datain_reg0",
+            "from": "emu:emu|lz4:lz4|block_read_total[12]",
+            "slack_ns": "-0.218",
+            "data_delay_ns": "11.915",
+            "logic_levels": "7",
+            "clock_skew_ns": "-0.184"
+          },
+          "window_input_failures": 16
+        },
+        "corner_02": {
+          "corner": {
+            "directory": "corner_02",
+            "name": "7_slow_1100mv_-40c",
+            "model": "slow",
+            "speed": "7",
+            "voltage": "1100",
+            "temperature": "-40"
+          },
+          "setup_summary": {
+            "corner": "corner_02",
+            "check": "setup",
+            "failing_endpoints": "8",
+            "endpoint_TNS_ns": "-1.238000",
+            "worst_slack_ns": "-0.236"
+          },
+          "negative_families": {
+            "vga-root": 4,
+            "crt-row": 4
+          },
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a54~porta_datain_reg0",
+            "from": "emu:emu|lz4:lz4|block_read_total[12]",
+            "slack_ns": "0.369",
+            "data_delay_ns": "11.373",
+            "logic_levels": "7",
+            "clock_skew_ns": "-0.139"
+          },
+          "window_input_failures": 0
+        },
+        "corner_03": {
+          "corner": {
+            "directory": "corner_03",
+            "name": "7_slow_1100mv_85c",
+            "model": "slow",
+            "speed": "7",
+            "voltage": "1100",
+            "temperature": "85"
+          },
+          "setup_summary": {
+            "corner": "corner_03",
+            "check": "setup",
+            "failing_endpoints": "10",
+            "endpoint_TNS_ns": "-0.411000",
+            "worst_slack_ns": "-0.060"
+          },
+          "negative_families": {
+            "crt-read": 1,
+            "lz4-window-write": 9
+          },
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a54~porta_datain_reg0",
+            "from": "emu:emu|lz4:lz4|block_read_total[12]",
+            "slack_ns": "-0.060",
+            "data_delay_ns": "11.770",
+            "logic_levels": "7",
+            "clock_skew_ns": "-0.171"
+          },
+          "window_input_failures": 9
+        },
+        "corner_04": {
+          "corner": {
+            "directory": "corner_04",
+            "name": "7_slow_1100mv_0c",
+            "model": "slow",
+            "speed": "7",
+            "voltage": "1100",
+            "temperature": "0"
+          },
+          "setup_summary": {
+            "corner": "corner_04",
+            "check": "setup",
+            "failing_endpoints": "3",
+            "endpoint_TNS_ns": "-0.074000",
+            "worst_slack_ns": "-0.046"
+          },
+          "negative_families": {
+            "vga-root": 1,
+            "crt-row": 2
+          },
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a54~porta_datain_reg0",
+            "from": "emu:emu|lz4:lz4|block_read_total[12]",
+            "slack_ns": "0.400",
+            "data_delay_ns": "11.359",
+            "logic_levels": "7",
+            "clock_skew_ns": "-0.122"
+          },
+          "window_input_failures": 0
+        },
+        "corner_05": {
+          "corner": {
+            "directory": "corner_05",
+            "name": "MIN_fast_1100mv_-40c",
+            "model": "fast",
+            "speed": "M",
+            "voltage": "1100",
+            "temperature": "-40"
+          },
+          "setup_summary": {
+            "corner": "corner_05",
+            "check": "setup",
+            "failing_endpoints": "0",
+            "endpoint_TNS_ns": "0.000000",
+            "worst_slack_ns": "6.168"
+          },
+          "negative_families": {},
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a54~porta_datain_reg0",
+            "from": "emu:emu|lz4:lz4|block_read_total[12]",
+            "slack_ns": "6.240",
+            "data_delay_ns": "5.663",
+            "logic_levels": "7",
+            "clock_skew_ns": "0.022"
+          },
+          "window_input_failures": 0
+        },
+        "corner_06": {
+          "corner": {
+            "directory": "corner_06",
+            "name": "MIN_fast_1100mv_0c",
+            "model": "fast",
+            "speed": "M",
+            "voltage": "1100",
+            "temperature": "0"
+          },
+          "setup_summary": {
+            "corner": "corner_06",
+            "check": "setup",
+            "failing_endpoints": "0",
+            "endpoint_TNS_ns": "0.000000",
+            "worst_slack_ns": "5.947"
+          },
+          "negative_families": {},
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a54~porta_datain_reg0",
+            "from": "emu:emu|lz4:lz4|block_read_total[12]",
+            "slack_ns": "6.032",
+            "data_delay_ns": "5.868",
+            "logic_levels": "7",
+            "clock_skew_ns": "0.019"
+          },
+          "window_input_failures": 0
+        },
+        "corner_07": {
+          "corner": {
+            "directory": "corner_07",
+            "name": "MIN_fast_1100mv_85c",
+            "model": "fast",
+            "speed": "M",
+            "voltage": "1100",
+            "temperature": "85"
+          },
+          "setup_summary": {
+            "corner": "corner_07",
+            "check": "setup",
+            "failing_endpoints": "0",
+            "endpoint_TNS_ns": "0.000000",
+            "worst_slack_ns": "5.109"
+          },
+          "negative_families": {},
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a54~porta_datain_reg0",
+            "from": "emu:emu|lz4:lz4|block_read_total[12]",
+            "slack_ns": "5.233",
+            "data_delay_ns": "6.643",
+            "logic_levels": "7",
+            "clock_skew_ns": "-0.005"
+          },
+          "window_input_failures": 0
+        },
+        "corner_08": {
+          "corner": {
+            "directory": "corner_08",
+            "name": "MIN_fast_1100mv_100c",
+            "model": "fast",
+            "speed": "M",
+            "voltage": "1100",
+            "temperature": "100"
+          },
+          "setup_summary": {
+            "corner": "corner_08",
+            "check": "setup",
+            "failing_endpoints": "0",
+            "endpoint_TNS_ns": "0.000000",
+            "worst_slack_ns": "4.835"
+          },
+          "negative_families": {},
+          "window_input_captures": 1024,
+          "worst_window_input": {
+            "to": "emu:emu|lz4:lz4|altsyncram:window_rtl_0|altsyncram_9ap1:auto_generated|ram_block1a54~porta_datain_reg0",
+            "from": "emu:emu|lz4:lz4|block_read_total[12]",
+            "slack_ns": "5.010",
+            "data_delay_ns": "6.861",
+            "logic_levels": "7",
+            "clock_skew_ns": "-0.010"
+          },
+          "window_input_failures": 0
+        }
+      },
+      "report_hashes": {
+        "timing_closure/corners.tsv": "62f2b4db76d31709f082ee82c4adc6492ee3378fe5fb1f099c957bfd43512c32",
+        "timing_closure/endpoint_summary.tsv": "f8e1c3a28d606816fc186251de4bd9648af50383abd6feec97c25d4e1fced03c",
+        "timing_closure/corner_01/all_setup_endpoints.tsv": "8405b8fad8e2680ad55267cb4eaf5b4c8a57bf23cd88da8e3d681878ae065f62",
+        "timing_closure/corner_01/lz4_counter_launch_setup.txt": "ca7079111cd3c341280b6a278792a4b75020ff6803783cb3a93029004d237e9f",
+        "timing_closure/corner_01/hb_setup.txt": "8b26d4fb3d01220077f5d3c0b6c8342fb577c126c80da4552ac9b3e91ea8acbe",
+        "timing_closure/corner_01/bank_1_even_setup.txt": "f1c1358995cb32f5127c6cec7e6889ff4488160c8159bf4858712782fa2a3f90",
+        "timing_closure/corner_01/vga_setup.txt": "260d64b2caec5781e55fb7076953de1d4d665492a6eae7adb5b923198c421f8d",
+        "timing_closure/corner_01/negative_setup_paths.txt": "d6ac7fcbfc0b0652a337445b622108ac17149bc0aace4b526d4e3077ca87e103",
+        "timing_closure/corner_02/all_setup_endpoints.tsv": "2cfc1e327a8ffd3e7d04b70af4612f52057f1f82cbc5cf6f2b88f9d52a193810",
+        "timing_closure/corner_02/lz4_counter_launch_setup.txt": "2248d0327088a3bd92d216ac60f5bed582355844542187357ce96dcea4bb9263",
+        "timing_closure/corner_02/hb_setup.txt": "27b18f292e2f16f7d1cb898704150361a29e0b737282760e5f861f7b0bb22512",
+        "timing_closure/corner_02/bank_1_even_setup.txt": "bc23ca4ff2091469af22f122a58fbf15c7163d288e3326d864cb57cb0f27943a",
+        "timing_closure/corner_02/vga_setup.txt": "888b85016a0bcb2d0aafa8d97a7cf76c101b8fe902ec8dde8af1ccbdc5395299",
+        "timing_closure/corner_02/negative_setup_paths.txt": "368984a30a75728676b8ac9e1e4ff25fbf002d277407b23a54ed2bc837748e36",
+        "timing_closure/corner_03/all_setup_endpoints.tsv": "5edfbcb5c3ad3533d202ae84a2097afc8cec65b9702ba709ac907b53448b1a01",
+        "timing_closure/corner_03/lz4_counter_launch_setup.txt": "c64c6d3001c018cbb0469635a199244695962c6a0cbcd907cd6d4812599eaca1",
+        "timing_closure/corner_03/hb_setup.txt": "c6164be84e625b91f8acc30f9418856c438e3324409de8a4f74adc5be67dd489",
+        "timing_closure/corner_03/bank_1_even_setup.txt": "d2ed028ca35fdf662bb49d65aebe607ca8120d95dae27b5190e76a25fd76914c",
+        "timing_closure/corner_03/vga_setup.txt": "c76ff627fe87af9128d16645c8e814770b45d50854977933ae0d773abcd40a21",
+        "timing_closure/corner_03/negative_setup_paths.txt": "25861d7e9445b893ec2c71591002ffc9c18b97ceffd392157e3860ccb74ffcbb",
+        "timing_closure/corner_04/all_setup_endpoints.tsv": "656ac801bd43327e37a0e7adb13c7b5fa339e21d71ff06134950e89a19e47124",
+        "timing_closure/corner_04/lz4_counter_launch_setup.txt": "4b0231623b4afb93c8388c1e550d5de6b80fe39cba8c782476944a016241bb2a",
+        "timing_closure/corner_04/hb_setup.txt": "9d48813e89c6e22f8aade186ab405cbfa8e12e20f6ff03c4da735ffb2f53af50",
+        "timing_closure/corner_04/bank_1_even_setup.txt": "4c78d69b20053dd620f9dcde782c8ea2c1037a28acbc97e0c53f73403a32977d",
+        "timing_closure/corner_04/vga_setup.txt": "434755dab42096719abd3ee2441054efd7d3aa8270973237fe7c0dd4dd2db4bc",
+        "timing_closure/corner_04/negative_setup_paths.txt": "bae01745080565d586a7da74fec7584f09d97517c61ae67ea1a5f8f2dece0b99",
+        "timing_closure/corner_05/all_setup_endpoints.tsv": "ae19fb58de043c5975f8fee2422f93ebc57df63bdb3426127d86ed4ccc3e9d76",
+        "timing_closure/corner_05/lz4_counter_launch_setup.txt": "ea5fb5a34566ef29e5b0677b8539714d7586e250047c42da5643e450162839e6",
+        "timing_closure/corner_05/hb_setup.txt": "63ee585a707723d416037149f3adae190d773e7ce382f292441b5f92623f4075",
+        "timing_closure/corner_05/bank_1_even_setup.txt": "9aeb9fb6ee64b12e3e864ad2d82002d3822fb89e704b2fc0fe280fd62c0c662d",
+        "timing_closure/corner_05/vga_setup.txt": "b0d9fa0d89138423160a042f7cfecfa21b95171efb1cfae8616823074a9837be",
+        "timing_closure/corner_05/negative_setup_paths.txt": "cabd8f366c51d7b4534909948e8f712a1a82ba31c22c04d886da502e53b6fc52",
+        "timing_closure/corner_06/all_setup_endpoints.tsv": "aee0f719f4edc12856f73526ad69c85482008b5cb540cb12fb60538038a8edb6",
+        "timing_closure/corner_06/lz4_counter_launch_setup.txt": "bcb73b7bab780652f22958c3528c993c7a992c2e334a710c151e9c64a002778e",
+        "timing_closure/corner_06/hb_setup.txt": "a78699c44c0a70e8e01b195d3cb915933bbadd08b36b3a8bf5de3af83a4abf86",
+        "timing_closure/corner_06/bank_1_even_setup.txt": "321b522cceb3a1d4ab94987abc247033dae8f0b91bd4f16eabe00ccdc498cd3b",
+        "timing_closure/corner_06/vga_setup.txt": "d183e4abc2b7c4e7be9e4372f0291e1f557bd126647d7038baf125d6bb86b265",
+        "timing_closure/corner_06/negative_setup_paths.txt": "cabd8f366c51d7b4534909948e8f712a1a82ba31c22c04d886da502e53b6fc52",
+        "timing_closure/corner_07/all_setup_endpoints.tsv": "422b2a44e62b75d47b816084889ce2341b723a739a631794143ae097f5db930b",
+        "timing_closure/corner_07/lz4_counter_launch_setup.txt": "be86a66b0e0d30f9a6600998adbaffd367dc900d2a56b6db3ef20d5900d7cab9",
+        "timing_closure/corner_07/hb_setup.txt": "27e0d9e493e2019be651f23d54b5fe9d8211a2be1b65ca8bc3324035e0e0341a",
+        "timing_closure/corner_07/bank_1_even_setup.txt": "a14ecc884c4c3ddd2d3a0f59b0b0e70fa5c1be60ee179b431b6f9baf80fdf9a9",
+        "timing_closure/corner_07/vga_setup.txt": "37fab5500e27f380e76dc09152272072b6febdbb68abd9e059669ea5ce95f7fe",
+        "timing_closure/corner_07/negative_setup_paths.txt": "cabd8f366c51d7b4534909948e8f712a1a82ba31c22c04d886da502e53b6fc52",
+        "timing_closure/corner_08/all_setup_endpoints.tsv": "403e4f150fbaf541ce78e9cdd1ed0c08ede54060ee81346c6cc151599221afe7",
+        "timing_closure/corner_08/lz4_counter_launch_setup.txt": "47887e963386ca9b3dc29e6ab3115f9c33fb27f8826d7968fce8f1e4637203d5",
+        "timing_closure/corner_08/hb_setup.txt": "4eeddc291900bde2bd23aca7da708fd737117e5171564e69f670e536bafd2f49",
+        "timing_closure/corner_08/bank_1_even_setup.txt": "904d6fa708c265d19a3c8577b8c54fbbc4ea60eb49f84d65e4375fe0670b3854",
+        "timing_closure/corner_08/vga_setup.txt": "c5b96d9170d9d802105fbf5c2423396f4088bd4187997e25558b0eaab35504f8",
+        "timing_closure/corner_08/negative_setup_paths.txt": "cabd8f366c51d7b4534909948e8f712a1a82ba31c22c04d886da502e53b6fc52"
+      }
+    }
+  },
+  "comparison_json_sha256": "530e0a5528bf504f98c9bdd2e53c5ca3b9cd7d8b7226e25c6066135c1506e3da",
+  "v1_change_inventory": [
+    "A\tdocs/physical-timing/C1.md",
+    "A\tdocs/physical-timing/R0-DIAG.md",
+    "A\tdocs/physical-timing/V1.md",
+    "A\tdocs/physical-timing/results/iteration-verification.json",
+    "A\tdocs/physical-timing/results/r0_diag_repair.json",
+    "M\ttests/physical/application.py",
+    "A\ttests/physical/candidates/C1.pending.json",
+    "M\ttests/physical/compare.py",
+    "M\ttests/physical/control.py",
+    "M\ttests/physical/diagnostics.py",
+    "A\ttests/physical/fixtures/registered_bit11_r0.json",
+    "A\ttests/physical/graph.py",
+    "A\ttests/physical/logical.py",
+    "M\ttests/physical/overlays.py",
+    "M\ttests/physical/q25_ram_evidence.py",
+    "M\ttests/physical/registry.json",
+    "A\ttests/physical/repair_r0.py",
+    "M\ttests/physical/report_fanout.tcl",
+    "A\ttests/physical/variants.py",
+    "A\ttests/physical/variants/V1.json",
+    "A\ttests/physical/variants/V1.patch",
+    "A\ttests/prove_v1_blanking.py",
+    "M\ttests/run_physical_timing_quartus.sh",
+    "M\ttests/run_timing_candidate_tests.py",
+    "A\ttests/run_v1_vga_compare.py",
+    "A\ttests/test_q25_diag_repair.py",
+    "A\ttests/test_q25_native_alias.py",
+    "A\ttests/test_q25_variants.py"
+  ],
+  "selected_driver_summary": {
+    "r0": {
+      "emu|u_vsize|crt_read_1_even_bit3|combout": {
+        "source_location": "LABCELL_X37_Y35_N24",
+        "source_type": "pin",
+        "unique_pin_arcs": 3840,
+        "location_count": 3840,
+        "scope": "Observed load coordinates, not routed length or legal placement sites"
+      },
+      "emu|u_vsize|line_begin~0_Duplicate|combout": {
+        "source_location": "LABCELL_X36_Y22_N42",
+        "source_type": "pin",
+        "unique_pin_arcs": 345,
+        "location_count": 345,
+        "scope": "Observed load coordinates, not routed length or legal placement sites"
+      },
+      "emu|u_vsize|line_begin~0_Duplicate|dataf": {
+        "source_location": "LABCELL_X36_Y22_N42",
+        "source_type": "pin",
+        "unique_pin_arcs": 1,
+        "location_count": 1,
+        "scope": "Observed load coordinates, not routed length or legal placement sites"
+      },
+      "emu|u_vsize|packed_ram[1].local_ra_even[10]~2|combout": {
+        "source_location": "LABCELL_X35_Y22_N57",
+        "source_type": "pin",
+        "unique_pin_arcs": 1302,
+        "location_count": 1302,
+        "scope": "Observed load coordinates, not routed length or legal placement sites"
+      },
+      "emu|u_vsize|wa[3]~3|combout": {
+        "source_location": "LABCELL_X37_Y22_N18",
+        "source_type": "pin",
+        "unique_pin_arcs": 15406,
+        "location_count": 15406,
+        "scope": "Observed load coordinates, not routed length or legal placement sites"
+      }
+    },
+    "v1": {
+      "emu|u_vsize|crt_read_1_even_bit3|combout": {
+        "source_location": "LABCELL_X43_Y22_N36",
+        "source_type": "pin",
+        "unique_pin_arcs": 3840,
+        "location_count": 3840,
+        "scope": "Observed load coordinates, not routed length or legal placement sites"
+      },
+      "emu|u_vsize|line_begin~0_Duplicate|combout": {
+        "source_location": "LABCELL_X42_Y22_N45",
+        "source_type": "pin",
+        "unique_pin_arcs": 345,
+        "location_count": 345,
+        "scope": "Observed load coordinates, not routed length or legal placement sites"
+      },
+      "emu|u_vsize|line_begin~0_Duplicate|dataf": {
+        "source_location": "LABCELL_X42_Y22_N45",
+        "source_type": "pin",
+        "unique_pin_arcs": 1,
+        "location_count": 1,
+        "scope": "Observed load coordinates, not routed length or legal placement sites"
+      },
+      "emu|u_vsize|packed_ram[1].local_ra_even[10]~2|combout": {
+        "source_location": "LABCELL_X42_Y16_N51",
+        "source_type": "pin",
+        "unique_pin_arcs": 1301,
+        "location_count": 1301,
+        "scope": "Observed load coordinates, not routed length or legal placement sites"
+      },
+      "emu|u_vsize|wa[3]~3|combout": {
+        "source_location": "LABCELL_X42_Y22_N48",
+        "source_type": "pin",
+        "unique_pin_arcs": 15406,
+        "location_count": 15406,
+        "scope": "Observed load coordinates, not routed length or legal placement sites"
+      }
+    }
+  }
+}

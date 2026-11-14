@@ -41,7 +41,7 @@ proc get_atom_port_info {args} {
    provenance={'source_commit':BASE,'compiler_profile':'q25','experiment':{'name':'R0'},'generated_input':{'sha256':digest(expected_build_id())}}
    (out/'provenance.json').write_text(json.dumps(provenance));(out/'crt_read_address_tool_version.txt').write_text('Version 25.1std.0 Build 1129 Lite Edition')
    commands,request,reports=prepare(build,root/'new',True)
-   self.assertEqual([c[0] for c in commands],['quartus_sh','quartus_cdb','quartus_sta'])
+   self.assertEqual([c[0] for c in commands],['quartus_sh','quartus_cdb','quartus_cdb','quartus_sta','quartus_sta'])
    self.assertFalse(request['quartus_executed']);self.assertIn('UNVERIFIED',request['assignment_capabilities'])
    with self.assertRaises(ValueError):prepare(build,root/'new',True)
    provenance['source_commit']='other';(out/'provenance.json').write_text(json.dumps(provenance))

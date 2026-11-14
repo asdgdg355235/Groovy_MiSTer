@@ -16,7 +16,8 @@ array set enqueued {}
 set seed_count 0
 foreach {family patterns} {
     position {*u_vsize*position* *u_vsize*delay_lines* *u_vsize*advance_rows*}
-    crt_address {*crt_read_* *u_vsize*local_ra_* *u_vsize*wcol* *u_vsize*group_col*}
+    crt_address {*crt_read_* *u_vsize*local_ra_* *u_vsize*wcol* *u_vsize*group_col* *u_vsize*wa* *u_vsize*next_aslot* *u_vsize*line_begin*}
+    lz4_window {*lz4*block_read_total* *lz4*block_write_total* *lz4*window_write* *lz4*window_addr* *lz4*state*}
     delta {*PoC_lz4_delta_index* *PoC_lz4_delta_FB*}
     metadata {*u_vsize*control* *u_vsize*hb_d* *dv_hs1*}
     vga {*vga*v_cnt* *vga*hb* *vga*Add0* *vga*Add1* *vga*Add54* *vga*LessThan19* *|PoC_V* *Add17* *PoC_px_frameskip*}

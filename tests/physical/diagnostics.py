@@ -164,7 +164,7 @@ def path_metrics(output):
     return result
 
 
-def collect(output, destination=None):
+def collect(output, destination=None, raw_overrides=None):
     output = Path(output).resolve()
     out = Path(destination).resolve() if destination else output / 'closure_diagnostics'
     out.mkdir(parents=True, exist_ok=True)
@@ -172,6 +172,21 @@ def collect(output, destination=None):
     if out != raw and raw.exists():
         for p in raw.iterdir():
             if p.is_file() and p.name != 'evidence_manifest.json': shutil.copy2(p, out / p.name)
+    # Fresh read-only exports override historical raw observations only in the
+    # derived destination. Never seal an old graph as evidence for a fresh run.
+    if raw_overrides is not None:
+        if out == raw:
+            raise ValueError('Fresh exports require a separate derived destination')
+        fresh = Path(raw_overrides).resolve()
+        names = ('atom_ports_map.tsv', 'atom_ports_cmp.tsv', 'fanout_locations.tsv',
+                 'fanout_processed_sources.tsv', 'fanout_export_status.tsv',
+                 'fanout_seeds.tsv', 'fanout_native_aliases.tsv', 'placement_binding.tsv',
+                 'source_correspondence.tsv', 'correspondence_errors.tsv')
+        for name in names:
+            source = fresh / name
+            if source.is_file(): shutil.copy2(source, out / name)
+        write_json(out / 'fresh_export_inputs.json',
+                   {name: digest((fresh/name).read_bytes()) for name in names if (fresh/name).is_file()})
     inventory = []; inventory_counts = Counter(); partial_count = 0
     if (out / 'node_inventory.tsv').is_file():
         with (out / 'node_inventory.tsv').open() as stream:

@@ -34,3 +34,30 @@ be new. It retains partial results on failure, original provenance/timing & deri
 corrected diagnostics. Do not compile the old R0 again.
 
 Return that archive before selecting a C1 site or register-preservation control.
+
+## Recovery update
+
+The runner now opens a fresh, non-hardlinked copy of the existing source/database
+in a sibling `R0_PHYS-native-query` directory. It never launches map/fit/assembly.
+The original fitted database & sealed reports remain untouched even if a native
+API writes cache metadata. This copy requires additional local disk space. Keep
+it for debugging or remove it after reviewing the export archive.
+
+Fresh mapped AND fitted atoms include LZ4 window/state, VGA totals/counters &
+root Add17/Mult0/Add18 consumers. Targeted STA reports cover every corner,
+complete filtered endpoint inventories & eight detailed paths per family,
+including positive LZ4 window captures, address/control & CRT hb/wcol/advance.
+All path detail includes native routing, locations & clock skew.
+
+Fresh graph/atom data now override historical data only in corrected_diagnostics.
+The earlier helper instead reassembled the historical exports. The fresh seal
+records exactly which raw inputs were used. Missing/unmatched native queries
+produce exit code 3 with the partial archive retained; they cannot reuse an old
+successful diagnostic status. Source-location observations remain distinct from
+register ancestry & functional capture-enable proof.
+
+Use --prepare-only for command/schema preparation with no vendor lookup. Run the
+full helper only locally. Both R0_PHYS & its archive must be new; if a previous
+attempt exists, select another parent directory or preserve/rename that attempt.
+The archive is Groovy-Q25-R0-PHYS-reports.tar.gz beside the requested output.
+Only the user-side read-only export is pending, not another R0 compilation.
