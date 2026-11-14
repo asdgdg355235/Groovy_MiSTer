@@ -18,7 +18,7 @@ while [[ $# -gt 0 ]]; do
 done
 [[ "$PROFILE" == q17 || "$PROFILE" == q25 ]] || { echo 'Expected --profile q17 or q25' >&2; exit 2; }
 [[ -n "$QBIN" ]] || { if [[ "$PROFILE" == q25 ]]; then QBIN="${QUARTUS_25_BIN:-}"; else QBIN="${QUARTUS_17_BIN:-}"; fi; }
-[[ "$EXPERIMENT" == R0 || "$EXPERIMENT" == A1 || "$EXPERIMENT" == D1 ]] || { echo 'Expected R0, A1 or D1' >&2; exit 2; }
+[[ "$EXPERIMENT" == R0 || "$EXPERIMENT" == A1 || "$EXPERIMENT" == D1 || "$EXPERIMENT" == V1 || "$EXPERIMENT" == C1 ]] || { echo 'Expected R0, A1, D1, V1 or C1' >&2; exit 2; }
 [[ "${CRT_DUPLICATION_DISABLED:-0}" != 1 ]] || { echo 'Driver duplication must remain enabled' >&2; exit 2; }
 OUT="${CRT_READ_BUILD_DIR:-$ROOT/../physical-$EXPERIMENT-$(date -u +%Y%m%d-%H%M%S)}"
 OUT="$(python3 -c 'import pathlib,sys;print(pathlib.Path(sys.argv[1]).resolve())' "$OUT")"

@@ -1,0 +1,11 @@
+{
+  "format": "q25-targeted-source-v1",
+  "experiment": "C1",
+  "r0_source_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "r0_manifest_sha256": "506023cbda24aa83c97fee26bd8057e1c3dd0b12131b86fab79729ce729a5b55",
+  "rtl_path": "rtl/CRT/crt_vsize_fixed.sv",
+  "r0_file_sha256": "efe58c15761e085490635049989ded292788d5dfb65ed80b153b579547df97c3",
+  "candidate_file_sha256": "746f7923291e2c56b792293c56bbc2a37c9ef9d56d21b21b765ad34b1a95a42e",
+  "physical_evidence": "Groovy-Q25-R0-postmapgate-reports.tar.gz",
+  "hypothesis": "Bank 1 even MLAB read-address offset split at the verified 512-word stride to isolate the 9-bit word offset from upper bank-slot selection; unchanged RAM latency."
+}

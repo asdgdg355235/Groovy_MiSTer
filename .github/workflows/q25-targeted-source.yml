@@ -1,0 +1,32 @@
+name: Quartus 25 source experiment non-Quartus regression
+on:
+  push:
+    branches:
+      - experimental/q25-vga-arithmetic
+      - experimental/q25-crt-mlab-locality
+  workflow_dispatch:
+jobs:
+  independent:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install independent non-vendor tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog verilator g++ tcl
+          python3 -m pip install --user z3-solver
+      - name: Verify source manifest and focused arithmetic
+        run: |
+          python3 tests/physical/q25_ram_evidence.py preflight . --profile q25
+          python3 -m unittest discover -s tests -p test_q25_targeted_logic.py -v
+          bash -n tests/run_physical_timing_quartus.sh
+      - name: Run existing independent timing candidate regression suite
+        env:
+          CRT_RTL_SIMULATOR: iverilog
+        run: python3 tests/run_timing_candidate_tests.py
+      - name: Physical and Q25 evidence-gate regressions
+        run: |
+          python3 -m unittest discover -s tests -p test_physical_q25.py -v
+          python3 -m unittest discover -s tests -p test_physical_experiments.py -v

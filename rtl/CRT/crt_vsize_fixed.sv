@@ -246,7 +246,19 @@ module crt_vsize_fixed #(
         // A separate combinational mux output for each physical RAM read port.
         // Keep only these final drivers; arithmetic, memory inference and all
         // registers remain unchanged. Quartus must still be checked for merging.
-        (* keep = "true" *) wire [AW-1:0] local_ra_even = line_begin ? ra_even_line : ra_even_current;
+        (* keep = "true" *) wire [AW-1:0] local_ra_even;
+        // C1 is confined to the fitted critical packed_ram[1].even_ram port.
+        // LINE_WORDS=512 makes the low nine address bits the word offset;
+        // upper bits select the bank slot without a carry from the offset.
+        // Preserve the full-width implementation for all other geometries.
+        if (part == 1 && MLAB_PARTS > 1 && LINE_WORDS == 512 && AW == 12) begin : c1_even_read
+            assign local_ra_even = {
+                line_begin ? ra_even_line[11:9] : ra_even_current[11:9],
+                read_current_word[8:0] & {9{~line_begin}}
+            };
+        end else begin : normal_even_read
+            assign local_ra_even = line_begin ? ra_even_line : ra_even_current;
+        end
         (* keep = "true" *) wire [AW-1:0] local_ra_odd = line_begin ? ra_odd_line : ra_odd_current;
         // Reuse the stand-alone 3072x40 synchronous RAM inference pattern.
         // One even/odd pair per 40-bit slice; no replicated pixel storage.
