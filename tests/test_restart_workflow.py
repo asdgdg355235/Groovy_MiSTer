@@ -78,9 +78,15 @@ class RestartWorkflow(unittest.TestCase):
 
  def test_default_hardware_is_unmodified_baseline(self):
   q25=json.loads((ROOT/'tests/physical/hardware_q25.json').read_text())
+  experiment_path=ROOT/'tests/physical/q25_targeted_experiment.json'
+  target=json.loads(experiment_path.read_text()) if experiment_path.is_file() else None
   for p in PROTECTED+CORE:
    observed=(ROOT/p).read_bytes()
-   if p=='rtl/lz4.v':
+   if target and p==target['rtl_path']:
+    self.assertEqual(sha(observed),target['candidate_file_sha256'])
+    self.assertEqual(sha(baseline(p)),target['r0_file_sha256'])
+    self.assertNotEqual(observed,baseline(p))
+   elif p=='rtl/lz4.v':
     self.assertEqual(sha(observed),q25['files'][p])
     self.assertNotEqual(observed,baseline(p))
    else:self.assertEqual(observed,baseline(p))
