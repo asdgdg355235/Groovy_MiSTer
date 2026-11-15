@@ -1,0 +1,25 @@
+{
+  "format": "q25-publication-source-equivalence-v1",
+  "reason": "Local Git HTTPS push had no credentials. Connected GitHub publication recreated commit metadata while preserving every tested Git tree byte.",
+  "source_equivalence": [
+    {
+      "local": "562a8e412dd970aab82ba78f58c757bd6079d1e5",
+      "remote": "1346413c81bbbe2b8c4529d4e2f3116300b31191",
+      "tree": "abcff7313d31dcbb3f4026f562da054969390491"
+    },
+    {
+      "local": "206a11c07996c66b17d9831e2f7a02c27cc45cce",
+      "remote": "e49824fc77d4687cc431709a7147cf3f8d845061",
+      "tree": "96c8c50bd65225125f6c8a86f30b633ce985f8cb"
+    },
+    {
+      "local": "3bf8dd88e03f7d62a07c7864e3f023e98a78965d",
+      "remote": "af6524e316a85c0e8a613a1ec17a4de98f3666c2",
+      "tree": "81a95a5a0195c2b3cbc34deb5e4e09e612706849"
+    }
+  ],
+  "non_quartus_tested_tree": "96c8c50bd65225125f6c8a86f30b633ce985f8cb",
+  "hardware_control": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "quartus_executed": false,
+  "preservation": "Original R0, V1, V2 and reviewed physical-evidence branches were not moved."
+}
