@@ -1,0 +1,16 @@
+{
+  "format": "q25-selected-experiment-v1",
+  "control_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "compiler_profile": "q25",
+  "experiment": "U10_U9_V3",
+  "factors": [
+    "U10",
+    "U9",
+    "V3"
+  ],
+  "shared_infrastructure_commit": "9b832f86c44ee4f43cb4eab63202eca77dda8b4b",
+  "hardware_rtl_changes": [],
+  "generated_input_changes": [],
+  "status": "blocked-constituent-evidence-and-acceptance",
+  "assignment_policy": "Resolve U10/U9 from fresh mapped ports; V3 requires a separately reviewed native ancestry/scope recipe."
+}
