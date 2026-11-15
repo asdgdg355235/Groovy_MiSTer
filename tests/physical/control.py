@@ -75,9 +75,16 @@ def create(source, output, experiment='R0', overlay=None, evidence=None, profile
         raise ValueError('Unknown physical experiment: ' + experiment)
     if experiment == 'R0' and (overlay or evidence):
         raise ValueError('R0 cannot contain a physical overlay')
+    from physical.q25_experiments import validate_selection
+    validate_selection(source, experiment)
     hardware_hashes(source, profile)
     accepted = None
-    if experiment != 'R0':
+    new_q25 = experiment in ('U10', 'U9', 'V3', 'U10_U9_V3')
+    if new_q25:
+        if profile != 'q25' or not evidence: raise ValueError('Q25 candidates require original R0 evidence')
+        from physical.q25_experiments import request
+        accepted = request(experiment, evidence, overlay)
+    elif experiment != 'R0':
         from physical.overlays import validate_recipe
         if not overlay or not evidence:
             raise ValueError(experiment + ' evidence gate pending: supply reviewed recipe and complete R0 evidence')
@@ -101,9 +108,13 @@ def create(source, output, experiment='R0', overlay=None, evidence=None, profile
     from project_assignments import capture
     write_json(out / 'control_project_calls_prepared.json', capture(output, profile))
     if accepted:
-        from physical.overlays import materialize
+        if new_q25:
+            from physical.q25_experiments import materialize
+        else:
+            from physical.overlays import materialize
         materialize(output, accepted, evidence)
         provenance['physical_overlay'] = accepted
+        provenance['prepared_project_sha256'] = digest((output / 'Groovy.qsf').read_bytes())
     (out / 'provenance.json').write_text(json.dumps(provenance, indent=2) + '\n')
     # Replace the generic prepared record before compilation, preserving overlay bytes.
     record(output, 'prepared')
@@ -237,9 +248,15 @@ def stage_inputs(root, phase):
         raise ValueError('Missing QIP source inputs: ' + ', '.join(actual['missing_qip_files']))
     write_json(out / ('project_calls_' + phase + '.json'), actual)
     experiment = provenance['experiment']['name']
-    if experiment == 'R0':
+    if experiment in ('U10', 'U9', 'V3', 'U10_U9_V3'):
+        from physical.q25_experiments import derived_assignments
+        derived_assignments(out, actual, phase)
+    new_q25 = experiment in ('U10', 'U9', 'V3', 'U10_U9_V3')
+    if experiment == 'R0' or new_q25:
         control = json.loads((out / 'control_project_calls_prepared.json').read_text())
-        additions = []
+        additions = [] if experiment == 'R0' else [
+            ['instance', '-name', a['name'], a['value'], '-to', a['target']]
+            for a in provenance['physical_overlay']['assignments']]
     else:
         path = out / 'control_evidence' / ('project_calls_' + phase + '.json')
         if not path.is_file(): raise ValueError('Missing equivalent R0 assignment stage: ' + phase)
@@ -267,7 +284,7 @@ def stage_inputs(root, phase):
         observed, compiler_version_metadata = accepted_compiler_version_metadata(
             wanted, observed, provenance.get('compiler_profile', 'q17'))
         observed, postmap_serialization = accepted_q25_postmap_serialization(
-            wanted, observed, provenance.get('compiler_profile', 'q17'), experiment, phase)
+            wanted, observed, provenance.get('compiler_profile', 'q17'), 'R0' if new_q25 else experiment, phase)
         if observed != wanted:
             write_json(out / ('assignment_difference_' + phase + '.json'), {'expected': wanted, 'actual': policy(actual['events'])})
             raise ValueError('Unapproved effective assignment difference at ' + phase)
@@ -286,7 +303,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     sub = p.add_subparsers(dest='command', required=True)
     q = sub.add_parser('prepare')
-    q.add_argument('source'); q.add_argument('output'); q.add_argument('experiment', choices=['R0', 'A1', 'D1'])
+    q.add_argument('source'); q.add_argument('output'); q.add_argument('experiment', choices=list(load_registry()['experiments']))
     q.add_argument('--overlay'); q.add_argument('--evidence')
     q.add_argument('--profile', choices=['q17','q25'], default='q25')
     for name in ['freeze', 'verify-generated', 'verify-hardware']:

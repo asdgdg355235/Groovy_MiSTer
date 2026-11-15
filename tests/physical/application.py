@@ -13,6 +13,12 @@ from physical.control import write_json
 
 def audit(output, phase):
     output = Path(output)
+    if (output / 'q25_experiment.json').exists():
+        from physical.q25_experiments import audit as q25_audit, write
+        try: return q25_audit(output, phase)
+        except (ValueError, FileNotFoundError, KeyError) as error:
+            write(output / f'application_{phase}.json', {'target_gate_pass': False, 'error': str(error)})
+            raise ValueError('INVALID Q25 EXPERIMENT: ' + str(error)) from error
     recipe = output / 'physical_recipe.json'
     if not recipe.exists(): return {'experiment': 'R0', 'target_gate_pass': True, 'mechanism_status': 'control'}
     spec = json.loads(recipe.read_text())
@@ -48,4 +54,8 @@ def audit(output, phase):
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('output_files', type=Path); p.add_argument('phase', choices=['map', 'cmp'])
-    a = p.parse_args(); print(json.dumps(audit(a.output_files, a.phase), indent=2))
+    a = p.parse_args()
+    try: print(json.dumps(audit(a.output_files, a.phase), indent=2))
+    except (ValueError, FileNotFoundError, KeyError) as error:
+        print(str(error), file=sys.stderr)
+        raise SystemExit(3)

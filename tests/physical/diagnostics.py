@@ -49,13 +49,18 @@ def family(source, sink):
     return 'other:' + sink.split('|')[0]
 
 
-def logical_bits(atom_rows, mapped_rows=None):
+def logical_bits(atom_rows, mapped_rows=None, upper_copies=None):
     result = []
     known = defaultdict(set)
     for r in atom_rows:
         match = re.search(r'packed_ram\[[012]\]\.(even|odd)_ram\|', r['node'])
         if r['direction'] == 'INPUT' and r['port'] == 'PORTBADDR' and match:
             known[(match[1], r['bit'])].add((r['peer'], r['peer_port'], r.get('peer_bit', '')))
+    # A fresh-map logical anchor plus a validated fitted bank-only copy is an
+    # additional observed high-bit source, not a fabricated MLAB address pin.
+    for copy in upper_copies or []:
+        if not copy.get('split_verified'): raise ValueError('Unproved upper-selector correspondence')
+        known[(copy['parity'], str(copy['bit']))].add((copy['copy_node'], copy['copy_port'], copy['copy_bit']))
     for part in range(3):
         for bank in ('even', 'odd'):
             token = f'packed_ram[{part}].{bank}_ram|'
@@ -204,7 +209,9 @@ def collect(output, destination=None, raw_overrides=None):
     panels = read_rows(out / 'report_panels_map.tsv') + read_rows(out / 'report_panels_cmp.tsv')
     atoms = read_rows(out / 'atom_ports_cmp.tsv')
     from physical.logical import resolve_registered, summarize
-    direct_bits = logical_bits(atoms)
+    upper = output / 'upper_driver_gate.json'
+    copies = json.loads(upper.read_text()).get('copies', []) if upper.is_file() else []
+    direct_bits = logical_bits(atoms, upper_copies=copies)
     bits, chains = resolve_registered(direct_bits, atoms, read_rows(out / 'atom_ports_map.tsv'))
     logical_summary, logical_complete = summarize(bits, chains)
     table(out / 'crt_logical_read_summary.tsv', ['part','bank','logical_bit','status','physical_rows','observed_statuses','observed_drivers','registered_dependencies','conditions'], logical_summary)

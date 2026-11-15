@@ -18,7 +18,11 @@ while [[ $# -gt 0 ]]; do
 done
 [[ "$PROFILE" == q17 || "$PROFILE" == q25 ]] || { echo 'Expected --profile q17 or q25' >&2; exit 2; }
 [[ -n "$QBIN" ]] || { if [[ "$PROFILE" == q25 ]]; then QBIN="${QUARTUS_25_BIN:-}"; else QBIN="${QUARTUS_17_BIN:-}"; fi; }
-[[ "$EXPERIMENT" == R0 || "$EXPERIMENT" == A1 || "$EXPERIMENT" == D1 ]] || { echo 'Expected R0, A1 or D1' >&2; exit 2; }
+case "$EXPERIMENT" in
+    R0|A1|D1) ;;
+    U10|U9|V3|U10_U9_V3) [[ "$PROFILE" == q25 ]] || { echo 'Q25 candidate requires q25' >&2; exit 2; } ;;
+    *) echo 'Unknown physical experiment' >&2; exit 2 ;;
+esac
 [[ "${CRT_DUPLICATION_DISABLED:-0}" != 1 ]] || { echo 'Driver duplication must remain enabled' >&2; exit 2; }
 OUT="${CRT_READ_BUILD_DIR:-$ROOT/../physical-$EXPERIMENT-$(date -u +%Y%m%d-%H%M%S)}"
 OUT="$(python3 -c 'import pathlib,sys;print(pathlib.Path(sys.argv[1]).resolve())' "$OUT")"
@@ -105,10 +109,12 @@ grep -F 'Quartus Prime Analysis & Synthesis was successful' output_files/crt_rea
 python3 tests/physical/q25_ram_evidence.py map output_files --profile "$PROFILE"
 quartus_sh -t tests/physical/report_project.tcl map > output_files/closure_diagnostics/project_map.log 2>&1
 quartus_cdb -t tests/physical/report_atoms.tcl map > output_files/closure_diagnostics/atoms_map.log 2>&1
+STAGE=postmap-targets
 python3 tests/physical/application.py output_files map
 quartus_cdb -t tests/report_crt_local_drivers.tcl map > output_files/crt_local_drivers_map.log 2>&1
 python3 tests/summarize_crt_local_drivers.py output_files/crt_local_drivers_map.tsv > output_files/crt_local_drivers_map.json
 python3 tests/resolve_crt_duplicate_sources.py output_files/crt_local_drivers_map.tsv output_files/crt_address_duplication_resolved.qsf
+STAGE=pre-fit-inputs
 python3 tests/physical/control.py stage-inputs . before_fit
 STAGE=fitting
 python3 tests/run_crt_duplicate_fit.py 2>&1 | tee -a output_files/crt_read_address_compile.log

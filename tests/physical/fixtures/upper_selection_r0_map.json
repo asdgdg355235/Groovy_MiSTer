@@ -1,0 +1,20 @@
+{
+  "kind": "actual_Q25_R0_complete_selected_port_excerpt",
+  "control_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "archive_sha256": "ec067377ace04da1e7ce444b91f6dcd4639a4e8e11f9c6331f8b41f63cb29011",
+  "source_file": "output_files/atom_ports_map.tsv",
+  "source_sha256": "c13af9558acc00ac91d10ecef2cf282974627872cbaa938c09281b8987d0a06c",
+  "fixture_sha256": "8c51b0e3ab9c3d4165a397d74f4bf408e9e32c0ed5603a708a8bae44945bf785",
+  "rows": 5600,
+  "sources": {
+    "10": "emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_even[10]~2",
+    "9": "emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[9]~11"
+  },
+  "mapped_output_count_per_source": 1400,
+  "mapped_bank_counts_per_source": [
+    680,
+    680,
+    40
+  ],
+  "note": "Mapped counts differ from fitted 1302/1301 counts. Unit tests that create a copy are SYNTHETIC transformations, not measured candidates."
+}

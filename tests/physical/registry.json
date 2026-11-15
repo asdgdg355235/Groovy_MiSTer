@@ -3,6 +3,10 @@
   "hardware_baseline": "c8d4b3897c4ed98165d3ee862cabbdd9ab9a4f17",
   "generated_build_id_hex": "60646566696e65204255494c445f44415445202232363131313222",
   "experiments": {
+    "U10": {"kind": "upper-even-bit10", "status": "fresh-map-required", "target_bank": "1.even", "logical_bit": 10},
+    "U9": {"kind": "upper-odd-bit9", "status": "fresh-map-required", "target_bank": "0.odd", "logical_bit": 9},
+    "V3": {"kind": "vga-counter-boundary", "status": "evidence-required", "requires": ["original_register_ancestry", "reset_enable_initialization", "native_instance_assignment_scope"]},
+    "U10_U9_V3": {"kind": "independent-factor-composition", "status": "constituent-evidence-required", "factors": ["U10", "U9", "V3"]},
     "R0": {
       "kind": "diagnostic-control",
       "assignments": [],

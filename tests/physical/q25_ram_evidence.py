@@ -13,7 +13,15 @@ from physical.control import digest, hardware_hashes, profile_spec, write_json
 def preflight(root, profile):
     root = Path(root)
     spec = profile_spec(profile)
-    validated = hardware_hashes(root, profile)
+    if (root / 'output_files/q25_experiment.json').exists():
+        provenance = json.loads((root / 'output_files/provenance.json').read_text())
+        validated = provenance['hardware_hashes']
+        for rel, wanted in validated.items():
+            expected = provenance['prepared_project_sha256'] if rel == 'Groovy.qsf' else wanted
+            if digest((root / rel).read_bytes()) != expected:
+                raise ValueError('Prepared Q25 candidate source drift: ' + rel)
+    else:
+        validated = hardware_hashes(root, profile)
     qip = root / spec['pll_qip']
     q17 = root / 'sys/pll_q17.qip'
     if not qip.is_file() or not q17.is_file():

@@ -1,0 +1,33 @@
+{
+  "format": "q25-v3-boundary-v1",
+  "experiment": "V3",
+  "status": "blocked",
+  "control_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "compiler_profile": "q25",
+  "assignments": [],
+  "correspondence": [],
+  "evidence": {},
+  "support": {
+    "native_25_1_lite_verified": false,
+    "instance_register_scope_verified": false,
+    "accepted_value_verified": false
+  },
+  "mechanism": "Preserve one reviewed original VGA vertical-counter register boundary; global retiming remains ON.",
+  "unresolved": [
+    "Original v_cnt D/Q/reset/CE/power-up ancestry through generated registers has not been proved.",
+    "Native Quartus 25.1 Lite instance-register scope and accepted value are unverified.",
+    "A matched Add17/NEW_REG/OTERM name does not prove register movement."
+  ],
+  "source_basis": {
+    "rtl/vga.v:96": "16-bit v_cnt declaration without an explicit initial value",
+    "rtl/vga.v:109": "Unchanged V_total arithmetic",
+    "rtl/vga.v:702-742": "soft reset has later assignment priority; normal updates require ce_pix and neither reset; counter update occurs at H+HFP",
+    "Groovy.sv:1074-1078": "S_Blit_Auto_Skip pixel-count product consumes the next-line operand",
+    "fixture": "tests/physical/fixtures/root_operand_r0.json retains observed map/fitted D/CLK/Q and multiplier consumers; it is not original-register ancestry proof"
+  },
+  "required_review_fields": [
+    "hardware_manifest_sha256", "generated_input_sha256", "control_provenance_sha256",
+    "reviewed_by", "evidence.register_ancestry", "evidence.clock_enable_reset_initialization",
+    "evidence.native_assignment_scope_values", "support.name", "support.value"
+  ]
+}

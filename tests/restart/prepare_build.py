@@ -10,7 +10,7 @@ def source_paths(root):
 def record(root,phase):
  root=Path(root).resolve();out=root/'output_files';entries=[]
  paths=source_paths(root)
- for name in ('crt_address_duplication_resolved.qsf','physical_overlay.qsf'):
+ for name in ('crt_address_duplication_resolved.qsf','physical_overlay.qsf','upper_address_duplication.qsf','upper_resolution_map.json','q25_experiment.json'):
   generated=out/name
   if generated.exists():paths.append(generated)
  for path in paths:
