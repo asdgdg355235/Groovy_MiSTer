@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 
@@ -138,6 +139,7 @@ def run_batch(args,build_call=invoke,snapshot_call=snapshot,compare_call=compare
                 out=build/'output_files';out.mkdir(parents=True,exist_ok=True)
                 write_json(out/'batch_result.json',r)
                 write_json(out/'control_evidence_manifest.json',control)
+                if (root/'logs'/(label+'.log')).is_file():shutil.copy2(root/'logs'/(label+'.log'),out/'batch_runner.log')
                 pack(out,str(build)+'-reports.tar.gz')
             archive=Path(str(build)+'-reports.tar.gz')
             if archive.exists():r['archive']=str(archive)

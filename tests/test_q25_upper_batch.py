@@ -18,7 +18,7 @@ from physical.upper_selection import SPECS, PREFIX, resolve, compose, audit_fit,
 from physical.q25_experiments import CONTROL, request, validate_baseline, validate_v3, validate_selection, materialize, derived_assignments, Blocked
 from physical.control import digest, expected_build_id, hardware_hashes, stage_inputs, write_json
 from physical.diagnostics import table, logical_bits
-from physical.q25_batch_compare import compare
+from physical.q25_batch_compare import compare, physical_summary
 from physical.run_v3_diagnostics import commands
 from test_physical_experiments import timing_fixture
 spec=importlib.util.spec_from_file_location('batch',ROOT/'tests/run_q25_timing_experiment_batch.py')
@@ -208,6 +208,19 @@ class CandidateGates(unittest.TestCase):
         for e in ['V3','U10_U9_V3']:
             with self.assertRaises(Blocked):request(e,self.b)
 
+    def test_original_legacy_memory_only_outputs_use_only_sealed_reviewed_excerpt(self):
+        from physical.q25_experiments import LEGACY_ATOMS_EXPORTER_SHA256
+        legacy=[{k:v for k,v in r.items() if k not in ('node_id','peer_id')} for r in NATIVE if r['direction']=='INPUT']
+        memory=dict(legacy[0]);memory['direction']='OUTPUT';memory['node']='legacy|memory';legacy.append(memory)
+        put_rows(self.b/'closure_diagnostics/atom_ports_map.tsv',legacy)
+        m=json.loads((self.b/'source_manifest_prepared.json').read_text())
+        m['files'].append({'path':'tests/physical/report_atoms.tcl','sha256':LEGACY_ATOMS_EXPORTER_SHA256})
+        write_json(self.b/'source_manifest_prepared.json',m)
+        r=request('U10',self.b);self.assertEqual(r['baseline_upper_graph']['kind'],'actual_Q25_R0_complete_selected_port_excerpt')
+        # The same partial graph with a current/unknown exporter must fail.
+        m['files'][-1]['sha256']='unreviewed';write_json(self.b/'source_manifest_prepared.json',m)
+        with self.assertRaises(ValueError):request('U10',self.b)
+
     def test_v3_complete_review_and_missing_scope_or_ancestry(self):
         p=reviewed_v3(self.root,self.b);r=validate_v3(p,self.b);self.assertEqual(len(r['assignments']),1)
         for k in ['native_25_1_lite_verified','instance_register_scope_verified','accepted_value_verified']:
@@ -388,6 +401,12 @@ class EightCornerComparison(unittest.TestCase):
         self.compare()
         after={p.relative_to(self.b).as_posix():sha(p) for p in self.b.rglob('*') if p.is_file()}
         self.assertEqual(before,after)
+
+    def test_native_resource_and_retiming_record_summary(self):
+        (self.c/'Groovy.fit.summary').write_text('SYNTHETIC ONLY\nLogic utilization (in ALMs) : 32,000 / 41,910\nTotal registers : 31,000\n')
+        (self.c/'Groovy.fit.rpt').write_text('; synthetic_counter ; Retimed Register ; Synthetic physical record ;\n')
+        r=physical_summary(self.c)
+        self.assertEqual(r['resource_summary']['Total registers'],'31,000');self.assertEqual(r['retiming_records'],1)
 
 
 if __name__=='__main__':unittest.main()

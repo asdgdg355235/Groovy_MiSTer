@@ -2,6 +2,7 @@
 import csv
 import json
 from pathlib import Path
+import re
 
 from physical.q25_experiments import CONTROL, output_root, validate_baseline, checked_path
 from physical.upper_selection import sha, bank_prefix
@@ -11,6 +12,42 @@ from validate_timing_exports import validate
 
 def read(path):
     with Path(path).open() as f: return list(csv.DictReader(f, delimiter='\t'))
+
+
+def physical_summary(root, spec=None):
+    """Native resource/retiming counts and selected driver locations, not ancestry."""
+    result={'resource_summary':{},'retiming_records':None,'upper_driver_locations':[]}
+    p=root/'Groovy.fit.summary'
+    if p.exists():
+        for line in p.read_text(errors='replace').splitlines():
+            if ':' in line:
+                k,v=line.split(':',1);result['resource_summary'][k.strip()]=v.strip()
+    p=root/'Groovy.fit.rpt'
+    if p.exists():
+        count=0
+        with p.open(errors='replace') as f:
+            for line in f:
+                cells=[x.strip() for x in line.split(';')[1:-1]] if line.startswith(';') else []
+                count += len(cells)>1 and cells[1]=='Retimed Register'
+        result['retiming_records']=count
+    p=root/'closure_diagnostics/fanout_locations.tsv'
+    if p.exists() and spec:
+        labels={r['source'].split('|')[-1] for r in spec.get('baseline_upper_observations',[])}
+        labels.update(r['copy'] for r in spec.get('baseline_upper_observations',[]))
+        observed={}
+        with p.open() as f:
+            for r in csv.DictReader(f,delimiter='\t'):
+                seg=r['source'].split('|')
+                if len(seg)<2 or seg[-2] not in labels or seg[-1] not in ('combout','sumout'):continue
+                key=r['source'];v=observed.setdefault(key,{'source':key,'locations':set(),'edges':set(),'expected':set(),'load_banks':set()})
+                v['locations'].add(r['source_location']);v['edges'].add(r['edge_id']);v['expected'].add(r['expected_fanout'])
+                m=re.search(r'packed_ram\[[012]\]\.(?:even|odd)_ram',r['destination'])
+                v['load_banks'].add(m[0] if m else 'other')
+        result['upper_driver_locations']=[{'source':v['source'],'locations':sorted(v['locations']),
+            'observed_unique_edges':len(v['edges']),'expected_fanout':sorted(v['expected']),
+            'load_banks':sorted(v['load_banks'])} for v in observed.values()]
+    result['limit']='Native counts/locations only. A retiming row is not original-register ancestry or a causal timing improvement.'
+    return result
 
 
 def path_family(source, sink):
@@ -148,6 +185,8 @@ def compare(control, candidate, destination, review=None):
             'ancillary_failures':ancillary,'pulse_failures':ng['pulse_failures'],'invalid':invalid,'pending':pending,
             'vectors':vectors,'endpoint_distribution':{'file':dist.name,'sha256':sha(dist),'unmatched_endpoint_records':changed_names},
             'critical_paths':path_metrics(candidate),'resources':resource,'application':application,
+            'control_critical_paths':path_metrics(control),
+            'control_physical':physical_summary(control,spec),'candidate_physical':physical_summary(candidate,spec),
             'qualification':'Timing/experiment retention only. I/O coverage and CRT hardware acceptance remain separate.'}
     (destination/'comparison.json').write_text(json.dumps(result,indent=2)+'\n')
     return result

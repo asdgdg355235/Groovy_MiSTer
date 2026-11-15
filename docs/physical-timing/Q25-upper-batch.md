@@ -60,9 +60,11 @@ copy/original fanin for review. It does not claim that a named copy improves
 timing or that unreviewed retiming is cycle proof. Logical-bit diagnostics
 include these validated copy connections without inventing MLAB address pins.
 
-The sealed original R0 report predates full output-port export. When it has no
-OUTPUT records at all, preparation uses the committed, hash-checked complete
-R0-PHYS excerpt. Partial fresh candidate output exports always fail. Neither
+The sealed original R0 report predates full driver output-port export. Its
+exporter emitted memory outputs but omitted the selected driver outputs.
+Only that exact committed exporter SHA-256 & its old schema permit preparation
+to use the committed, hash-checked complete R0-PHYS excerpt. Partial fresh
+candidate output exports always fail. Neither
 the old diagnostic failure nor a historical suffix is silently treated as a
 successful candidate mechanism.
 

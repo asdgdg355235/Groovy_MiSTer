@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT / 'tests'))
 from physical.upper_selection import rows, resolve, compose, audit_fit, reject_ignored, sha, literal
 
 CONTROL = '3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a'
+LEGACY_ATOMS_EXPORTER_SHA256 = '8459cab25401eec95a4d3610781d7d5aa024625fc307402572ee7e766fa1cc07'
 NAMES = ('U10', 'U9', 'V3', 'U10_U9_V3')
 
 
@@ -34,7 +35,9 @@ def validate_selection(source, experiment):
     if not path.exists():return
     selected=json.loads(path.read_text())
     if (selected.get('control_commit')!=CONTROL or selected.get('compiler_profile')!='q25'
-            or selected.get('experiment')!=experiment or selected.get('factors')!=factors(experiment)):
+            or selected.get('experiment') not in NAMES
+            or (experiment!='R0' and selected.get('experiment')!=experiment)
+            or selected.get('factors')!=factors(selected['experiment'])):
         raise ValueError('Individual experiment branch selection differs; use the shared batch branch for other factors')
 
 
@@ -162,8 +165,14 @@ def request(experiment, evidence, v3_recipe=None):
         path = checked_path(output_root(evidence), 'closure_diagnostics/atom_ports_map.tsv')
         rr = rows(path)
         graph = {'kind':'control-archive', 'sha256':sha(path)}
-        if not any(r['direction']=='OUTPUT' for r in rr):
-            # The original sealed 3b8 archive predates complete output exports.
+        prepared=json.loads((output_root(evidence)/'source_manifest_prepared.json').read_text())
+        exporter=next((r['sha256'] for r in prepared['files'] if r['path']=='tests/physical/report_atoms.tcl'),None)
+        legacy = (exporter==LEGACY_ATOMS_EXPORTER_SHA256 and rr
+                  and 'node_id' not in rr[0] and 'peer_id' not in rr[0])
+        if legacy:
+            # The original sealed 3b8 exporter emitted some memory OUTPUT rows,
+            # but not the selected driver outputs. Match its exact source hash
+            # and old schema, not the existence of arbitrary OUTPUT records.
             # Use ONLY the committed complete R0-PHYS excerpt, never a partial
             # candidate graph or an arbitrary replacement supplied by filename.
             fixture=Path(__file__).with_name('fixtures')/'upper_selection_r0_map.tsv.gz'
