@@ -19,7 +19,7 @@ from package_reports import pack
 
 def commands(source,single=None):
     script=str(Path(source)/'tests/physical/report_v3_boundary.tcl')
-    result=[['quartus_cdb','-t',script,'map'],['quartus_cdb','-t',script,'cmp']]
+    result=[['quartus_sh','-t',str(Path(source)/'tests/physical/report_correspondence.tcl')], ['quartus_cdb','-t',script,'map'],['quartus_cdb','-t',script,'cmp'], ['quartus_sta','-t',str(Path(source)/'tests/physical/report_upper_recovery.tcl')]]
     if single:result.append(['quartus_sh','-t',script,'support',single])
     return result
 
@@ -31,9 +31,20 @@ def main():
     p.add_argument('--quartus-bin',type=Path,default=Path('/home/taichi/altera_lite/25.1std/quartus/bin'))
     p.add_argument('--single-assignment-query',choices=['ADV_NETLIST_OPT_ALLOWED','PHYSICAL_SYNTHESIS_REGISTER_RETIMING'])
     p.add_argument('--prepare-only',action='store_true')
+    p.add_argument('--experiment',choices=['R0','U10','U9'],default='R0')
     a=p.parse_args();build=a.build_dir.resolve();out=a.output.resolve()
     if out==build or build in out.parents or out.exists() or Path(str(out)+'-reports.tar.gz').exists():raise ValueError('V3 query output must be new and outside the sealed build')
-    identity=validate_baseline(build)
+    if a.experiment=='R0':identity=validate_baseline(build)
+    else:
+        reports=build/'output_files'
+        prov=json.loads((reports/'provenance.json').read_text())
+        profile=json.loads((ROOT/'tests/physical/hardware_q25.json').read_text())
+        if (prov.get('source_commit')!='9b832f86c44ee4f43cb4eab63202eca77dda8b4b'
+            or prov.get('experiment',{}).get('name')!=a.experiment
+            or prov.get('hardware_hashes')!=profile['files']):raise ValueError('Unexpected failed-candidate identity')
+        if prov.get('generated_input',{}).get('sha256')!=__import__('hashlib').sha256(expected_build_id()).hexdigest():raise ValueError('Generated identity differs')
+        identity={'experiment':a.experiment,'provenance_sha256':sha(reports/'provenance.json'),'hardware_manifest_sha256':sha(ROOT/'tests/physical/hardware_q25.json')}
+
     out.mkdir(parents=True);plan=commands(ROOT,a.single_assignment_query)
     state={'control':identity,'commands':plan,'quartus_executed':False,'status':'prepared-only',
            'assignment_approval':False,'register_ancestry':'PENDING_REVIEW',
@@ -58,6 +69,9 @@ def main():
             for i,cmd in enumerate(plan):
                 with (out/f'query_{i}.log').open('w') as f:
                     subprocess.run([str(a.quartus_bin/cmd[0]),*cmd[1:]],cwd=query,env=env,stdout=f,stderr=subprocess.STDOUT,check=True)
+            required=['source_correspondence.tsv','v3_boundary_ports_map.tsv','v3_boundary_ports_cmp.tsv','upper_recovery_paths/endpoints.tsv','upper_recovery_paths/corners.tsv']
+            for rel in required:
+                if not (out/rel).is_file() or (out/rel).stat().st_size==0:raise ValueError('Missing query export: '+rel)
             state['status']='observations-exported-ancestry-and-scope-review-pending'
     except (ValueError,OSError,subprocess.SubprocessError) as error:
         code=3;state.update(status='incomplete',error=str(error))

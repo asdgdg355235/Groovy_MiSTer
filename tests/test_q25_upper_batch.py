@@ -81,7 +81,7 @@ def reviewed_v3(root,b):
     for k in ['register_ancestry','clock_enable_reset_initialization','native_assignment_scope_values']:
         p=proof/(k+'.txt');p.write_text('SYNTHETIC ONLY register scope/ancestry fixture\n')
         if k=='native_assignment_scope_values':write_json(p,{'status':'supported','version':'25.1std.0','build':1129,'edition':'Lite',
-            'scope':'instance','object_type':'register','name':'ADV_NETLIST_OPT_ALLOWED','accepted_values':['NEVER_ALLOW'],
+            'scope':'instance','object_type':'register','name':'ADV_NETLIST_OPT_ALLOWED','accepted_values':['NEVER ALLOW'],
             'reviewed_by':'SYNTHETIC UNIT TEST','native_evidence':{'native_metadata.txt':sha(native_raw)}})
         files[k]={'file':p.name,'sha256':sha(p),'explanation':'Synthetic unit test'}
     original='emu:emu|vga:vga|v_cnt[12]';fitted=original+'_SYNTHETIC'
@@ -92,8 +92,8 @@ def reviewed_v3(root,b):
        'control_provenance_sha256':seal['files']['provenance.json'],'reviewed_by':'SYNTHETIC UNIT TEST',
        'mechanism':'Synthetic boundary test only','evidence':files,
        'support':{'native_25_1_lite_verified':True,'instance_register_scope_verified':True,'accepted_value_verified':True,
-                  'name':'ADV_NETLIST_OPT_ALLOWED','value':'NEVER_ALLOW'},
-       'assignments':[{'kind':'instance','name':'ADV_NETLIST_OPT_ALLOWED','value':'NEVER_ALLOW','target':original}],
+                  'name':'ADV_NETLIST_OPT_ALLOWED','value':'NEVER ALLOW'},
+       'assignments':[{'kind':'instance','name':'ADV_NETLIST_OPT_ALLOWED','value':'NEVER ALLOW','target':original}],
        'correspondence':[{'rtl_node':original,'fitted_node':fitted,'reviewed':True,'ancestry_explanation':'SYNTHETIC'}]}
     path=root/'V3.json';write_json(path,recipe);return path
 
@@ -261,9 +261,24 @@ class CandidateGates(unittest.TestCase):
         r['evidence']['native_assignment_scope_values']['sha256']=sha(native);write_json(p,r)
         with self.assertRaises(Blocked):validate_v3(p,self.b)
 
+    def test_v3_supplemental_inventory_does_not_modify_sealed_control(self):
+        p=reviewed_v3(self.root,self.b);r=json.loads(p.read_text())
+        original=self.b/'closure_diagnostics/node_inventory.tsv'
+        extra=self.root/'V3-evidence/register_inventory.tsv'
+        extra.write_bytes(original.read_bytes());original.unlink()
+        r['evidence']['register_inventory']={'file':extra.name,'sha256':sha(extra),'explanation':'SYNTHETIC supplemental source correspondence test'}
+        write_json(p,r);self.assertEqual(validate_v3(p,self.b)['status'],'reviewed')
+        extra.write_text('tampered')
+        with self.assertRaises(ValueError):validate_v3(p,self.b)
+
+    def test_v3_rejects_underscored_vendor_enum(self):
+        p=reviewed_v3(self.root,self.b);r=json.loads(p.read_text())
+        r['assignments'][0]['value']='NEVER_ALLOW';write_json(p,r)
+        with self.assertRaises(ValueError):validate_v3(p,self.b)
+
     def test_v3_exporter_has_no_compile_or_unsafe_enumeration_calls(self):
         for args in [commands(ROOT),commands(ROOT,'ADV_NETLIST_OPT_ALLOWED')]:
-            self.assertTrue(all(c[0] in ('quartus_cdb','quartus_sh') and '-t' in c for c in args))
+            self.assertTrue(all(c[0] in ('quartus_cdb','quartus_sh','quartus_sta') and '-t' in c for c in args))
         tcl=(ROOT/'tests/physical/report_v3_boundary.tcl').read_text()
         self.assertNotRegex(tcl,r'(?m)^\s*get_all_assignment_names')
         script='set h [open {'+str(ROOT/'tests/physical/report_v3_boundary.tcl')+'}];set s [read $h];if {![info complete $s]} {exit 1}\n'

@@ -108,7 +108,7 @@ def validate_v3(recipe_path, evidence):
     proof = recipe.get('evidence', {})
     proof_root = Path(recipe_path).resolve().parent / recipe.get('evidence_directory', 'V3-evidence')
     required = {'register_ancestry', 'clock_enable_reset_initialization', 'native_assignment_scope_values'}
-    if set(proof) != required or not recipe.get('reviewed_by') or not recipe.get('mechanism'):
+    if not required <= set(proof) or set(proof)-required-{'register_inventory'} or not recipe.get('reviewed_by') or not recipe.get('mechanism'):
         raise Blocked('V3 source/cycle/scope review is incomplete')
     for item in proof.values():
         if not item.get('explanation') or sha(checked_path(proof_root, item.get('file', ''))) != item.get('sha256'):
@@ -120,10 +120,10 @@ def validate_v3(recipe_path, evidence):
     mappings = recipe.get('correspondence', [])
     if not 1 <= len(assignments) <= 16 or len(assignments) != len(mappings):
         raise ValueError('V3 requires one narrow reviewed register group')
-    inv = rows(checked_path(b, 'closure_diagnostics/node_inventory.tsv'))
-    identities = {(r['stage'], n): r['type'] for r in inv for n in (r['name'], r['short_name'])}
+    inv = rows(checked_path(proof_root, proof['register_inventory']['file'])) if 'register_inventory' in proof else rows(checked_path(b, 'closure_diagnostics/node_inventory.tsv'))
+    identities = {(r['stage'], n): r['type'] for r in inv for n in (r['name'], r.get('short_name', r['name']))}
     factors, targets = set(), set()
-    allowed = {('ADV_NETLIST_OPT_ALLOWED', 'NEVER_ALLOW'), ('PHYSICAL_SYNTHESIS_REGISTER_RETIMING', 'OFF')}
+    allowed = {('ADV_NETLIST_OPT_ALLOWED', 'NEVER ALLOW'), ('PHYSICAL_SYNTHESIS_REGISTER_RETIMING', 'OFF')}
     for a, m in zip(assignments, mappings):
         target = a.get('target', ''); literal(target)
         if target in targets: raise ValueError('Duplicate V3 target')
