@@ -1,0 +1,6 @@
+# Original analog-triggers hardware with the synchronous LZ4 window.
+source Groovy.qsf
+set_global_assignment -name LAST_QUARTUS_VERSION "25.1std.0 Lite Edition"
+set_global_assignment -name DEVICE 5CSEBA6U23I7
+set_global_assignment -name SEED 1
+set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
