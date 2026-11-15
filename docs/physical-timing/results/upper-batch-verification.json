@@ -1,0 +1,85 @@
+{
+  "format": "q25-upper-batch-nonquartus-verification-v1",
+  "tested_source_commit": "206a11c07996c66b17d9831e2f7a02c27cc45cce",
+  "control_commit": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "physical_evidence_commit": "83862f796f4382dfec91ebbf4dbc5a9ea8409f0c",
+  "quartus_executed": false,
+  "hardware_rtl_changes": [],
+  "hardware_configuration_files_identical_to_q25_profile": 93,
+  "tools": {
+    "python": "3.12.14",
+    "iverilog": "12.0",
+    "verilator": "5.032",
+    "z3": "5.4.1"
+  },
+  "full_regression": {
+    "command": "python3 tests/run_timing_candidate_tests.py",
+    "exit_code": 0,
+    "python_unit_tests": 141,
+    "memory_extraction_unit_tests": 3,
+    "focused_upper_batch_tests_included": 37,
+    "log_sha256": "2e47f8b274fc2488657df2996fa5a2ec72e0606891b24b9c9d7a1ed4544bd7f9",
+    "coverage": [
+      "actual Verilog/SystemVerilog language modes",
+      "finite-width arithmetic proofs",
+      "CRT synchronous memory data and ports",
+      "geometry -7 through +7",
+      "progressive/interlaced fields",
+      "CE stalls, reset, restart and mode transitions",
+      "LZ4 full and byte-only differential",
+      "delta selection/decode",
+      "OSD metadata/output latency",
+      "complete emu elaboration"
+    ]
+  },
+  "static_checks": [
+    {
+      "command": "bash -n tests/run_physical_timing_quartus.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    },
+    {
+      "command": "tclsh info complete on report_v3_boundary.tcl",
+      "exit_code": 0,
+      "limitation": "Tcl parsing is not native Quartus API acceptance"
+    }
+  ],
+  "real_r0_preparation": {
+    "api_calls": [
+      "physical.control.create",
+      "physical.control.freeze_generated",
+      "physical.q25_ram_evidence.preflight",
+      "physical.control.stage_inputs before_map"
+    ],
+    "experiments": {
+      "U10": {
+        "input_gate_before_map_pass": true,
+        "generated_input_sha256": "21c1651fc5ab1eaa30f93df3a5fd169f4ed71ceb79c8b2dfda6b881aad1ac88a",
+        "provenance_sha256": "5208ff930a26dac0f06f7794ab5fdadd631eb70680f0b1d5c938dbaf7a877288",
+        "input_gate_sha256": "210610b318e41e25880e393389f7f5ae2dca3bb323c3e8cf6a5235cdc4aae989"
+      },
+      "U9": {
+        "input_gate_before_map_pass": true,
+        "generated_input_sha256": "21c1651fc5ab1eaa30f93df3a5fd169f4ed71ceb79c8b2dfda6b881aad1ac88a",
+        "provenance_sha256": "b0cc55ecf6df99343b2de0ee27402da643b3379020e23fc991e1253e62210393",
+        "input_gate_sha256": "210610b318e41e25880e393389f7f5ae2dca3bb323c3e8cf6a5235cdc4aae989"
+      }
+    },
+    "vendor_invocations": 0
+  },
+  "mechanism_tests": "Native selected R0 graph excerpt plus explicitly labelled synthetic splits, recipes and mocked compilations.",
+  "corrected_verification_findings": [
+    "Initial full-suite run rejected an uncommitted checkout; preserved the clean-source gate and reran after committing.",
+    "Actual original R0 export includes memory OUTPUT records but not upper-driver OUTPUTs. Preparation now keys the narrowly permitted reviewed-fixture fallback to the exact historical exporter hash and old schema."
+  ],
+  "pending": [
+    "Fresh mapped-source/output-pin resolution and assignment acceptance for U10/U9.",
+    "Post-fit bank-specific upper driver split, resources and complete eight-corner comparison.",
+    "V3 original-register ancestry and Quartus 25.1 Lite instance-register assignment scope/value proof.",
+    "Constituent physical acceptance before combined execution.",
+    "Clock/I/O coverage disposition and CRT hardware validation."
+  ]
+}

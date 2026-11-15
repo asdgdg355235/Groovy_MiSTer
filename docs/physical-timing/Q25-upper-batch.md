@@ -109,6 +109,15 @@ CRT_READ_BUILD_DIR="$PWD/../Groovy-Q25-U10" \
 Use U9 with a different new directory for the other upper selector. No factor
 depends on another candidate's source or fit result.
 
+The published independent branches are `work/q25-u10-even-locality`,
+`work/q25-u9-odd-locality`, `work/q25-v3-counter-boundary` &
+`work/q25-u10-u9-v3`. Each forks the same shared infrastructure revision & adds
+only `tests/physical/selected_experiment.json`. That manifest selects one factor
+set; it does not install a historical mapped source or a physical location.
+Preparation rejects a different named factor on these individual branches.
+The shared `work/q25-timing-batch` branch has no such selection & runs all
+independent candidates from the same source commit.
+
 ## V3 diagnostics & activation
 
 `tests/physical/recipes/V3.blocked.json` records source expressions, reset/CE
@@ -200,7 +209,21 @@ source/output selection, 3 blocked/invalid evidence or pending review, 4 complet
 but rejected timing. Each candidate also retains its original runner exit code.
 Nothing is promoted automatically to the original R0 branch.
 
+The delivered V3 recipe is blocked, so the documented default command measures
+U10 & U9, writes a diagnostic-only V3 archive & records the combined build as
+blocked. Exit code 3 is expected for that pending evidence. Supplying a later
+reviewed V3 recipe activates the existing code; no placeholder control build is
+reported as V3. Physical review files can be supplied through `--reviews-dir`
+for a subsequent eligible batch. Every invocation still needs a new output root.
+
 ## Verification & remaining physical requirements
+
+`results/upper-batch-verification.json` records the tested source revision,
+commands, tool versions & log hashes. The full entry point passed 141 Python
+unit tests, including 37 focused upper/batch tests, plus the memory extraction
+checks, arithmetic proofs, HDL simulations & full-design elaboration. Real
+U10/U9 preparation against the original R0 archive passed without vendor calls;
+both retained the exact 27-byte build input.
 
 ```bash
 python3 -m unittest discover -s tests -p test_q25_upper_batch.py -v
