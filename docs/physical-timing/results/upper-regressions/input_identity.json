@@ -1,0 +1,22 @@
+{
+  "q25-timing-batch-results.md": {
+    "bytes": 1246,
+    "sha256": "99fe0a53f214320a6f04200008d19a05addba037b83ca7190d35f06cd7e3b29c"
+  },
+  "q25-timing-batch-comparison.tsv": {
+    "bytes": 10153,
+    "sha256": "dcc47050e7eb1ab9f8981393691df6c34dd27c8f6a15e72915b61acfbcbd76af"
+  },
+  "Groovy-Q25-U10-reports.tar.gz": {
+    "bytes": 137610360,
+    "sha256": "4e6f4c12c521505192b5d1d31b5c4c62befebc7638fd5a981d7f51140ad66551"
+  },
+  "Groovy-Q25-U9-reports.tar.gz": {
+    "bytes": 139095343,
+    "sha256": "f17dd5f7c0b7c45be5468b20415a8aa3b60876123ae1129e3d3d1f176b96d4be"
+  },
+  "Groovy-Q25-V3-reports.tar.gz": {
+    "bytes": 1603,
+    "sha256": "74da29c17a0c818f2b91340dc2a459c1c9d7d03a2aa4cc6a0f7e1d90ad32fc49"
+  }
+}

@@ -1,0 +1,1145 @@
+{
+  "U10": {
+    "groups": [
+      {
+        "corner": {
+          "directory": "corner_01",
+          "name": "7_slow_1100mv_100c",
+          "model": "slow",
+          "speed": "7",
+          "voltage": "1100",
+          "temperature": "100"
+        },
+        "negative_endpoints": 76,
+        "capture_families": {
+          "pixel decode capture; launch must be inspected": 3,
+          "CRT row arithmetic capture; generated ancestry pending": 3,
+          "registered RGB capture": 16,
+          "CRT read/mux capture": 50,
+          "DDR burst capture": 3,
+          "other; exact launch/capture retained": 1
+        },
+        "launch_counts": {
+          "emu:emu|PoC_lz4_delta_index[0]": 2,
+          "emu:emu|vga:vga|hb~DUPLICATE": 3,
+          "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[31]_OTERM147~DUPLICATE": 16,
+          "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4228": 49,
+          "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[5]~33_OTERM4248": 1,
+          "emu:emu|vga:vga|vb": 3,
+          "emu:emu|PoC_lz4_delta_index[2]": 2
+        }
+      },
+      {
+        "corner": {
+          "directory": "corner_02",
+          "name": "7_slow_1100mv_-40c",
+          "model": "slow",
+          "speed": "7",
+          "voltage": "1100",
+          "temperature": "-40"
+        },
+        "negative_endpoints": 44,
+        "capture_families": {
+          "VGA/root arithmetic": 4,
+          "pixel decode capture; launch must be inspected": 1,
+          "CRT row arithmetic capture; generated ancestry pending": 10,
+          "CRT read/mux capture": 29
+        },
+        "launch_counts": {
+          "emu:emu|vga:vga|Add1~93_OTERM3880": 4,
+          "emu:emu|PoC_lz4_delta_index[4]": 1,
+          "emu:emu|vga:vga|hb~DUPLICATE": 10,
+          "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4228": 23,
+          "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[5]~33_OTERM4248": 6
+        }
+      },
+      {
+        "corner": {
+          "directory": "corner_03",
+          "name": "7_slow_1100mv_85c",
+          "model": "slow",
+          "speed": "7",
+          "voltage": "1100",
+          "temperature": "85"
+        },
+        "negative_endpoints": 59,
+        "capture_families": {
+          "CRT row arithmetic capture; generated ancestry pending": 2,
+          "registered RGB capture": 16,
+          "CRT read/mux capture": 37,
+          "DDR burst capture": 3,
+          "pixel decode capture; launch must be inspected": 1
+        },
+        "launch_counts": {
+          "emu:emu|vga:vga|hb~DUPLICATE": 2,
+          "emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[0].odd_ram|altdpram:distributed.mem_rtl_0|dpram_rro1:auto_generated|dataout_reg[16]_OTERM1125": 16,
+          "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4228": 36,
+          "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[5]~33_OTERM4248": 1,
+          "emu:emu|vga:vga|vb": 3,
+          "emu:emu|PoC_lz4_delta_index[0]": 1
+        }
+      },
+      {
+        "corner": {
+          "directory": "corner_04",
+          "name": "7_slow_1100mv_0c",
+          "model": "slow",
+          "speed": "7",
+          "voltage": "1100",
+          "temperature": "0"
+        },
+        "negative_endpoints": 31,
+        "capture_families": {
+          "VGA/root arithmetic": 1,
+          "CRT row arithmetic capture; generated ancestry pending": 8,
+          "CRT read/mux capture": 22
+        },
+        "launch_counts": {
+          "emu:emu|vga:vga|Add1~93_OTERM3880": 1,
+          "emu:emu|vga:vga|hb~DUPLICATE": 8,
+          "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4228": 20,
+          "emu:emu|crt_vsize_fixed:u_vsize|advance_rows[5]~33_OTERM4248": 2
+        }
+      },
+      {
+        "corner": {
+          "directory": "corner_05",
+          "name": "MIN_fast_1100mv_-40c",
+          "model": "fast",
+          "speed": "M",
+          "voltage": "1100",
+          "temperature": "-40"
+        },
+        "negative_endpoints": 0,
+        "capture_families": {},
+        "launch_counts": {}
+      },
+      {
+        "corner": {
+          "directory": "corner_06",
+          "name": "MIN_fast_1100mv_0c",
+          "model": "fast",
+          "speed": "M",
+          "voltage": "1100",
+          "temperature": "0"
+        },
+        "negative_endpoints": 0,
+        "capture_families": {},
+        "launch_counts": {}
+      },
+      {
+        "corner": {
+          "directory": "corner_07",
+          "name": "MIN_fast_1100mv_85c",
+          "model": "fast",
+          "speed": "M",
+          "voltage": "1100",
+          "temperature": "85"
+        },
+        "negative_endpoints": 0,
+        "capture_families": {},
+        "launch_counts": {}
+      },
+      {
+        "corner": {
+          "directory": "corner_08",
+          "name": "MIN_fast_1100mv_100c",
+          "model": "fast",
+          "speed": "M",
+          "voltage": "1100",
+          "temperature": "100"
+        },
+        "negative_endpoints": 0,
+        "capture_families": {},
+        "launch_counts": {}
+      }
+    ],
+    "complete_negative_records": 210,
+    "vectors": [
+      {
+        "corner": "fast/M/1100/-40",
+        "check": "hold",
+        "R0_WNS_ns": 0.062,
+        "candidate_WNS_ns": 0.118,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/-40",
+        "check": "recovery",
+        "R0_WNS_ns": 7.211,
+        "candidate_WNS_ns": 7.147,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/-40",
+        "check": "removal",
+        "R0_WNS_ns": 0.431,
+        "candidate_WNS_ns": 0.707,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/-40",
+        "check": "setup",
+        "R0_WNS_ns": 5.739,
+        "candidate_WNS_ns": 6.037,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/0",
+        "check": "hold",
+        "R0_WNS_ns": 0.076,
+        "candidate_WNS_ns": 0.121,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/0",
+        "check": "recovery",
+        "R0_WNS_ns": 7.102,
+        "candidate_WNS_ns": 7.035,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/0",
+        "check": "removal",
+        "R0_WNS_ns": 0.455,
+        "candidate_WNS_ns": 0.74,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/0",
+        "check": "setup",
+        "R0_WNS_ns": 5.427,
+        "candidate_WNS_ns": 5.833,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/100",
+        "check": "hold",
+        "R0_WNS_ns": 0.131,
+        "candidate_WNS_ns": 0.134,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/100",
+        "check": "recovery",
+        "R0_WNS_ns": 6.732,
+        "candidate_WNS_ns": 6.63,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/100",
+        "check": "removal",
+        "R0_WNS_ns": 0.541,
+        "candidate_WNS_ns": 0.868,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/100",
+        "check": "setup",
+        "R0_WNS_ns": 4.11,
+        "candidate_WNS_ns": 4.622,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/85",
+        "check": "hold",
+        "R0_WNS_ns": 0.129,
+        "candidate_WNS_ns": 0.132,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/85",
+        "check": "recovery",
+        "R0_WNS_ns": 6.821,
+        "candidate_WNS_ns": 6.725,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/85",
+        "check": "removal",
+        "R0_WNS_ns": 0.523,
+        "candidate_WNS_ns": 0.841,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/85",
+        "check": "setup",
+        "R0_WNS_ns": 4.45,
+        "candidate_WNS_ns": 4.943,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/-40",
+        "check": "hold",
+        "R0_WNS_ns": 0.067,
+        "candidate_WNS_ns": 0.204,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/-40",
+        "check": "recovery",
+        "R0_WNS_ns": 1.9,
+        "candidate_WNS_ns": 1.627,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/-40",
+        "check": "removal",
+        "R0_WNS_ns": 0.905,
+        "candidate_WNS_ns": 1.451,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/-40",
+        "check": "setup",
+        "R0_WNS_ns": -0.097,
+        "candidate_WNS_ns": -0.59,
+        "R0_TNS_ns": -0.302,
+        "candidate_TNS_ns": -9.226,
+        "R0_failing": 4,
+        "candidate_failing": 44
+      },
+      {
+        "corner": "slow/7/1100/0",
+        "check": "hold",
+        "R0_WNS_ns": 0.07,
+        "candidate_WNS_ns": 0.235,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/0",
+        "check": "recovery",
+        "R0_WNS_ns": 1.963,
+        "candidate_WNS_ns": 1.701,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/0",
+        "check": "removal",
+        "R0_WNS_ns": 0.913,
+        "candidate_WNS_ns": 1.451,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/0",
+        "check": "setup",
+        "R0_WNS_ns": 0.125,
+        "candidate_WNS_ns": -0.451,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": -4.659,
+        "R0_failing": 0,
+        "candidate_failing": 31
+      },
+      {
+        "corner": "slow/7/1100/100",
+        "check": "hold",
+        "R0_WNS_ns": 0.245,
+        "candidate_WNS_ns": 0.249,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/100",
+        "check": "recovery",
+        "R0_WNS_ns": 1.69,
+        "candidate_WNS_ns": 1.45,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/100",
+        "check": "removal",
+        "R0_WNS_ns": 1.003,
+        "candidate_WNS_ns": 1.574,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/100",
+        "check": "setup",
+        "R0_WNS_ns": -0.077,
+        "candidate_WNS_ns": -0.594,
+        "R0_TNS_ns": -0.094,
+        "candidate_TNS_ns": -13.314,
+        "R0_failing": 2,
+        "candidate_failing": 76
+      },
+      {
+        "corner": "slow/7/1100/85",
+        "check": "hold",
+        "R0_WNS_ns": 0.249,
+        "candidate_WNS_ns": 0.253,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/85",
+        "check": "recovery",
+        "R0_WNS_ns": 1.754,
+        "candidate_WNS_ns": 1.493,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/85",
+        "check": "removal",
+        "R0_WNS_ns": 0.997,
+        "candidate_WNS_ns": 1.555,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/85",
+        "check": "setup",
+        "R0_WNS_ns": -0.001,
+        "candidate_WNS_ns": -0.562,
+        "R0_TNS_ns": -0.001,
+        "candidate_TNS_ns": -8.6,
+        "R0_failing": 1,
+        "candidate_failing": 59
+      }
+    ],
+    "control_physical": {
+      "resource_summary": {
+        "Fitter Status": "Successful - Fri Nov 13 16:03:13 2026",
+        "Quartus Prime Version": "25.1std.0 Build 1129 10/21/2025 SC Lite Edition",
+        "Revision Name": "Groovy",
+        "Top-level Entity Name": "sys_top",
+        "Family": "Cyclone V",
+        "Device": "5CSEBA6U23I7",
+        "Timing Models": "Final",
+        "Logic utilization (in ALMs)": "32,750 / 41,910 ( 78 % )",
+        "Total registers": "31206",
+        "Total pins": "145 / 314 ( 46 % )",
+        "Total virtual pins": "0",
+        "Total block memory bits": "3,803,729 / 5,662,720 ( 67 % )",
+        "Total RAM Blocks": "489 / 553 ( 88 % )",
+        "Total DSP Blocks": "21 / 112 ( 19 % )",
+        "Total HSSI RX PCSs": "0",
+        "Total HSSI PMA RX Deserializers": "0",
+        "Total HSSI TX PCSs": "0",
+        "Total HSSI PMA TX Serializers": "0",
+        "Total PLLs": "2 / 6 ( 33 % )",
+        "Total DLLs": "0 / 4 ( 0 % )"
+      },
+      "retiming_records": 2504,
+      "upper_driver_locations": [
+        {
+          "source": "emu|u_vsize|packed_ram[1].local_ra_even[10]~2|combout",
+          "locations": [
+            "LABCELL_X35_Y22_N57"
+          ],
+          "observed_unique_edges": 1302,
+          "expected_fanout": [
+            "1302"
+          ],
+          "load_banks": [
+            "packed_ram[0].even_ram",
+            "packed_ram[1].even_ram",
+            "packed_ram[2].even_ram"
+          ]
+        }
+      ],
+      "limit": "Native counts/locations only. A retiming row is not original-register ancestry or a causal timing improvement."
+    },
+    "candidate_physical": {
+      "resource_summary": {
+        "Fitter Status": "Successful - Sat Nov 14 17:46:52 2026",
+        "Quartus Prime Version": "25.1std.0 Build 1129 10/21/2025 SC Lite Edition",
+        "Revision Name": "Groovy",
+        "Top-level Entity Name": "sys_top",
+        "Family": "Cyclone V",
+        "Device": "5CSEBA6U23I7",
+        "Timing Models": "Final",
+        "Logic utilization (in ALMs)": "32,676 / 41,910 ( 78 % )",
+        "Total registers": "31131",
+        "Total pins": "145 / 314 ( 46 % )",
+        "Total virtual pins": "0",
+        "Total block memory bits": "3,803,729 / 5,662,720 ( 67 % )",
+        "Total RAM Blocks": "489 / 553 ( 88 % )",
+        "Total DSP Blocks": "21 / 112 ( 19 % )",
+        "Total HSSI RX PCSs": "0",
+        "Total HSSI PMA RX Deserializers": "0",
+        "Total HSSI TX PCSs": "0",
+        "Total HSSI PMA TX Serializers": "0",
+        "Total PLLs": "2 / 6 ( 33 % )",
+        "Total DLLs": "0 / 4 ( 0 % )"
+      },
+      "retiming_records": 2505,
+      "upper_driver_locations": [
+        {
+          "source": "emu|u_vsize|packed_ram[1].local_ra_even[10]~2|combout",
+          "locations": [
+            "LABCELL_X50_Y22_N33"
+          ],
+          "observed_unique_edges": 662,
+          "expected_fanout": [
+            "662"
+          ],
+          "load_banks": [
+            "packed_ram[0].even_ram",
+            "packed_ram[2].even_ram"
+          ]
+        },
+        {
+          "source": "emu|u_vsize|crt_upper_1_even_bit10|combout",
+          "locations": [
+            "LABCELL_X50_Y22_N30"
+          ],
+          "observed_unique_edges": 641,
+          "expected_fanout": [
+            "641"
+          ],
+          "load_banks": [
+            "packed_ram[1].even_ram"
+          ]
+        }
+      ],
+      "limit": "Native counts/locations only. A retiming row is not original-register ancestry or a causal timing improvement."
+    },
+    "assignment": "# Fresh-map upper read-selection factors; no RTL or latency change.\nset_instance_assignment -name DUPLICATE_ATOM crt_upper_1_even_bit10 -from {emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_even[10]~2} -to {emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[1].even_ram|*}\n",
+    "target_correspondence": "PENDING: worst-per-capture exports do not establish timing through the selected upper driver; renamed retimed registers are not equivalent by name."
+  },
+  "U9": {
+    "groups": [
+      {
+        "corner": {
+          "directory": "corner_01",
+          "name": "7_slow_1100mv_100c",
+          "model": "slow",
+          "speed": "7",
+          "voltage": "1100",
+          "temperature": "100"
+        },
+        "negative_endpoints": 278,
+        "capture_families": {
+          "pixel decode capture; launch must be inspected": 1,
+          "CRT row arithmetic capture; generated ancestry pending": 7,
+          "CRT read/mux capture": 270
+        },
+        "launch_counts": {
+          "emu:emu|PoC_lz4_delta_index[1]": 1,
+          "emu:emu|ce_pix": 7,
+          "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4228": 266,
+          "emu:emu|crt_vsize_fixed:u_vsize|aslot[0]": 1,
+          "emu:emu|crt_vsize_fixed:u_vsize|wcol[12]": 3
+        }
+      },
+      {
+        "corner": {
+          "directory": "corner_02",
+          "name": "7_slow_1100mv_-40c",
+          "model": "slow",
+          "speed": "7",
+          "voltage": "1100",
+          "temperature": "-40"
+        },
+        "negative_endpoints": 81,
+        "capture_families": {
+          "VGA/root arithmetic": 9,
+          "pixel decode capture; launch must be inspected": 1,
+          "CRT row arithmetic capture; generated ancestry pending": 8,
+          "CRT read/mux capture": 63
+        },
+        "launch_counts": {
+          "emu:emu|vga:vga|Add1~97_OTERM3878": 9,
+          "emu:emu|PoC_lz4_delta_index[1]": 1,
+          "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4228": 71
+        }
+      },
+      {
+        "corner": {
+          "directory": "corner_03",
+          "name": "7_slow_1100mv_85c",
+          "model": "slow",
+          "speed": "7",
+          "voltage": "1100",
+          "temperature": "85"
+        },
+        "negative_endpoints": 222,
+        "capture_families": {
+          "CRT row arithmetic capture; generated ancestry pending": 3,
+          "CRT read/mux capture": 219
+        },
+        "launch_counts": {
+          "emu:emu|ce_pix": 3,
+          "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4228": 218,
+          "emu:emu|crt_vsize_fixed:u_vsize|wcol[12]": 1
+        }
+      },
+      {
+        "corner": {
+          "directory": "corner_04",
+          "name": "7_slow_1100mv_0c",
+          "model": "slow",
+          "speed": "7",
+          "voltage": "1100",
+          "temperature": "0"
+        },
+        "negative_endpoints": 27,
+        "capture_families": {
+          "VGA/root arithmetic": 2,
+          "CRT row arithmetic capture; generated ancestry pending": 3,
+          "CRT read/mux capture": 22
+        },
+        "launch_counts": {
+          "emu:emu|vga:vga|Add1~97_OTERM3878": 2,
+          "emu:emu|crt_vsize_fixed:u_vsize|hb_d~0_OTERM4228": 25
+        }
+      },
+      {
+        "corner": {
+          "directory": "corner_05",
+          "name": "MIN_fast_1100mv_-40c",
+          "model": "fast",
+          "speed": "M",
+          "voltage": "1100",
+          "temperature": "-40"
+        },
+        "negative_endpoints": 0,
+        "capture_families": {},
+        "launch_counts": {}
+      },
+      {
+        "corner": {
+          "directory": "corner_06",
+          "name": "MIN_fast_1100mv_0c",
+          "model": "fast",
+          "speed": "M",
+          "voltage": "1100",
+          "temperature": "0"
+        },
+        "negative_endpoints": 0,
+        "capture_families": {},
+        "launch_counts": {}
+      },
+      {
+        "corner": {
+          "directory": "corner_07",
+          "name": "MIN_fast_1100mv_85c",
+          "model": "fast",
+          "speed": "M",
+          "voltage": "1100",
+          "temperature": "85"
+        },
+        "negative_endpoints": 0,
+        "capture_families": {},
+        "launch_counts": {}
+      },
+      {
+        "corner": {
+          "directory": "corner_08",
+          "name": "MIN_fast_1100mv_100c",
+          "model": "fast",
+          "speed": "M",
+          "voltage": "1100",
+          "temperature": "100"
+        },
+        "negative_endpoints": 0,
+        "capture_families": {},
+        "launch_counts": {}
+      }
+    ],
+    "complete_negative_records": 608,
+    "vectors": [
+      {
+        "corner": "fast/M/1100/-40",
+        "check": "hold",
+        "R0_WNS_ns": 0.062,
+        "candidate_WNS_ns": 0.118,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/-40",
+        "check": "recovery",
+        "R0_WNS_ns": 7.211,
+        "candidate_WNS_ns": 7.066,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/-40",
+        "check": "removal",
+        "R0_WNS_ns": 0.431,
+        "candidate_WNS_ns": 0.503,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/-40",
+        "check": "setup",
+        "R0_WNS_ns": 5.739,
+        "candidate_WNS_ns": 5.923,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/0",
+        "check": "hold",
+        "R0_WNS_ns": 0.076,
+        "candidate_WNS_ns": 0.122,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/0",
+        "check": "recovery",
+        "R0_WNS_ns": 7.102,
+        "candidate_WNS_ns": 6.947,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/0",
+        "check": "removal",
+        "R0_WNS_ns": 0.455,
+        "candidate_WNS_ns": 0.517,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/0",
+        "check": "setup",
+        "R0_WNS_ns": 5.427,
+        "candidate_WNS_ns": 5.685,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/100",
+        "check": "hold",
+        "R0_WNS_ns": 0.131,
+        "candidate_WNS_ns": 0.133,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/100",
+        "check": "recovery",
+        "R0_WNS_ns": 6.732,
+        "candidate_WNS_ns": 6.526,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/100",
+        "check": "removal",
+        "R0_WNS_ns": 0.541,
+        "candidate_WNS_ns": 0.589,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/100",
+        "check": "setup",
+        "R0_WNS_ns": 4.11,
+        "candidate_WNS_ns": 4.618,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/85",
+        "check": "hold",
+        "R0_WNS_ns": 0.129,
+        "candidate_WNS_ns": 0.132,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/85",
+        "check": "recovery",
+        "R0_WNS_ns": 6.821,
+        "candidate_WNS_ns": 6.615,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/85",
+        "check": "removal",
+        "R0_WNS_ns": 0.523,
+        "candidate_WNS_ns": 0.573,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "fast/M/1100/85",
+        "check": "setup",
+        "R0_WNS_ns": 4.45,
+        "candidate_WNS_ns": 4.882,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/-40",
+        "check": "hold",
+        "R0_WNS_ns": 0.067,
+        "candidate_WNS_ns": 0.243,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/-40",
+        "check": "recovery",
+        "R0_WNS_ns": 1.9,
+        "candidate_WNS_ns": 1.486,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/-40",
+        "check": "removal",
+        "R0_WNS_ns": 0.905,
+        "candidate_WNS_ns": 1.114,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/-40",
+        "check": "setup",
+        "R0_WNS_ns": -0.097,
+        "candidate_WNS_ns": -0.32,
+        "R0_TNS_ns": -0.302,
+        "candidate_TNS_ns": -6.011,
+        "R0_failing": 4,
+        "candidate_failing": 81
+      },
+      {
+        "corner": "slow/7/1100/0",
+        "check": "hold",
+        "R0_WNS_ns": 0.07,
+        "candidate_WNS_ns": 0.244,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/0",
+        "check": "recovery",
+        "R0_WNS_ns": 1.963,
+        "candidate_WNS_ns": 1.537,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/0",
+        "check": "removal",
+        "R0_WNS_ns": 0.913,
+        "candidate_WNS_ns": 1.104,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/0",
+        "check": "setup",
+        "R0_WNS_ns": 0.125,
+        "candidate_WNS_ns": -0.132,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": -0.668,
+        "R0_failing": 0,
+        "candidate_failing": 27
+      },
+      {
+        "corner": "slow/7/1100/100",
+        "check": "hold",
+        "R0_WNS_ns": 0.245,
+        "candidate_WNS_ns": 0.252,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/100",
+        "check": "recovery",
+        "R0_WNS_ns": 1.69,
+        "candidate_WNS_ns": 1.245,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/100",
+        "check": "removal",
+        "R0_WNS_ns": 1.003,
+        "candidate_WNS_ns": 1.195,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/100",
+        "check": "setup",
+        "R0_WNS_ns": -0.077,
+        "candidate_WNS_ns": -0.431,
+        "R0_TNS_ns": -0.094,
+        "candidate_TNS_ns": -44.629,
+        "R0_failing": 2,
+        "candidate_failing": 278
+      },
+      {
+        "corner": "slow/7/1100/85",
+        "check": "hold",
+        "R0_WNS_ns": 0.249,
+        "candidate_WNS_ns": 0.255,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/85",
+        "check": "recovery",
+        "R0_WNS_ns": 1.754,
+        "candidate_WNS_ns": 1.319,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/85",
+        "check": "removal",
+        "R0_WNS_ns": 0.997,
+        "candidate_WNS_ns": 1.189,
+        "R0_TNS_ns": 0.0,
+        "candidate_TNS_ns": 0.0,
+        "R0_failing": 0,
+        "candidate_failing": 0
+      },
+      {
+        "corner": "slow/7/1100/85",
+        "check": "setup",
+        "R0_WNS_ns": -0.001,
+        "candidate_WNS_ns": -0.33,
+        "R0_TNS_ns": -0.001,
+        "candidate_TNS_ns": -21.865,
+        "R0_failing": 1,
+        "candidate_failing": 222
+      }
+    ],
+    "control_physical": {
+      "resource_summary": {
+        "Fitter Status": "Successful - Fri Nov 13 16:03:13 2026",
+        "Quartus Prime Version": "25.1std.0 Build 1129 10/21/2025 SC Lite Edition",
+        "Revision Name": "Groovy",
+        "Top-level Entity Name": "sys_top",
+        "Family": "Cyclone V",
+        "Device": "5CSEBA6U23I7",
+        "Timing Models": "Final",
+        "Logic utilization (in ALMs)": "32,750 / 41,910 ( 78 % )",
+        "Total registers": "31206",
+        "Total pins": "145 / 314 ( 46 % )",
+        "Total virtual pins": "0",
+        "Total block memory bits": "3,803,729 / 5,662,720 ( 67 % )",
+        "Total RAM Blocks": "489 / 553 ( 88 % )",
+        "Total DSP Blocks": "21 / 112 ( 19 % )",
+        "Total HSSI RX PCSs": "0",
+        "Total HSSI PMA RX Deserializers": "0",
+        "Total HSSI TX PCSs": "0",
+        "Total HSSI PMA TX Serializers": "0",
+        "Total PLLs": "2 / 6 ( 33 % )",
+        "Total DLLs": "0 / 4 ( 0 % )"
+      },
+      "retiming_records": 2504,
+      "upper_driver_locations": [
+        {
+          "source": "emu|u_vsize|packed_ram[1].local_ra_odd[9]~11|combout",
+          "locations": [
+            "LABCELL_X35_Y18_N36"
+          ],
+          "observed_unique_edges": 1301,
+          "expected_fanout": [
+            "1301"
+          ],
+          "load_banks": [
+            "packed_ram[0].odd_ram",
+            "packed_ram[1].odd_ram",
+            "packed_ram[2].odd_ram"
+          ]
+        }
+      ],
+      "limit": "Native counts/locations only. A retiming row is not original-register ancestry or a causal timing improvement."
+    },
+    "candidate_physical": {
+      "resource_summary": {
+        "Fitter Status": "Successful - Sat Nov 14 18:40:57 2026",
+        "Quartus Prime Version": "25.1std.0 Build 1129 10/21/2025 SC Lite Edition",
+        "Revision Name": "Groovy",
+        "Top-level Entity Name": "sys_top",
+        "Family": "Cyclone V",
+        "Device": "5CSEBA6U23I7",
+        "Timing Models": "Final",
+        "Logic utilization (in ALMs)": "32,773 / 41,910 ( 78 % )",
+        "Total registers": "31174",
+        "Total pins": "145 / 314 ( 46 % )",
+        "Total virtual pins": "0",
+        "Total block memory bits": "3,803,729 / 5,662,720 ( 67 % )",
+        "Total RAM Blocks": "489 / 553 ( 88 % )",
+        "Total DSP Blocks": "21 / 112 ( 19 % )",
+        "Total HSSI RX PCSs": "0",
+        "Total HSSI PMA RX Deserializers": "0",
+        "Total HSSI TX PCSs": "0",
+        "Total HSSI PMA TX Serializers": "0",
+        "Total PLLs": "2 / 6 ( 33 % )",
+        "Total DLLs": "0 / 4 ( 0 % )"
+      },
+      "retiming_records": 2505,
+      "upper_driver_locations": [
+        {
+          "source": "emu|u_vsize|crt_upper_0_odd_bit9|combout",
+          "locations": [
+            "LABCELL_X57_Y32_N9"
+          ],
+          "observed_unique_edges": 642,
+          "expected_fanout": [
+            "642"
+          ],
+          "load_banks": [
+            "packed_ram[0].odd_ram"
+          ]
+        },
+        {
+          "source": "emu|u_vsize|packed_ram[1].local_ra_odd[9]~11|combout",
+          "locations": [
+            "LABCELL_X57_Y32_N6"
+          ],
+          "observed_unique_edges": 662,
+          "expected_fanout": [
+            "662"
+          ],
+          "load_banks": [
+            "packed_ram[1].odd_ram",
+            "packed_ram[2].odd_ram"
+          ]
+        }
+      ],
+      "limit": "Native counts/locations only. A retiming row is not original-register ancestry or a causal timing improvement."
+    },
+    "assignment": "# Fresh-map upper read-selection factors; no RTL or latency change.\nset_instance_assignment -name DUPLICATE_ATOM crt_upper_0_odd_bit9 -from {emu:emu|crt_vsize_fixed:u_vsize|packed_ram[1].local_ra_odd[9]~11} -to {emu:emu|crt_vsize_fixed:u_vsize|crt_packed_ram:packed_ram[0].odd_ram|*}\n",
+    "target_correspondence": "PENDING: worst-per-capture exports do not establish timing through the selected upper driver; renamed retimed registers are not equivalent by name."
+  }
+}
