@@ -1,0 +1,28 @@
+{
+  "target_base": "735c777be2ec859afe3dc37cc448d49440447add",
+  "crt_upstream_repository": "rmonic79/MiSTer-CRT-Adjust",
+  "crt_upstream_commit": "c682de9f4acc61d8f4c7779efb48149d3baa3a8e",
+  "crt_user_fork_repository": "asdgdg355235/MiSTer-CRT-Adjust",
+  "crt_user_fork_commit": "c682de9f4acc61d8f4c7779efb48149d3baa3a8e",
+  "references_sha256": {
+    "docs/core-side-integration.md": "36f0d9969f486b3d44f1937c9ea11ae0190539c4939dc4d1a672642c85b6ff8a",
+    "examples/core_side_snippet.v": "33348159c307005680841a75e7a62608f8b23e3de42bf9806ef00ca3c7ca2f3d",
+    "rtl/crt_adjust.sv": "e66c4bae75ca86606c134fa82e57f63274331422a2c8931188495dfeac5afc21",
+    "rtl/crt_vsize.sv": "77e5baa2651b13009be588cec472ab4570913d974b465d392afdcf9c2ed8a496",
+    "docs/vsize-integration.md": "62282533c34445ccf7b76b3cccd036193d2016ec7ba5178e1c4bb23844128443",
+    "docs/v-size-design.md": "0c2855bcd509138b058ecabf82e039ad6a04286db83c644a4556eea217654ecd",
+    "docs/v-size-desync-roadmap.md": "e684aec2b258b8b92d32ab4e07fcda6e13ae900e5804544d03aa28e87fd1146a",
+    "examples/vsize_integration_snippet.v": "40797e5a38020c50e64b8cb28423a44cca8affb09808edd9b8c310effeea64c1",
+    "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+  },
+  "upstream_files_sha256": {
+    "crt_adjust.sv": "e66c4bae75ca86606c134fa82e57f63274331422a2c8931188495dfeac5afc21",
+    "crt_vsize.sv": "77e5baa2651b13009be588cec472ab4570913d974b465d392afdcf9c2ed8a496"
+  },
+  "lz4_implementation_commit": "16b3d9a51d708e76f8ab37c1c4e8f2228e02b070",
+  "lz4_test_snapshot": "a692f4f6d75a79e67cb36f1065ff0d7c9a97ae92",
+  "q25_diagnostic_reference": "3b8d1edb63f2d2fed05d23323c3ba1ae93eeed1a",
+  "receiver_reference": "psakhis/Groovy_MiSTer",
+  "receiver_reference_commit": "109908c9ddbd4397ba7aadb193de61fdb8cb34e6",
+  "hps_test_headers": "psakhis/Main_MiSTer@0272823a66cb7c601256406a2e80e8c6b2e93e13"
+}

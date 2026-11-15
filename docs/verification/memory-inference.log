@@ -1,0 +1,33 @@
+{
+  "lz4": {
+    "memory": "window",
+    "logical_bits": 524288,
+    "RD_CLK_ENABLE": 1,
+    "RD_PORTS": 1,
+    "SIZE": 8192,
+    "WIDTH": 64,
+    "WR_CLK_ENABLE": 1,
+    "WR_PORTS": 1
+  },
+  "crt_vsize": {
+    "memory": "ring",
+    "logical_bits": 706560,
+    "RD_CLK_ENABLE": 1,
+    "RD_PORTS": 1,
+    "SIZE": 29440,
+    "WIDTH": 24,
+    "WR_CLK_ENABLE": 1,
+    "WR_PORTS": 1
+  },
+  "crt_adjust": {
+    "memory": "mem",
+    "logical_bits": 49152,
+    "RD_CLK_ENABLE": 1,
+    "RD_PORTS": 1,
+    "SIZE": 2048,
+    "WIDTH": 24,
+    "WR_CLK_ENABLE": 1,
+    "WR_PORTS": 1
+  }
+}
+PASS: synchronous 1R/1W memories. M10K packing & device fit require Quartus reports.

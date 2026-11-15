@@ -1,0 +1,5 @@
+source Groovy_Q25_BASE.qsf
+set_global_assignment -name VERILOG_MACRO "GROOVY_CRT_CABINET=1"
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/CRT/crt_adjust.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/CRT/crt_vsize.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/CRT/groovy_crt.sv

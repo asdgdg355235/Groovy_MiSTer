@@ -1,0 +1,45 @@
+PASS: read-rate mode=0, all integer ratios 8..16, 10086 intervals & 108 hs_ref resets
+- /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_crt_read_rate.sv:57: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 1ms; walltime 0.154 s; speed 8.042 ms/s
+- Verilator: cpu 0.155 s on 1 threads; alloced 65 MB
+PASS: CRT upstream differential HPOS_MODE=0, 1966074 clocks, size/position/shift/bypass
+- /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_crt_adjust_upstream.sv:66: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 20ms; walltime 2.098 s; speed 9.400 ms/s
+- Verilator: cpu 2.092 s on 1 threads; alloced 64 MB
+PASS: Groovy CRT mode=0, 11108474 clocks, hs_ref resets=6941 OSD anchors=1682 first/last=64/64; mode/reset/ratio guards
+- /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_groovy_crt.sv:101: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 111ms; walltime 7.972 s; speed 13.948 ms/s
+- Verilator: cpu 7.964 s on 1 threads; alloced 65 MB
+PASS: read-rate mode=1, all integer ratios 8..16, 10090 intervals & 108 hs_ref resets
+- /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_crt_read_rate.sv:57: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 1ms; walltime 0.113 s; speed 10.903 ms/s
+- Verilator: cpu 0.114 s on 1 threads; alloced 65 MB
+PASS: CRT upstream differential HPOS_MODE=1, 1966074 clocks, size/position/shift/bypass
+- /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_crt_adjust_upstream.sv:66: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 20ms; walltime 1.185 s; speed 16.822 ms/s
+- Verilator: cpu 1.169 s on 1 threads; alloced 64 MB
+PASS: Groovy CRT mode=1, 11108474 clocks, hs_ref resets=6940 OSD anchors=1682 first/last=64/64; mode/reset/ratio guards
+- /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_groovy_crt.sv:101: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 111ms; walltime 8.404 s; speed 13.286 ms/s
+- Verilator: cpu 8.361 s on 1 threads; alloced 65 MB
+PASS: Cabinet period=8 width=64 capacity=80, 11206650 clocks, 771584 photometric pixels, VSync delay/ring wrap/clamp; corrected upstream RGB cycles=512
+- /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_cabinet_upstream.sv:103: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 112ms; walltime 8.794 s; speed 12.818 ms/s
+- Verilator: cpu 8.743 s on 1 threads; alloced 65 MB
+PASS: Cabinet period=16 width=64 capacity=80, 22413298 clocks, 771584 photometric pixels, VSync delay/ring wrap/clamp; corrected upstream RGB cycles=1024
+- /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_cabinet_upstream.sv:103: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 224ms; walltime 16.268 s; speed 13.848 ms/s
+- Verilator: cpu 16.185 s on 1 threads; alloced 65 MB
+PASS: Cabinet period=8 width=640 capacity=640, 5505018 clocks, 302080 photometric pixels, VSync delay/ring wrap/clamp; corrected upstream RGB cycles=0
+- /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_cabinet_upstream.sv:103: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 55ms; walltime 3.878 s; speed 14.232 ms/s
+- Verilator: cpu 3.868 s on 1 threads; alloced 65 MB

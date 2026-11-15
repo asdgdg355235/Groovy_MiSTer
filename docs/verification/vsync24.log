@@ -1,0 +1,5 @@
+PASS: Cabinet period=8 width=64 capacity=80, 11206650 clocks, 640896 photometric pixels, max VSync delay=24/ring wrap/clamp; corrected upstream RGB cycles=11264
+- /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_cabinet_upstream.sv:107: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 112ms; walltime 8.113 s; speed 13.895 ms/s
+- Verilator: cpu 8.065 s on 1 threads; alloced 65 MB

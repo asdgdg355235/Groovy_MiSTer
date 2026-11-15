@@ -1,2 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+# Preserve diagnostic bytes, including compiler-echoed trailing whitespace.
+docs/verification/*.log -text -whitespace

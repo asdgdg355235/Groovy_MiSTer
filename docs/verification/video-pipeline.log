@@ -1,0 +1,1138 @@
+%Warning-PINMISSING: /tmp/groovy-video-01ibb3xt/original.sv:69:26: Cell has missing pin: 'freeze_sync'
+   69 | video_mixer #(640, 0, 1) video_mixer(
+      |                          ^~~~~~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:51:19: ... Location of port declaration
+   51 |  output           freeze_sync,
+      |                   ^~~~~~~~~~~
+                     ... For warning description see https://verilator.org/warn/PINMISSING?v=5.032
+                     ... Use "/* verilator lint_off PINMISSING */" and lint_on around source to disable this message.
+%Warning-PINMISSING: /tmp/groovy-video-01ibb3xt/changed.sv:74:26: Cell has missing pin: 'freeze_sync'
+   74 | video_mixer #(640, 0, 1) video_mixer(
+      |                          ^~~~~~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:51:19: ... Location of port declaration
+   51 |  output           freeze_sync,
+      |                   ^~~~~~~~~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:39:17: Cell has missing pin: 'sync_pt'
+   39 | sync_lock #(33) vs_lock
+      |                 ^~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:91:10: ... Location of port declaration
+   91 |  output  sync_pt,
+      |          ^~~~~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:39:17: Cell has missing pin: 'valid'
+   39 | sync_lock #(33) vs_lock
+      |                 ^~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:92:10: ... Location of port declaration
+   92 |  output  valid
+      |          ^~~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:50:17: Cell has missing pin: 'valid'
+   50 | sync_lock #(21) hs_lock
+      |                 ^~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:92:10: ... Location of port declaration
+   92 |  output  valid
+      |          ^~~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/scandoubler.v:103:50: Cell has missing pin: 'mono'
+  103 | Hq2x #(.LENGTH(LENGTH), .HALF_DEPTH(HALF_DEPTH)) Hq2x
+      |                                                  ^~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:19:20: ... Location of port declaration
+   19 |  input             mono,
+      |                    ^~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:165:19: Cell has missing pin: 'remainder'
+  165 | sys_udiv #(24,12) div(CLK_VIDEO,div_start,div_run, div_num,div_den,div_res);
+      |                   ^~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:16:26: ... Location of port declaration
+   16 |  output reg [NB_DIV-1:0] remainder
+      |                          ^~~~~~~~~
+%Warning-TIMESCALEMOD: /tmp/groovy-video-01ibb3xt/original.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    1 | module original_pipeline(input clk_sys,ce_pix,ce_pix2,RESET,
+      |        ^~~~~~~~~~~~~~~~~
+                       /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:2:8: ... Location of module with timescale
+    2 | module tb_video_pipeline;
+      |        ^~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /tmp/groovy-video-01ibb3xt/changed.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    1 | module changed_pipeline(input clk_sys,ce_pix,ce_pix2,RESET,
+      |        ^~~~~~~~~~~~~~~~
+                       /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:2:8: ... Location of module with timescale
+    2 | module tb_video_pipeline;
+      |        ^~~~~~~~~~~~~~~~~
+%Warning-IMPLICIT: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:124:13: Signal definition not found, creating implicitly: 'R_in'
+  124 |    .RGB_in({R_in,G_in,B_in}),
+      |             ^~~~
+%Warning-IMPLICIT: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:124:18: Signal definition not found, creating implicitly: 'G_in'
+                                                                                          : ... Suggested alternative: 'R_in'
+  124 |    .RGB_in({R_in,G_in,B_in}),
+      |                  ^~~~
+%Warning-IMPLICIT: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:124:23: Signal definition not found, creating implicitly: 'B_in'
+                                                                                          : ... Suggested alternative: 'G_in'
+  124 |    .RGB_in({R_in,G_in,B_in}),
+      |                       ^~~~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:290:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 5 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender.diff_checker'
+  290 |  wire u_inside = (!u[8:4] || &u[8:4]);  
+      |                   ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:361:32: Operator ADD expects 35 bits on the RHS, but RHS's REPLICATE generates 32 bits.
+                                                                                      : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender'
+  361 |   if(op2[0]) mul24x3 = mul24x3 + {op1[23:16], 4'b0000, op1[15:8], 4'b0000, op1[7:0]};
+      |                                ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:362:32: Operator ADD expects 35 bits on the RHS, but RHS's REPLICATE generates 33 bits.
+                                                                                      : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender'
+  362 |   if(op2[1]) mul24x3 = mul24x3 + {op1[23:16], 4'b0000, op1[15:8], 4'b0000, op1[7:0], 1'b0};
+      |                                ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:367:73: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 2 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender'
+  367 |  wire [35:0] res = {mul24x3(i1, op[6:4]), 1'b0} + mul24x3(i2, {op[3:2], !op[3:2]}) + mul24x3(i3, {op[1:0], !op[3:2]});
+      |                                                                         ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:367:108: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 2 bits.
+                                                                                      : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender'
+  367 |  wire [35:0] res = {mul24x3(i1, op[6:4]), 1'b0} + mul24x3(i2, {op[3:2], !op[3:2]}) + mul24x3(i3, {op[1:0], !op[3:2]});
+      |                                                                                                            ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:29:7: Operator ASSIGNDLY expects 38 bits on the Assign RHS, but Assign RHS's VARREF 'num' generates 24 bits.
+                                                                                    : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.div'
+   29 |   rem <= num;
+      |       ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:36:41: Operator SHIFTL expects 37 bits on the LHS, but LHS's VARREF 'div' generates 12 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.div'
+   36 |     rem <= {rem[NB_DIV+NB_NUM:0] - (div << NB_NUM),1'b0};
+      |                                         ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:38:41: Operator SHIFTL expects 37 bits on the LHS, but LHS's VARREF 'div' generates 12 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.div'
+   38 |     rem <= {rem[NB_DIV+NB_NUM:0] + (div << NB_NUM),1'b0};
+      |                                         ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:79:39: Operator FUNCREF 'h2rgb' expects 12 bits on the Function Argument, but Function Argument's VARREF 'Curr20tmp' generates 24 bits.
+                                                                                    : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x'
+   79 | wire     [23:0] Curr20 = HALF_DEPTH ? h2rgb(Curr20tmp) : Curr20tmp;
+      |                                       ^~~~~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:81:39: Operator FUNCREF 'h2rgb' expects 12 bits on the Function Argument, but Function Argument's VARREF 'Curr21tmp' generates 24 bits.
+                                                                                    : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x'
+   81 | wire     [23:0] Curr21 = HALF_DEPTH ? h2rgb(Curr21tmp) : Curr21tmp;
+      |                                       ^~~~~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:146:43: Operator COND expects 24 bits on the Conditional True, but Conditional True's FUNCREF 'rgb2h' generates 12 bits.
+                                                                                      : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x'
+  146 | wire [DWIDTH:0] blend_result = HALF_DEPTH ? rgb2h(blend_result_pre) : blend_result_pre[DWIDTH:0];
+      |                                           ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:178:27: Operator FUNCREF 'h2rgb' expects 12 bits on the Function Argument, but Function Argument's VARREF 'inputpixel' generates 24 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x'
+  178 |     Next2 <= HALF_DEPTH ? h2rgb(inputpixel) : inputpixel;
+      |                           ^~~~~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:128:53: Operator ADD expects 21 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.video_mixer.freezer.hs_lock'
+  128 |  if(old_sync & ~sync_in & sync_valid) cnto <= s_len + 2'd2;
+      |                                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:128:53: Operator ADD expects 33 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.video_mixer.freezer.vs_lock'
+  128 |  if(old_sync & ~sync_in & sync_valid) cnto <= s_len + 2'd2;
+      |                                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:71:10: Operator ASSIGNDLY expects 24 bits on the Assign RHS, but Assign RHS's VARREF 'mul1' generates 12 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.mul'
+   71 |   add    <= mul1;
+      |          ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:75:6: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'map' generates 12 bits.
+                                                                                   : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.mul'
+   75 |   if(!map)   run <= 0;
+      |      ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:183:8: Operator ASSIGNDLY expects 13 bits on the Assign RHS, but Assign RHS's VARREF 'arx_i' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  183 |   arxf <= arx_i;
+      |        ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:184:8: Operator ASSIGNDLY expects 13 bits on the Assign RHS, but Assign RHS's VARREF 'ary_i' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  184 |   aryf <= ary_i;
+      |        ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:194:16: Operator ASSIGNDLY expects 24 bits on the Assign RHS, but Assign RHS's VARREF 'HDMI_HEIGHT' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  194 |      div_num   <= HDMI_HEIGHT;
+      |                ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:205:16: Operator ASSIGNDLY expects 13 bits on the Assign RHS, but Assign RHS's VARREF 'arx_i' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  205 |      arxf      <= arx_i;
+      |                ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:206:16: Operator ASSIGNDLY expects 13 bits on the Assign RHS, but Assign RHS's VARREF 'ary_i' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  206 |      aryf      <= ary_i;
+      |                ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:202:10: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  202 |    1: if(!div_res[11:0]) begin
+      |          ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:220:9: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ary_i' generates 12 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  220 |      if(!ary_i) begin
+      |         ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:257:33: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's SEL generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  257 |      mul_arg2  <= div_res[11:0] ? div_res[11:0] : 12'd1;
+      |                                 ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:264:18: Operator LTE expects 24 bits on the RHS, but RHS's VARREF 'HDMI_WIDTH' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  264 |    7: if(mul_res <= HDMI_WIDTH) begin
+      |                  ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:270:16: Operator ASSIGNDLY expects 24 bits on the Assign RHS, but Assign RHS's VARREF 'HDMI_WIDTH' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  270 |      div_num   <= HDMI_WIDTH;
+      |                ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:280:33: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's SEL generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  280 |      mul_arg2  <= div_res[11:0] ? div_res[11:0] : 12'd1;
+      |                                 ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:290:48: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's SEL generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  290 |                     mul_arg2  <= div_res[11:0] ? div_res[11:0] : 12'd1;
+      |                                                ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:182:6: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'SCALE' generates 3 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  182 |  if (!SCALE || (!ary_i && arx_i)) begin
+      |      ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:182:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ary_i' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  182 |  if (!SCALE || (!ary_i && arx_i)) begin
+      |                 ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:182:24: Logical operator LOGAND expects 1 bit on the RHS, but RHS's VARREF 'arx_i' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  182 |  if (!SCALE || (!ary_i && arx_i)) begin
+      |                        ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:97:30: Operator COND expects 8 bits on the Conditional True, but Conditional True's CONST '1'h0' generates 1 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+   97 |   wire [DWIDTH:0] R_in = frz ? 1'd0 : R;
+      |                              ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:98:30: Operator COND expects 8 bits on the Conditional True, but Conditional True's CONST '1'h0' generates 1 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+   98 |   wire [DWIDTH:0] G_in = frz ? 1'd0 : G;
+      |                              ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:99:30: Operator COND expects 8 bits on the Conditional True, but Conditional True's CONST '1'h0' generates 1 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+   99 |   wire [DWIDTH:0] B_in = frz ? 1'd0 : B;
+      |                              ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:124:5: Input port connection 'RGB_in' expects 24 bits on the pin connection, but pin connection's REPLICATE generates 3 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+  124 |    .RGB_in({R_in,G_in,B_in}),
+      |     ^~~~~~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:191:5: Operator ASSIGNDLY expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 16 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+  191 |   r <= {rt,rt};
+      |     ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:192:5: Operator ASSIGNDLY expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 16 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+  192 |   g <= {gt,gt};
+      |     ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:193:5: Operator ASSIGNDLY expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 16 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+  193 |   b <= {bt,bt};
+      |     ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:68:7: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'vcpt' generates 12 bits.
+                                                                                          : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   68 |    if(!vcpt) hsize <= hcpt;
+      |       ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:76:17: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's VARREF 'vcrop' generates 12 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   76 |  vsize <= vcrop ? vcrop : vtot;
+      |                 ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:84:7: Logical operator IF expects 1 bit on the If, but If's VARREF 'vcalc' generates 2 bits.
+                                                                                          : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   84 |  else if (vcalc) begin
+      |       ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:80:5: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'vcrop' generates 12 bits.
+                                                                                          : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   80 |  if(!vcrop || !ary || !arx) begin
+      |     ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:80:15: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ary' generates 12 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   80 |  if(!vcrop || !ary || !arx) begin
+      |               ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:80:23: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'arx' generates 12 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   80 |  if(!vcrop || !ary || !arx) begin
+      |                       ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:117:59: Operator COND expects 12 bits on the Conditional False, but Conditional False's SEL generates 11 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+  117 |  voff <= vadj[11] ? 12'd0 : ((vadj[11:1] + vcrop) > vtot) ? vtot-vcrop : vadj[11:1];
+      |                                                           ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:118:57: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'vcrop' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+  118 |  ovde <= ((vcpt >= voff) && (vcpt < (vcrop + voff))) || !vcrop;
+      |                                                         ^
+%Warning-WIDTHTRUNC: /tmp/groovy-video-01ibb3xt/changed.sv:177:8: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                : ... note: In instance 'tb_video_pipeline.changed'
+  177 |  .ARX((!ar) ? ( no_rotate ? 12'd4 : 12'd3 ) : (ar - 1'd1)),
+      |        ^
+%Warning-WIDTHEXPAND: /tmp/groovy-video-01ibb3xt/changed.sv:177:51: Operator SUB expects 12 bits on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                  : ... note: In instance 'tb_video_pipeline.changed'
+  177 |  .ARX((!ar) ? ( no_rotate ? 12'd4 : 12'd3 ) : (ar - 1'd1)),
+      |                                                   ^
+%Warning-WIDTHTRUNC: /tmp/groovy-video-01ibb3xt/changed.sv:178:8: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                : ... note: In instance 'tb_video_pipeline.changed'
+  178 |  .ARY((!ar) ? ( no_rotate ? 12'd3 : 12'd4 ) : 12'd0),
+      |        ^
+%Warning-WIDTHEXPAND: /tmp/groovy-video-01ibb3xt/changed.sv:181:3: Input port connection 'SCALE' expects 3 bits on the pin connection, but pin connection's VARREF 'scale' generates 2 bits.
+                                                                 : ... note: In instance 'tb_video_pipeline.changed'
+  181 |  .SCALE(scale)
+      |   ^~~~~
+%Warning-WIDTHTRUNC: /tmp/groovy-video-01ibb3xt/original.sv:112:8: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                 : ... note: In instance 'tb_video_pipeline.original'
+  112 |  .ARX((!ar) ? ( no_rotate ? 12'd4 : 12'd3 ) : (ar - 1'd1)),
+      |        ^
+%Warning-WIDTHEXPAND: /tmp/groovy-video-01ibb3xt/original.sv:112:51: Operator SUB expects 12 bits on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                   : ... note: In instance 'tb_video_pipeline.original'
+  112 |  .ARX((!ar) ? ( no_rotate ? 12'd4 : 12'd3 ) : (ar - 1'd1)),
+      |                                                   ^
+%Warning-WIDTHTRUNC: /tmp/groovy-video-01ibb3xt/original.sv:113:8: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                 : ... note: In instance 'tb_video_pipeline.original'
+  113 |  .ARY((!ar) ? ( no_rotate ? 12'd3 : 12'd4 ) : 12'd0),
+      |        ^
+%Warning-WIDTHEXPAND: /tmp/groovy-video-01ibb3xt/original.sv:116:3: Input port connection 'SCALE' expects 3 bits on the pin connection, but pin connection's VARREF 'scale' generates 2 bits.
+                                                                  : ... note: In instance 'tb_video_pipeline.original'
+  116 |  .SCALE(scale)
+      |   ^~~~~
+make: Entering directory '/tmp/groovy-video-01ibb3xt/base'
+g++ -Os  -I.  -MMD -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated.o /workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/verilated.cpp
+g++ -Os  -I.  -MMD -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_timing.o /workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/verilated_timing.cpp
+g++ -Os  -I.  -MMD -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_threads.o /workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/verilated_threads.cpp
+python3 /workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vtb_video_pipeline.cpp Vtb_video_pipeline___024root__DepSet_h05cb5e35__0.cpp Vtb_video_pipeline___024root__DepSet_he84eec99__0.cpp Vtb_video_pipeline_video_mixer__L280_G1__DepSet_hf77cea3d__0.cpp Vtb_video_pipeline_video_mixer__L280_G1__DepSet_h1abb98a1__0.cpp Vtb_video_pipeline__main.cpp Vtb_video_pipeline___024root__Slow.cpp Vtb_video_pipeline___024root__DepSet_h05cb5e35__0__Slow.cpp Vtb_video_pipeline___024root__DepSet_he84eec99__0__Slow.cpp Vtb_video_pipeline_video_mixer__L280_G1__Slow.cpp Vtb_video_pipeline_video_mixer__L280_G1__DepSet_hf77cea3d__0__Slow.cpp Vtb_video_pipeline_video_mixer__L280_G1__DepSet_h1abb98a1__0__Slow.cpp Vtb_video_pipeline__Syms.cpp > Vtb_video_pipeline__ALL.cpp
+echo "" > Vtb_video_pipeline__ALL.verilator_deplist.tmp
+g++ -Os  -I.  -MMD -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o Vtb_video_pipeline__ALL.o Vtb_video_pipeline__ALL.cpp
+g++    verilated.o verilated_timing.o verilated_threads.o Vtb_video_pipeline__ALL.a    -pthread -lpthread -latomic   -o Vtb_video_pipeline
+rm Vtb_video_pipeline__ALL.verilator_deplist.tmp
+make: Leaving directory '/tmp/groovy-video-01ibb3xt/base'
+- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)
+- Verilator: Built from 1.193 MB sources in 27 modules, into 0.542 MB in 13 C++ files needing 0.001 MB
+- Verilator: Walltime 7.412 s (elab=0.020, cvt=0.096, bld=7.235); cpu 0.186 s on 2 threads; alloced 21.410 MB
+PASS: actual emu video bypass 2230272 clocks, 168960 active pixels, original H/V/scale controls & unsupported interlace
+- /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:70: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 32ms; walltime 2.821 s; speed 11.498 ms/s
+- Verilator: cpu 2.821 s on 1 threads; alloced 65 MB
+PASS: actual emu video section, Cabinet build = False
+%Warning-PINMISSING: /tmp/groovy-video-01ibb3xt/original.sv:69:26: Cell has missing pin: 'freeze_sync'
+   69 | video_mixer #(640, 0, 1) video_mixer(
+      |                          ^~~~~~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:51:19: ... Location of port declaration
+   51 |  output           freeze_sync,
+      |                   ^~~~~~~~~~~
+                     ... For warning description see https://verilator.org/warn/PINMISSING?v=5.032
+                     ... Use "/* verilator lint_off PINMISSING */" and lint_on around source to disable this message.
+%Warning-PINMISSING: /tmp/groovy-video-01ibb3xt/changed.sv:74:26: Cell has missing pin: 'freeze_sync'
+   74 | video_mixer #(640, 0, 1) video_mixer(
+      |                          ^~~~~~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:51:19: ... Location of port declaration
+   51 |  output           freeze_sync,
+      |                   ^~~~~~~~~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:39:17: Cell has missing pin: 'sync_pt'
+   39 | sync_lock #(33) vs_lock
+      |                 ^~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:91:10: ... Location of port declaration
+   91 |  output  sync_pt,
+      |          ^~~~~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:39:17: Cell has missing pin: 'valid'
+   39 | sync_lock #(33) vs_lock
+      |                 ^~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:92:10: ... Location of port declaration
+   92 |  output  valid
+      |          ^~~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:50:17: Cell has missing pin: 'valid'
+   50 | sync_lock #(21) hs_lock
+      |                 ^~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:92:10: ... Location of port declaration
+   92 |  output  valid
+      |          ^~~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/scandoubler.v:103:50: Cell has missing pin: 'mono'
+  103 | Hq2x #(.LENGTH(LENGTH), .HALF_DEPTH(HALF_DEPTH)) Hq2x
+      |                                                  ^~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:19:20: ... Location of port declaration
+   19 |  input             mono,
+      |                    ^~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:165:19: Cell has missing pin: 'remainder'
+  165 | sys_udiv #(24,12) div(CLK_VIDEO,div_start,div_run, div_num,div_den,div_res);
+      |                   ^~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:16:26: ... Location of port declaration
+   16 |  output reg [NB_DIV-1:0] remainder
+      |                          ^~~~~~~~~
+%Warning-TIMESCALEMOD: /tmp/groovy-video-01ibb3xt/original.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    1 | module original_pipeline(input clk_sys,ce_pix,ce_pix2,RESET,
+      |        ^~~~~~~~~~~~~~~~~
+                       /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:2:8: ... Location of module with timescale
+    2 | module tb_video_pipeline;
+      |        ^~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /tmp/groovy-video-01ibb3xt/changed.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    1 | module changed_pipeline(input clk_sys,ce_pix,ce_pix2,RESET,
+      |        ^~~~~~~~~~~~~~~~
+                       /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:2:8: ... Location of module with timescale
+    2 | module tb_video_pipeline;
+      |        ^~~~~~~~~~~~~~~~~
+%Warning-IMPLICIT: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:124:13: Signal definition not found, creating implicitly: 'R_in'
+  124 |    .RGB_in({R_in,G_in,B_in}),
+      |             ^~~~
+%Warning-IMPLICIT: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:124:18: Signal definition not found, creating implicitly: 'G_in'
+                                                                                          : ... Suggested alternative: 'R_in'
+  124 |    .RGB_in({R_in,G_in,B_in}),
+      |                  ^~~~
+%Warning-IMPLICIT: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:124:23: Signal definition not found, creating implicitly: 'B_in'
+                                                                                          : ... Suggested alternative: 'G_in'
+  124 |    .RGB_in({R_in,G_in,B_in}),
+      |                       ^~~~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:290:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 5 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender.diff_checker'
+  290 |  wire u_inside = (!u[8:4] || &u[8:4]);  
+      |                   ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:361:32: Operator ADD expects 35 bits on the RHS, but RHS's REPLICATE generates 32 bits.
+                                                                                      : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender'
+  361 |   if(op2[0]) mul24x3 = mul24x3 + {op1[23:16], 4'b0000, op1[15:8], 4'b0000, op1[7:0]};
+      |                                ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:362:32: Operator ADD expects 35 bits on the RHS, but RHS's REPLICATE generates 33 bits.
+                                                                                      : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender'
+  362 |   if(op2[1]) mul24x3 = mul24x3 + {op1[23:16], 4'b0000, op1[15:8], 4'b0000, op1[7:0], 1'b0};
+      |                                ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:367:73: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 2 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender'
+  367 |  wire [35:0] res = {mul24x3(i1, op[6:4]), 1'b0} + mul24x3(i2, {op[3:2], !op[3:2]}) + mul24x3(i3, {op[1:0], !op[3:2]});
+      |                                                                         ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:367:108: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 2 bits.
+                                                                                      : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender'
+  367 |  wire [35:0] res = {mul24x3(i1, op[6:4]), 1'b0} + mul24x3(i2, {op[3:2], !op[3:2]}) + mul24x3(i3, {op[1:0], !op[3:2]});
+      |                                                                                                            ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:29:7: Operator ASSIGNDLY expects 38 bits on the Assign RHS, but Assign RHS's VARREF 'num' generates 24 bits.
+                                                                                    : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.div'
+   29 |   rem <= num;
+      |       ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:36:41: Operator SHIFTL expects 37 bits on the LHS, but LHS's VARREF 'div' generates 12 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.div'
+   36 |     rem <= {rem[NB_DIV+NB_NUM:0] - (div << NB_NUM),1'b0};
+      |                                         ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:38:41: Operator SHIFTL expects 37 bits on the LHS, but LHS's VARREF 'div' generates 12 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.div'
+   38 |     rem <= {rem[NB_DIV+NB_NUM:0] + (div << NB_NUM),1'b0};
+      |                                         ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:79:39: Operator FUNCREF 'h2rgb' expects 12 bits on the Function Argument, but Function Argument's VARREF 'Curr20tmp' generates 24 bits.
+                                                                                    : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x'
+   79 | wire     [23:0] Curr20 = HALF_DEPTH ? h2rgb(Curr20tmp) : Curr20tmp;
+      |                                       ^~~~~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:81:39: Operator FUNCREF 'h2rgb' expects 12 bits on the Function Argument, but Function Argument's VARREF 'Curr21tmp' generates 24 bits.
+                                                                                    : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x'
+   81 | wire     [23:0] Curr21 = HALF_DEPTH ? h2rgb(Curr21tmp) : Curr21tmp;
+      |                                       ^~~~~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:146:43: Operator COND expects 24 bits on the Conditional True, but Conditional True's FUNCREF 'rgb2h' generates 12 bits.
+                                                                                      : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x'
+  146 | wire [DWIDTH:0] blend_result = HALF_DEPTH ? rgb2h(blend_result_pre) : blend_result_pre[DWIDTH:0];
+      |                                           ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:178:27: Operator FUNCREF 'h2rgb' expects 12 bits on the Function Argument, but Function Argument's VARREF 'inputpixel' generates 24 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x'
+  178 |     Next2 <= HALF_DEPTH ? h2rgb(inputpixel) : inputpixel;
+      |                           ^~~~~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:128:53: Operator ADD expects 21 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.video_mixer.freezer.hs_lock'
+  128 |  if(old_sync & ~sync_in & sync_valid) cnto <= s_len + 2'd2;
+      |                                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:128:53: Operator ADD expects 33 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.video_mixer.freezer.vs_lock'
+  128 |  if(old_sync & ~sync_in & sync_valid) cnto <= s_len + 2'd2;
+      |                                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:71:10: Operator ASSIGNDLY expects 24 bits on the Assign RHS, but Assign RHS's VARREF 'mul1' generates 12 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.mul'
+   71 |   add    <= mul1;
+      |          ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:75:6: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'map' generates 12 bits.
+                                                                                   : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.mul'
+   75 |   if(!map)   run <= 0;
+      |      ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:190:40: Operator ADD expects 17 bits on the RHS, but RHS's SIGNED generates 9 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  190 |         ? $signed({1'b0, htotal_used}) + $signed(hoffset)
+      |                                        ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:190:9: Operator COND expects 17 bits on the Conditional False, but Conditional False's SIGNED generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  190 |         ? $signed({1'b0, htotal_used}) + $signed(hoffset)
+      |         ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:199:35: Operator EQ expects 17 bits on the RHS, but RHS's CONST '10'h0' generates 10 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  199 |         hs_shifted <= (hshift_tap == 10'd0) ? hs_in : hsync_pix_shreg[hshift_tap - 10'd1];
+      |                                   ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:199:82: Operator SUB expects 17 bits on the RHS, but RHS's CONST '10'h1' generates 10 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  199 |         hs_shifted <= (hshift_tap == 10'd0) ? hs_in : hsync_pix_shreg[hshift_tap - 10'd1];
+      |                                                                                  ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:199:70: Bit extraction of var[1023:0] requires 10 bit index, not 17 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  199 |         hs_shifted <= (hshift_tap == 10'd0) ? hs_in : hsync_pix_shreg[hshift_tap - 10'd1];
+      |                                                                      ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:327:36: Operator COND expects 13 bits on the Conditional True, but Conditional True's SIGNED generates 9 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  327 |                                    ? $signed(hoffset)
+      |                                    ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:332:27: Operator ASSIGNW expects 11 bits on the Assign RHS, but Assign RHS's SUB generates 13 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  332 |     wire [AW-1:0] rd_addr = (rdcnt_s - hoff_s);
+      |                           ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:345:40: Operator ADD expects 17 bits on the RHS, but RHS's SIGNED generates 6 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  345 |         ? $signed({1'b0, vtotal_used}) + $signed(voffset)
+      |                                        ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:345:9: Operator COND expects 17 bits on the Conditional False, but Conditional False's SIGNED generates 6 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  345 |         ? $signed({1'b0, vtotal_used}) + $signed(voffset)
+      |         ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:354:35: Operator EQ expects 17 bits on the RHS, but RHS's CONST '9'h0' generates 9 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  354 |         vs_shifted <= (vshift_tap == 9'd0) ? vs_in : vsync_line_shreg[vshift_tap - 9'd1];
+      |                                   ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:354:82: Operator SUB expects 17 bits on the RHS, but RHS's CONST '9'h1' generates 9 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  354 |         vs_shifted <= (vshift_tap == 9'd0) ? vs_in : vsync_line_shreg[vshift_tap - 9'd1];
+      |                                                                                  ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:354:70: Bit extraction of var[511:0] requires 9 bit index, not 17 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  354 |         vs_shifted <= (vshift_tap == 9'd0) ? vs_in : vsync_line_shreg[vshift_tap - 9'd1];
+      |                                                                      ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:188:47: Operator ADD expects 15 bits on the RHS, but RHS's VARREF 'wpx' generates 10 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  188 |     wire [RAW-1:0] write_addr = line_base(wl) + wpx;
+      |                                               ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:284:65: Operator ADD expects 11 bits on the RHS, but RHS's VARREF 'vsize_eff' generates 6 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  284 |     wire signed [10:0] lines_out_s = $signed({1'b0, lines_nat}) + vsize_eff;
+      |                                                                 ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:290:58: Operator SUB expects 11 bits on the RHS, but RHS's VARREF 'vsize_eff' generates 6 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  290 |     wire signed [10:0] a_out_ts = $signed({1'b0, a_nat}) - vsize_eff;
+      |                                                          ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:397:35: Operator COND expects 23 bits on the Conditional False, but Conditional False's SEL generates 22 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  397 |             bres_acc <= line_tick ? (bres_sum - {1'b0, f_lat}) : bres_sum[21:0];
+      |                                   ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:397:22: Operator ASSIGNDLY expects 22 bits on the Assign RHS, but Assign RHS's COND generates 23 bits.
+                                                                                              : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  397 |             bres_acc <= line_tick ? (bres_sum - {1'b0, f_lat}) : bres_sum[21:0];
+      |                      ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:481:42: Operator ADD expects 15 bits on the RHS, but RHS's VARREF 'o_px' generates 10 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  481 |                 rd_addr <= line_base(rl) + o_px;
+      |                                          ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:635:37: Operator SUB expects 25 bits on the LHS, but LHS's CONST '9'h100' generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  635 |     wire [24:0] t_mix_r = ( (9'd256 - {1'b0, t_al}) * t_sqa_r ) + ( {1'b0, t_al} * t_sqb_r );
+      |                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:635:37: Operator SUB expects 25 bits on the RHS, but RHS's REPLICATE generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  635 |     wire [24:0] t_mix_r = ( (9'd256 - {1'b0, t_al}) * t_sqa_r ) + ( {1'b0, t_al} * t_sqb_r );
+      |                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:636:37: Operator SUB expects 25 bits on the LHS, but LHS's CONST '9'h100' generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  636 |     wire [24:0] t_mix_g = ( (9'd256 - {1'b0, t_al}) * t_sqa_g ) + ( {1'b0, t_al} * t_sqb_g );
+      |                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:636:37: Operator SUB expects 25 bits on the RHS, but RHS's REPLICATE generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  636 |     wire [24:0] t_mix_g = ( (9'd256 - {1'b0, t_al}) * t_sqa_g ) + ( {1'b0, t_al} * t_sqb_g );
+      |                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:637:37: Operator SUB expects 25 bits on the LHS, but LHS's CONST '9'h100' generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  637 |     wire [24:0] t_mix_b = ( (9'd256 - {1'b0, t_al}) * t_sqa_b ) + ( {1'b0, t_al} * t_sqb_b );
+      |                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:637:37: Operator SUB expects 25 bits on the RHS, but RHS's REPLICATE generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  637 |     wire [24:0] t_mix_b = ( (9'd256 - {1'b0, t_al}) * t_sqa_b ) + ( {1'b0, t_al} * t_sqb_b );
+      |                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:656:61: Operator ADD expects 15 bits on the RHS, but RHS's VARREF 't_px_l' generates 10 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  656 |             5'd0: rd_addr_t <= t_fetch ? line_base(t_slotA) + t_px_l : {RAW{1'b0}};
+      |                                                             ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:657:61: Operator ADD expects 15 bits on the RHS, but RHS's VARREF 't_px_l' generates 10 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  657 |             5'd1: rd_addr_t <= t_fetch ? line_base(t_slotB) + t_px_l : {RAW{1'b0}};
+      |                                                             ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:183:8: Operator ASSIGNDLY expects 13 bits on the Assign RHS, but Assign RHS's VARREF 'arx_i' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  183 |   arxf <= arx_i;
+      |        ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:184:8: Operator ASSIGNDLY expects 13 bits on the Assign RHS, but Assign RHS's VARREF 'ary_i' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  184 |   aryf <= ary_i;
+      |        ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:194:16: Operator ASSIGNDLY expects 24 bits on the Assign RHS, but Assign RHS's VARREF 'HDMI_HEIGHT' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  194 |      div_num   <= HDMI_HEIGHT;
+      |                ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:205:16: Operator ASSIGNDLY expects 13 bits on the Assign RHS, but Assign RHS's VARREF 'arx_i' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  205 |      arxf      <= arx_i;
+      |                ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:206:16: Operator ASSIGNDLY expects 13 bits on the Assign RHS, but Assign RHS's VARREF 'ary_i' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  206 |      aryf      <= ary_i;
+      |                ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:202:10: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  202 |    1: if(!div_res[11:0]) begin
+      |          ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:220:9: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ary_i' generates 12 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  220 |      if(!ary_i) begin
+      |         ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:257:33: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's SEL generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  257 |      mul_arg2  <= div_res[11:0] ? div_res[11:0] : 12'd1;
+      |                                 ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:264:18: Operator LTE expects 24 bits on the RHS, but RHS's VARREF 'HDMI_WIDTH' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  264 |    7: if(mul_res <= HDMI_WIDTH) begin
+      |                  ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:270:16: Operator ASSIGNDLY expects 24 bits on the Assign RHS, but Assign RHS's VARREF 'HDMI_WIDTH' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  270 |      div_num   <= HDMI_WIDTH;
+      |                ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:280:33: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's SEL generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  280 |      mul_arg2  <= div_res[11:0] ? div_res[11:0] : 12'd1;
+      |                                 ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:290:48: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's SEL generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  290 |                     mul_arg2  <= div_res[11:0] ? div_res[11:0] : 12'd1;
+      |                                                ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:182:6: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'SCALE' generates 3 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  182 |  if (!SCALE || (!ary_i && arx_i)) begin
+      |      ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:182:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ary_i' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  182 |  if (!SCALE || (!ary_i && arx_i)) begin
+      |                 ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:182:24: Logical operator LOGAND expects 1 bit on the RHS, but RHS's VARREF 'arx_i' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  182 |  if (!SCALE || (!ary_i && arx_i)) begin
+      |                        ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:97:30: Operator COND expects 8 bits on the Conditional True, but Conditional True's CONST '1'h0' generates 1 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+   97 |   wire [DWIDTH:0] R_in = frz ? 1'd0 : R;
+      |                              ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:98:30: Operator COND expects 8 bits on the Conditional True, but Conditional True's CONST '1'h0' generates 1 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+   98 |   wire [DWIDTH:0] G_in = frz ? 1'd0 : G;
+      |                              ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:99:30: Operator COND expects 8 bits on the Conditional True, but Conditional True's CONST '1'h0' generates 1 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+   99 |   wire [DWIDTH:0] B_in = frz ? 1'd0 : B;
+      |                              ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:124:5: Input port connection 'RGB_in' expects 24 bits on the pin connection, but pin connection's REPLICATE generates 3 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+  124 |    .RGB_in({R_in,G_in,B_in}),
+      |     ^~~~~~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:191:5: Operator ASSIGNDLY expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 16 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+  191 |   r <= {rt,rt};
+      |     ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:192:5: Operator ASSIGNDLY expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 16 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+  192 |   g <= {gt,gt};
+      |     ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:193:5: Operator ASSIGNDLY expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 16 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+  193 |   b <= {bt,bt};
+      |     ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:68:7: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'vcpt' generates 12 bits.
+                                                                                          : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   68 |    if(!vcpt) hsize <= hcpt;
+      |       ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:76:17: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's VARREF 'vcrop' generates 12 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   76 |  vsize <= vcrop ? vcrop : vtot;
+      |                 ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:84:7: Logical operator IF expects 1 bit on the If, but If's VARREF 'vcalc' generates 2 bits.
+                                                                                          : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   84 |  else if (vcalc) begin
+      |       ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:80:5: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'vcrop' generates 12 bits.
+                                                                                          : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   80 |  if(!vcrop || !ary || !arx) begin
+      |     ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:80:15: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ary' generates 12 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   80 |  if(!vcrop || !ary || !arx) begin
+      |               ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:80:23: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'arx' generates 12 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   80 |  if(!vcrop || !ary || !arx) begin
+      |                       ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:117:59: Operator COND expects 12 bits on the Conditional False, but Conditional False's SEL generates 11 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+  117 |  voff <= vadj[11] ? 12'd0 : ((vadj[11:1] + vcrop) > vtot) ? vtot-vcrop : vadj[11:1];
+      |                                                           ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:118:57: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'vcrop' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+  118 |  ovde <= ((vcpt >= voff) && (vcpt < (vcrop + voff))) || !vcrop;
+      |                                                         ^
+%Warning-WIDTHTRUNC: /tmp/groovy-video-01ibb3xt/changed.sv:177:8: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                : ... note: In instance 'tb_video_pipeline.changed'
+  177 |  .ARX((!ar) ? ( no_rotate ? 12'd4 : 12'd3 ) : (ar - 1'd1)),
+      |        ^
+%Warning-WIDTHEXPAND: /tmp/groovy-video-01ibb3xt/changed.sv:177:51: Operator SUB expects 12 bits on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                  : ... note: In instance 'tb_video_pipeline.changed'
+  177 |  .ARX((!ar) ? ( no_rotate ? 12'd4 : 12'd3 ) : (ar - 1'd1)),
+      |                                                   ^
+%Warning-WIDTHTRUNC: /tmp/groovy-video-01ibb3xt/changed.sv:178:8: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                : ... note: In instance 'tb_video_pipeline.changed'
+  178 |  .ARY((!ar) ? ( no_rotate ? 12'd3 : 12'd4 ) : 12'd0),
+      |        ^
+%Warning-WIDTHEXPAND: /tmp/groovy-video-01ibb3xt/changed.sv:181:3: Input port connection 'SCALE' expects 3 bits on the pin connection, but pin connection's VARREF 'scale' generates 2 bits.
+                                                                 : ... note: In instance 'tb_video_pipeline.changed'
+  181 |  .SCALE(scale)
+      |   ^~~~~
+%Warning-WIDTHTRUNC: /tmp/groovy-video-01ibb3xt/original.sv:112:8: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                 : ... note: In instance 'tb_video_pipeline.original'
+  112 |  .ARX((!ar) ? ( no_rotate ? 12'd4 : 12'd3 ) : (ar - 1'd1)),
+      |        ^
+%Warning-WIDTHEXPAND: /tmp/groovy-video-01ibb3xt/original.sv:112:51: Operator SUB expects 12 bits on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                   : ... note: In instance 'tb_video_pipeline.original'
+  112 |  .ARX((!ar) ? ( no_rotate ? 12'd4 : 12'd3 ) : (ar - 1'd1)),
+      |                                                   ^
+%Warning-WIDTHTRUNC: /tmp/groovy-video-01ibb3xt/original.sv:113:8: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                 : ... note: In instance 'tb_video_pipeline.original'
+  113 |  .ARY((!ar) ? ( no_rotate ? 12'd3 : 12'd4 ) : 12'd0),
+      |        ^
+%Warning-WIDTHEXPAND: /tmp/groovy-video-01ibb3xt/original.sv:116:3: Input port connection 'SCALE' expects 3 bits on the pin connection, but pin connection's VARREF 'scale' generates 2 bits.
+                                                                  : ... note: In instance 'tb_video_pipeline.original'
+  116 |  .SCALE(scale)
+      |   ^~~~~
+make: Entering directory '/tmp/groovy-video-01ibb3xt/cabinet'
+g++ -Os  -I.  -MMD -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated.o /workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/verilated.cpp
+g++ -Os  -I.  -MMD -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_timing.o /workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/verilated_timing.cpp
+g++ -Os  -I.  -MMD -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_threads.o /workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/verilated_threads.cpp
+python3 /workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vtb_video_pipeline.cpp Vtb_video_pipeline___024root__DepSet_h05cb5e35__0.cpp Vtb_video_pipeline___024root__DepSet_he84eec99__0.cpp Vtb_video_pipeline_video_mixer__L280_G1__DepSet_hf77cea3d__0.cpp Vtb_video_pipeline_video_mixer__L280_G1__DepSet_h1abb98a1__0.cpp Vtb_video_pipeline__main.cpp Vtb_video_pipeline__ConstPool_0.cpp Vtb_video_pipeline___024root__Slow.cpp Vtb_video_pipeline___024root__DepSet_h05cb5e35__0__Slow.cpp Vtb_video_pipeline___024root__DepSet_he84eec99__0__Slow.cpp Vtb_video_pipeline_video_mixer__L280_G1__Slow.cpp Vtb_video_pipeline_video_mixer__L280_G1__DepSet_hf77cea3d__0__Slow.cpp Vtb_video_pipeline_video_mixer__L280_G1__DepSet_h1abb98a1__0__Slow.cpp Vtb_video_pipeline__Syms.cpp > Vtb_video_pipeline__ALL.cpp
+echo "" > Vtb_video_pipeline__ALL.verilator_deplist.tmp
+g++ -Os  -I.  -MMD -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o Vtb_video_pipeline__ALL.o Vtb_video_pipeline__ALL.cpp
+g++    verilated.o verilated_timing.o verilated_threads.o Vtb_video_pipeline__ALL.a    -pthread -lpthread -latomic   -o Vtb_video_pipeline
+rm Vtb_video_pipeline__ALL.verilator_deplist.tmp
+make: Leaving directory '/tmp/groovy-video-01ibb3xt/cabinet'
+- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)
+- Verilator: Built from 1.220 MB sources in 27 modules, into 0.825 MB in 14 C++ files needing 0.001 MB
+- Verilator: Walltime 5.221 s (elab=0.086, cvt=0.120, bld=4.975); cpu 0.263 s on 2 threads; alloced 23.340 MB
+PASS: actual emu video bypass 2230272 clocks, 168960 active pixels, original H/V/scale controls & unsupported interlace
+- /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:70: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 32ms; walltime 3.523 s; speed 9.255 ms/s
+- Verilator: cpu 3.505 s on 1 threads; alloced 65 MB
+PASS: actual emu video section, Cabinet build = True
+%Warning-PINMISSING: /tmp/groovy-video-01ibb3xt/original.sv:69:26: Cell has missing pin: 'freeze_sync'
+   69 | video_mixer #(640, 0, 1) video_mixer(
+      |                          ^~~~~~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:51:19: ... Location of port declaration
+   51 |  output           freeze_sync,
+      |                   ^~~~~~~~~~~
+                     ... For warning description see https://verilator.org/warn/PINMISSING?v=5.032
+                     ... Use "/* verilator lint_off PINMISSING */" and lint_on around source to disable this message.
+%Warning-PINMISSING: /tmp/groovy-video-01ibb3xt/changed.sv:74:26: Cell has missing pin: 'freeze_sync'
+   74 | video_mixer #(640, 0, 1) video_mixer(
+      |                          ^~~~~~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:51:19: ... Location of port declaration
+   51 |  output           freeze_sync,
+      |                   ^~~~~~~~~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:39:17: Cell has missing pin: 'sync_pt'
+   39 | sync_lock #(33) vs_lock
+      |                 ^~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:91:10: ... Location of port declaration
+   91 |  output  sync_pt,
+      |          ^~~~~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:39:17: Cell has missing pin: 'valid'
+   39 | sync_lock #(33) vs_lock
+      |                 ^~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:92:10: ... Location of port declaration
+   92 |  output  valid
+      |          ^~~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:50:17: Cell has missing pin: 'valid'
+   50 | sync_lock #(21) hs_lock
+      |                 ^~~~~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:92:10: ... Location of port declaration
+   92 |  output  valid
+      |          ^~~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/scandoubler.v:103:50: Cell has missing pin: 'mono'
+  103 | Hq2x #(.LENGTH(LENGTH), .HALF_DEPTH(HALF_DEPTH)) Hq2x
+      |                                                  ^~~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:19:20: ... Location of port declaration
+   19 |  input             mono,
+      |                    ^~~~
+%Warning-PINMISSING: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:165:19: Cell has missing pin: 'remainder'
+  165 | sys_udiv #(24,12) div(CLK_VIDEO,div_start,div_run, div_num,div_den,div_res);
+      |                   ^~~
+                     /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:16:26: ... Location of port declaration
+   16 |  output reg [NB_DIV-1:0] remainder
+      |                          ^~~~~~~~~
+%Warning-TIMESCALEMOD: /tmp/groovy-video-01ibb3xt/original.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    1 | module original_pipeline(input clk_sys,ce_pix,ce_pix2,RESET,
+      |        ^~~~~~~~~~~~~~~~~
+                       /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:2:8: ... Location of module with timescale
+    2 | module tb_video_pipeline;
+      |        ^~~~~~~~~~~~~~~~~
+%Warning-TIMESCALEMOD: /tmp/groovy-video-01ibb3xt/changed.sv:1:8: Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)
+    1 | module changed_pipeline(input clk_sys,ce_pix,ce_pix2,RESET,
+      |        ^~~~~~~~~~~~~~~~
+                       /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:2:8: ... Location of module with timescale
+    2 | module tb_video_pipeline;
+      |        ^~~~~~~~~~~~~~~~~
+%Warning-IMPLICIT: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:124:13: Signal definition not found, creating implicitly: 'R_in'
+  124 |    .RGB_in({R_in,G_in,B_in}),
+      |             ^~~~
+%Warning-IMPLICIT: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:124:18: Signal definition not found, creating implicitly: 'G_in'
+                                                                                          : ... Suggested alternative: 'R_in'
+  124 |    .RGB_in({R_in,G_in,B_in}),
+      |                  ^~~~
+%Warning-IMPLICIT: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:124:23: Signal definition not found, creating implicitly: 'B_in'
+                                                                                          : ... Suggested alternative: 'G_in'
+  124 |    .RGB_in({R_in,G_in,B_in}),
+      |                       ^~~~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:290:19: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 5 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender.diff_checker'
+  290 |  wire u_inside = (!u[8:4] || &u[8:4]);  
+      |                   ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:361:32: Operator ADD expects 35 bits on the RHS, but RHS's REPLICATE generates 32 bits.
+                                                                                      : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender'
+  361 |   if(op2[0]) mul24x3 = mul24x3 + {op1[23:16], 4'b0000, op1[15:8], 4'b0000, op1[7:0]};
+      |                                ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:362:32: Operator ADD expects 35 bits on the RHS, but RHS's REPLICATE generates 33 bits.
+                                                                                      : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender'
+  362 |   if(op2[1]) mul24x3 = mul24x3 + {op1[23:16], 4'b0000, op1[15:8], 4'b0000, op1[7:0], 1'b0};
+      |                                ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:367:73: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 2 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender'
+  367 |  wire [35:0] res = {mul24x3(i1, op[6:4]), 1'b0} + mul24x3(i2, {op[3:2], !op[3:2]}) + mul24x3(i3, {op[1:0], !op[3:2]});
+      |                                                                         ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:367:108: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 2 bits.
+                                                                                      : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x.blender'
+  367 |  wire [35:0] res = {mul24x3(i1, op[6:4]), 1'b0} + mul24x3(i2, {op[3:2], !op[3:2]}) + mul24x3(i3, {op[1:0], !op[3:2]});
+      |                                                                                                            ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:29:7: Operator ASSIGNDLY expects 38 bits on the Assign RHS, but Assign RHS's VARREF 'num' generates 24 bits.
+                                                                                    : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.div'
+   29 |   rem <= num;
+      |       ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:36:41: Operator SHIFTL expects 37 bits on the LHS, but LHS's VARREF 'div' generates 12 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.div'
+   36 |     rem <= {rem[NB_DIV+NB_NUM:0] - (div << NB_NUM),1'b0};
+      |                                         ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:38:41: Operator SHIFTL expects 37 bits on the LHS, but LHS's VARREF 'div' generates 12 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.div'
+   38 |     rem <= {rem[NB_DIV+NB_NUM:0] + (div << NB_NUM),1'b0};
+      |                                         ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:79:39: Operator FUNCREF 'h2rgb' expects 12 bits on the Function Argument, but Function Argument's VARREF 'Curr20tmp' generates 24 bits.
+                                                                                    : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x'
+   79 | wire     [23:0] Curr20 = HALF_DEPTH ? h2rgb(Curr20tmp) : Curr20tmp;
+      |                                       ^~~~~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:81:39: Operator FUNCREF 'h2rgb' expects 12 bits on the Function Argument, but Function Argument's VARREF 'Curr21tmp' generates 24 bits.
+                                                                                    : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x'
+   81 | wire     [23:0] Curr21 = HALF_DEPTH ? h2rgb(Curr21tmp) : Curr21tmp;
+      |                                       ^~~~~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:146:43: Operator COND expects 24 bits on the Conditional True, but Conditional True's FUNCREF 'rgb2h' generates 12 bits.
+                                                                                      : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x'
+  146 | wire [DWIDTH:0] blend_result = HALF_DEPTH ? rgb2h(blend_result_pre) : blend_result_pre[DWIDTH:0];
+      |                                           ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/hq2x.sv:178:27: Operator FUNCREF 'h2rgb' expects 12 bits on the Function Argument, but Function Argument's VARREF 'inputpixel' generates 24 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_mixer.sd.Hq2x'
+  178 |     Next2 <= HALF_DEPTH ? h2rgb(inputpixel) : inputpixel;
+      |                           ^~~~~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:128:53: Operator ADD expects 21 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.video_mixer.freezer.hs_lock'
+  128 |  if(old_sync & ~sync_in & sync_valid) cnto <= s_len + 2'd2;
+      |                                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freezer.sv:128:53: Operator ADD expects 33 bits on the RHS, but RHS's CONST '2'h2' generates 2 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.video_mixer.freezer.vs_lock'
+  128 |  if(old_sync & ~sync_in & sync_valid) cnto <= s_len + 2'd2;
+      |                                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:71:10: Operator ASSIGNDLY expects 24 bits on the Assign RHS, but Assign RHS's VARREF 'mul1' generates 12 bits.
+                                                                                     : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.mul'
+   71 |   add    <= mul1;
+      |          ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/math.sv:75:6: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'map' generates 12 bits.
+                                                                                   : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale.mul'
+   75 |   if(!map)   run <= 0;
+      |      ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:190:40: Operator ADD expects 17 bits on the RHS, but RHS's SIGNED generates 9 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  190 |         ? $signed({1'b0, htotal_used}) + $signed(hoffset)
+      |                                        ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:190:9: Operator COND expects 17 bits on the Conditional False, but Conditional False's SIGNED generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  190 |         ? $signed({1'b0, htotal_used}) + $signed(hoffset)
+      |         ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:199:35: Operator EQ expects 17 bits on the RHS, but RHS's CONST '10'h0' generates 10 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  199 |         hs_shifted <= (hshift_tap == 10'd0) ? hs_in : hsync_pix_shreg[hshift_tap - 10'd1];
+      |                                   ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:199:82: Operator SUB expects 17 bits on the RHS, but RHS's CONST '10'h1' generates 10 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  199 |         hs_shifted <= (hshift_tap == 10'd0) ? hs_in : hsync_pix_shreg[hshift_tap - 10'd1];
+      |                                                                                  ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:199:70: Bit extraction of var[1023:0] requires 10 bit index, not 17 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  199 |         hs_shifted <= (hshift_tap == 10'd0) ? hs_in : hsync_pix_shreg[hshift_tap - 10'd1];
+      |                                                                      ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:327:36: Operator COND expects 13 bits on the Conditional True, but Conditional True's SIGNED generates 9 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  327 |                                    ? $signed(hoffset)
+      |                                    ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:332:27: Operator ASSIGNW expects 11 bits on the Assign RHS, but Assign RHS's SUB generates 13 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  332 |     wire [AW-1:0] rd_addr = (rdcnt_s - hoff_s);
+      |                           ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:345:40: Operator ADD expects 17 bits on the RHS, but RHS's SIGNED generates 6 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  345 |         ? $signed({1'b0, vtotal_used}) + $signed(voffset)
+      |                                        ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:345:9: Operator COND expects 17 bits on the Conditional False, but Conditional False's SIGNED generates 6 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  345 |         ? $signed({1'b0, vtotal_used}) + $signed(voffset)
+      |         ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:354:35: Operator EQ expects 17 bits on the RHS, but RHS's CONST '9'h0' generates 9 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  354 |         vs_shifted <= (vshift_tap == 9'd0) ? vs_in : vsync_line_shreg[vshift_tap - 9'd1];
+      |                                   ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:354:82: Operator SUB expects 17 bits on the RHS, but RHS's CONST '9'h1' generates 9 bits.
+                                                                                                : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  354 |         vs_shifted <= (vshift_tap == 9'd0) ? vs_in : vsync_line_shreg[vshift_tap - 9'd1];
+      |                                                                                  ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_adjust.sv:354:70: Bit extraction of var[511:0] requires 9 bit index, not 17 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_adjust'
+  354 |         vs_shifted <= (vshift_tap == 9'd0) ? vs_in : vsync_line_shreg[vshift_tap - 9'd1];
+      |                                                                      ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:188:47: Operator ADD expects 15 bits on the RHS, but RHS's VARREF 'wpx' generates 10 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  188 |     wire [RAW-1:0] write_addr = line_base(wl) + wpx;
+      |                                               ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:284:65: Operator ADD expects 11 bits on the RHS, but RHS's VARREF 'vsize_eff' generates 6 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  284 |     wire signed [10:0] lines_out_s = $signed({1'b0, lines_nat}) + vsize_eff;
+      |                                                                 ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:290:58: Operator SUB expects 11 bits on the RHS, but RHS's VARREF 'vsize_eff' generates 6 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  290 |     wire signed [10:0] a_out_ts = $signed({1'b0, a_nat}) - vsize_eff;
+      |                                                          ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:397:35: Operator COND expects 23 bits on the Conditional False, but Conditional False's SEL generates 22 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  397 |             bres_acc <= line_tick ? (bres_sum - {1'b0, f_lat}) : bres_sum[21:0];
+      |                                   ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:397:22: Operator ASSIGNDLY expects 22 bits on the Assign RHS, but Assign RHS's COND generates 23 bits.
+                                                                                              : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  397 |             bres_acc <= line_tick ? (bres_sum - {1'b0, f_lat}) : bres_sum[21:0];
+      |                      ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:481:42: Operator ADD expects 15 bits on the RHS, but RHS's VARREF 'o_px' generates 10 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  481 |                 rd_addr <= line_base(rl) + o_px;
+      |                                          ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:635:37: Operator SUB expects 25 bits on the LHS, but LHS's CONST '9'h100' generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  635 |     wire [24:0] t_mix_r = ( (9'd256 - {1'b0, t_al}) * t_sqa_r ) + ( {1'b0, t_al} * t_sqb_r );
+      |                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:635:37: Operator SUB expects 25 bits on the RHS, but RHS's REPLICATE generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  635 |     wire [24:0] t_mix_r = ( (9'd256 - {1'b0, t_al}) * t_sqa_r ) + ( {1'b0, t_al} * t_sqb_r );
+      |                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:636:37: Operator SUB expects 25 bits on the LHS, but LHS's CONST '9'h100' generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  636 |     wire [24:0] t_mix_g = ( (9'd256 - {1'b0, t_al}) * t_sqa_g ) + ( {1'b0, t_al} * t_sqb_g );
+      |                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:636:37: Operator SUB expects 25 bits on the RHS, but RHS's REPLICATE generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  636 |     wire [24:0] t_mix_g = ( (9'd256 - {1'b0, t_al}) * t_sqa_g ) + ( {1'b0, t_al} * t_sqb_g );
+      |                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:637:37: Operator SUB expects 25 bits on the LHS, but LHS's CONST '9'h100' generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  637 |     wire [24:0] t_mix_b = ( (9'd256 - {1'b0, t_al}) * t_sqa_b ) + ( {1'b0, t_al} * t_sqb_b );
+      |                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:637:37: Operator SUB expects 25 bits on the RHS, but RHS's REPLICATE generates 9 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  637 |     wire [24:0] t_mix_b = ( (9'd256 - {1'b0, t_al}) * t_sqa_b ) + ( {1'b0, t_al} * t_sqb_b );
+      |                                     ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:656:61: Operator ADD expects 15 bits on the RHS, but RHS's VARREF 't_px_l' generates 10 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  656 |             5'd0: rd_addr_t <= t_fetch ? line_base(t_slotA) + t_px_l : {RAW{1'b0}};
+      |                                                             ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/CRT/crt_vsize.sv:657:61: Operator ADD expects 15 bits on the RHS, but RHS's VARREF 't_px_l' generates 10 bits.
+                                                                                               : ... note: In instance 'tb_video_pipeline.changed.u_crt.u_vsize'
+  657 |             5'd1: rd_addr_t <= t_fetch ? line_base(t_slotB) + t_px_l : {RAW{1'b0}};
+      |                                                             ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:183:8: Operator ASSIGNDLY expects 13 bits on the Assign RHS, but Assign RHS's VARREF 'arx_i' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  183 |   arxf <= arx_i;
+      |        ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:184:8: Operator ASSIGNDLY expects 13 bits on the Assign RHS, but Assign RHS's VARREF 'ary_i' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  184 |   aryf <= ary_i;
+      |        ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:194:16: Operator ASSIGNDLY expects 24 bits on the Assign RHS, but Assign RHS's VARREF 'HDMI_HEIGHT' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  194 |      div_num   <= HDMI_HEIGHT;
+      |                ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:205:16: Operator ASSIGNDLY expects 13 bits on the Assign RHS, but Assign RHS's VARREF 'arx_i' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  205 |      arxf      <= arx_i;
+      |                ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:206:16: Operator ASSIGNDLY expects 13 bits on the Assign RHS, but Assign RHS's VARREF 'ary_i' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  206 |      aryf      <= ary_i;
+      |                ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:202:10: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's SEL generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  202 |    1: if(!div_res[11:0]) begin
+      |          ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:220:9: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ary_i' generates 12 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  220 |      if(!ary_i) begin
+      |         ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:257:33: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's SEL generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  257 |      mul_arg2  <= div_res[11:0] ? div_res[11:0] : 12'd1;
+      |                                 ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:264:18: Operator LTE expects 24 bits on the RHS, but RHS's VARREF 'HDMI_WIDTH' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  264 |    7: if(mul_res <= HDMI_WIDTH) begin
+      |                  ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:270:16: Operator ASSIGNDLY expects 24 bits on the Assign RHS, but Assign RHS's VARREF 'HDMI_WIDTH' generates 12 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  270 |      div_num   <= HDMI_WIDTH;
+      |                ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:280:33: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's SEL generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  280 |      mul_arg2  <= div_res[11:0] ? div_res[11:0] : 12'd1;
+      |                                 ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:290:48: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's SEL generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  290 |                     mul_arg2  <= div_res[11:0] ? div_res[11:0] : 12'd1;
+      |                                                ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:182:6: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'SCALE' generates 3 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  182 |  if (!SCALE || (!ary_i && arx_i)) begin
+      |      ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:182:17: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ary_i' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  182 |  if (!SCALE || (!ary_i && arx_i)) begin
+      |                 ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:182:24: Logical operator LOGAND expects 1 bit on the RHS, but RHS's VARREF 'arx_i' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak.scale'
+  182 |  if (!SCALE || (!ary_i && arx_i)) begin
+      |                        ^~
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:97:30: Operator COND expects 8 bits on the Conditional True, but Conditional True's CONST '1'h0' generates 1 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+   97 |   wire [DWIDTH:0] R_in = frz ? 1'd0 : R;
+      |                              ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:98:30: Operator COND expects 8 bits on the Conditional True, but Conditional True's CONST '1'h0' generates 1 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+   98 |   wire [DWIDTH:0] G_in = frz ? 1'd0 : G;
+      |                              ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:99:30: Operator COND expects 8 bits on the Conditional True, but Conditional True's CONST '1'h0' generates 1 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+   99 |   wire [DWIDTH:0] B_in = frz ? 1'd0 : B;
+      |                              ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:124:5: Input port connection 'RGB_in' expects 24 bits on the pin connection, but pin connection's REPLICATE generates 3 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+  124 |    .RGB_in({R_in,G_in,B_in}),
+      |     ^~~~~~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:191:5: Operator ASSIGNDLY expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 16 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+  191 |   r <= {rt,rt};
+      |     ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:192:5: Operator ASSIGNDLY expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 16 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+  192 |   g <= {gt,gt};
+      |     ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_mixer.sv:193:5: Operator ASSIGNDLY expects 8 bits on the Assign RHS, but Assign RHS's REPLICATE generates 16 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_mixer'
+  193 |   b <= {bt,bt};
+      |     ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:68:7: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'vcpt' generates 12 bits.
+                                                                                          : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   68 |    if(!vcpt) hsize <= hcpt;
+      |       ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:76:17: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's VARREF 'vcrop' generates 12 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   76 |  vsize <= vcrop ? vcrop : vtot;
+      |                 ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:84:7: Logical operator IF expects 1 bit on the If, but If's VARREF 'vcalc' generates 2 bits.
+                                                                                          : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   84 |  else if (vcalc) begin
+      |       ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:80:5: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'vcrop' generates 12 bits.
+                                                                                          : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   80 |  if(!vcrop || !ary || !arx) begin
+      |     ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:80:15: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ary' generates 12 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   80 |  if(!vcrop || !ary || !arx) begin
+      |               ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:80:23: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'arx' generates 12 bits.
+                                                                                           : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+   80 |  if(!vcrop || !ary || !arx) begin
+      |                       ^
+%Warning-WIDTHEXPAND: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:117:59: Operator COND expects 12 bits on the Conditional False, but Conditional False's SEL generates 11 bits.
+                                                                                             : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+  117 |  voff <= vadj[11] ? 12'd0 : ((vadj[11:1] + vcrop) > vtot) ? vtot-vcrop : vadj[11:1];
+      |                                                           ^
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/sys/video_freak.sv:118:57: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'vcrop' generates 12 bits.
+                                                                                            : ... note: In instance 'tb_video_pipeline.changed.video_freak'
+  118 |  ovde <= ((vcpt >= voff) && (vcpt < (vcrop + voff))) || !vcrop;
+      |                                                         ^
+%Warning-WIDTHTRUNC: /tmp/groovy-video-01ibb3xt/changed.sv:177:8: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                : ... note: In instance 'tb_video_pipeline.changed'
+  177 |  .ARX((!ar) ? ( no_rotate ? 12'd4 : 12'd3 ) : (ar - 1'd1)),
+      |        ^
+%Warning-WIDTHEXPAND: /tmp/groovy-video-01ibb3xt/changed.sv:177:51: Operator SUB expects 12 bits on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                  : ... note: In instance 'tb_video_pipeline.changed'
+  177 |  .ARX((!ar) ? ( no_rotate ? 12'd4 : 12'd3 ) : (ar - 1'd1)),
+      |                                                   ^
+%Warning-WIDTHTRUNC: /tmp/groovy-video-01ibb3xt/changed.sv:178:8: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                : ... note: In instance 'tb_video_pipeline.changed'
+  178 |  .ARY((!ar) ? ( no_rotate ? 12'd3 : 12'd4 ) : 12'd0),
+      |        ^
+%Warning-WIDTHEXPAND: /tmp/groovy-video-01ibb3xt/changed.sv:181:3: Input port connection 'SCALE' expects 3 bits on the pin connection, but pin connection's VARREF 'scale' generates 2 bits.
+                                                                 : ... note: In instance 'tb_video_pipeline.changed'
+  181 |  .SCALE(scale)
+      |   ^~~~~
+%Warning-WIDTHTRUNC: /tmp/groovy-video-01ibb3xt/original.sv:112:8: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                 : ... note: In instance 'tb_video_pipeline.original'
+  112 |  .ARX((!ar) ? ( no_rotate ? 12'd4 : 12'd3 ) : (ar - 1'd1)),
+      |        ^
+%Warning-WIDTHEXPAND: /tmp/groovy-video-01ibb3xt/original.sv:112:51: Operator SUB expects 12 bits on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                   : ... note: In instance 'tb_video_pipeline.original'
+  112 |  .ARX((!ar) ? ( no_rotate ? 12'd4 : 12'd3 ) : (ar - 1'd1)),
+      |                                                   ^
+%Warning-WIDTHTRUNC: /tmp/groovy-video-01ibb3xt/original.sv:113:8: Logical operator LOGNOT expects 1 bit on the LHS, but LHS's VARREF 'ar' generates 2 bits.
+                                                                 : ... note: In instance 'tb_video_pipeline.original'
+  113 |  .ARY((!ar) ? ( no_rotate ? 12'd3 : 12'd4 ) : 12'd0),
+      |        ^
+%Warning-WIDTHEXPAND: /tmp/groovy-video-01ibb3xt/original.sv:116:3: Input port connection 'SCALE' expects 3 bits on the pin connection, but pin connection's VARREF 'scale' generates 2 bits.
+                                                                  : ... note: In instance 'tb_video_pipeline.original'
+  116 |  .SCALE(scale)
+      |   ^~~~~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:41:24: Logical operator IF expects 1 bit on the If, but If's VARREF 'ENABLED' generates 32 bits.
+                                                                                                   : ... note: In instance 'tb_video_pipeline'
+   41 |                     16:if(ENABLED) begin status[60]=1;status[47]=0;status[21:17]=0;status[26:22]=0;end
+      |                        ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:42:24: Logical operator IF expects 1 bit on the If, but If's VARREF 'ENABLED' generates 32 bits.
+                                                                                                   : ... note: In instance 'tb_video_pipeline'
+   42 |                     25:if(ENABLED) status[64:61]=1;
+      |                        ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:59:20: Logical operator LOGAND expects 1 bit on the LHS, but LHS's VARREF 'ENABLED' generates 32 bits.
+                                                                                                   : ... note: In instance 'tb_video_pipeline'
+   59 |         if(ENABLED && changed.crt_selected) begin
+      |                    ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:67:24: Logical operator LOGAND expects 1 bit on the LHS, but LHS's VARREF 'ENABLED' generates 32 bits.
+                                                                                                   : ... note: In instance 'tb_video_pipeline'
+   67 |             if(ENABLED && enabled_checks<1000) $fatal(1,"enabled pipeline not exercised");
+      |                        ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:69:13: Logical operator IF expects 1 bit on the If, but If's VARREF 'ENABLED' generates 32 bits.
+                                                                                                   : ... note: In instance 'tb_video_pipeline'
+   69 |             if(ENABLED) $display("PASS: actual enabled emu mixer/CRT/freak pipeline, %0d true-blank alignment checks",enabled_checks);
+      |             ^~
+%Warning-WIDTHTRUNC: /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:65:27: Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's VARREF 'ENABLED' generates 32 bits.
+                                                                                                   : ... note: In instance 'tb_video_pipeline'
+   65 |         if(frame==(ENABLED?28:16)) begin
+      |                           ^
+make: Entering directory '/tmp/groovy-video-01ibb3xt/enabled'
+g++ -Os  -I.  -MMD -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated.o /workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/verilated.cpp
+g++ -Os  -I.  -MMD -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_timing.o /workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/verilated_timing.cpp
+g++ -Os  -I.  -MMD -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o verilated_threads.o /workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/verilated_threads.cpp
+python3 /workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vtb_video_pipeline.cpp Vtb_video_pipeline___024root__DepSet_h05cb5e35__0.cpp Vtb_video_pipeline___024root__DepSet_he84eec99__0.cpp Vtb_video_pipeline_video_mixer__L280_G1__DepSet_hf77cea3d__0.cpp Vtb_video_pipeline_video_mixer__L280_G1__DepSet_h1abb98a1__0.cpp Vtb_video_pipeline__main.cpp Vtb_video_pipeline__ConstPool_0.cpp Vtb_video_pipeline___024root__Slow.cpp Vtb_video_pipeline___024root__DepSet_h05cb5e35__0__Slow.cpp Vtb_video_pipeline___024root__DepSet_he84eec99__0__Slow.cpp Vtb_video_pipeline_video_mixer__L280_G1__Slow.cpp Vtb_video_pipeline_video_mixer__L280_G1__DepSet_hf77cea3d__0__Slow.cpp Vtb_video_pipeline_video_mixer__L280_G1__DepSet_h1abb98a1__0__Slow.cpp Vtb_video_pipeline__Syms.cpp > Vtb_video_pipeline__ALL.cpp
+echo "" > Vtb_video_pipeline__ALL.verilator_deplist.tmp
+g++ -Os  -I.  -MMD -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include -I/workspace/scratch/d943720265bb/toolchain/root/usr/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=1 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable    -DVL_TIME_CONTEXT   -fcoroutines -c -o Vtb_video_pipeline__ALL.o Vtb_video_pipeline__ALL.cpp
+g++    verilated.o verilated_timing.o verilated_threads.o Vtb_video_pipeline__ALL.a    -pthread -lpthread -latomic   -o Vtb_video_pipeline
+rm Vtb_video_pipeline__ALL.verilator_deplist.tmp
+make: Leaving directory '/tmp/groovy-video-01ibb3xt/enabled'
+- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)
+- Verilator: Built from 1.220 MB sources in 27 modules, into 0.828 MB in 14 C++ files needing 0.001 MB
+- Verilator: Walltime 5.059 s (elab=0.021, cvt=0.117, bld=4.879); cpu 0.197 s on 2 threads; alloced 23.219 MB
+PASS: actual emu video bypass 2230272 clocks, 168960 active pixels, original H/V/scale controls & unsupported interlace
+PASS: actual enabled emu mixer/CRT/freak pipeline, 1233360 true-blank alignment checks
+- /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_video_pipeline.sv:70: Verilog $finish
+- S i m u l a t i o n   R e p o r t: Verilator 5.032 2025-01-01
+- Verilator: $finish at 57ms; walltime 6.110 s; speed 9.308 ms/s
+- Verilator: cpu 6.099 s on 1 threads; alloced 65 MB

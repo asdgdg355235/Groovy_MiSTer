@@ -1,0 +1,38 @@
+{
+  "base": "735c777be2ec859afe3dc37cc448d49440447add",
+  "compatibility_commit": "a383702ba864471d97563cc7abdb1add1446e2ed",
+  "quartus_executed": false,
+  "physical_status": "UNMEASURED",
+  "source_sha256": {
+    "Groovy.sv": "b00ed92a4941d915e5b2a685f20d8b38559ccdb008afdb420c909910338adfda",
+    "Groovy.qpf": "3865dfc01591d1f464738706a2dcb34c0d2b6256b7ffab698773926d48e556f7",
+    "Groovy.qsf": "66f261b4eaa9a8994b4cd62d864aa35ee1c2c38c34df267931a78471b7b4bc73",
+    "Groovy_Q25_BASE.qsf": "a662db1eb2b5db8ba7a9b0d182da046ee94269bb5f054f4c674a5cf74cc7ec35",
+    "Groovy_Q25_CABINET.qsf": "8ede38e8f1b88060fbb33fe82b9ab19dadbda24e58a1a764916c1c21fd44cd44",
+    "Groovy.sdc": "89cb176f5eeb8c2adf59d758e56a605bd711631a4bccb92e77c77f995b62e71f",
+    "files.qip": "dbb86c8440768d4f9017005db241ddd7abe43dc144e209ec5c2584e3c93c511f",
+    "rtl/lz4.v": "ac805c829848a29cfb4f3588ca531a03e8a9dc2bab1266bcf7c65a561eceb681",
+    "rtl/vga.v": "7a3da33eb3543d7fdd497bcfed6a1866918d9b15785fd35f450a6af9552d0502",
+    "rtl/pll.qip": "42e5952fa1770e4463d2f3ad66c80c4a776ee04b7ffe118f12f88da69f96edfb",
+    "sys/pll_q25.qip": "7139faf33ae28066e805f290b15401eddb092d4b7d31b529a3ce1f0213fbc90a",
+    "rtl/CRT/crt_adjust.sv": "aae51a04727af94853eb78f2745f6b6261eec831287259625e1b24c4971729ae",
+    "rtl/CRT/crt_vsize.sv": "1e2a6129ac1c20eb45c07eaed593d8eeba328ffec77865f7ecde84e50c1db034",
+    "rtl/CRT/groovy_crt.sv": "a5e3ade43b5a7f0161f7012753b3077935750e5e8a9632f55e7e82bc2958fa88",
+    "sys/sys_top.v": "1ea45913bbc25943725618c243eef0251a17d6584f4c6e5491b8f3ba07b08d80",
+    "sys/video_mixer.sv": "ca02e63c3e61d8a8c817fa10008a7a9873eb34a40ab89e2e2a596c590f9f0cf9",
+    "sys/gamma_corr.sv": "2754944c6fe05d921374d1fecc26621782520b3bc6fbf600ca561e9f37c7af88",
+    "sys/video_freak.sv": "1c331bd8aee90bd722e8d9e400a8305de73392cb00cae256b8fb710e4fc2d478"
+  },
+  "log_sha256": {
+    "cabinet.log": "314462376edf9f4bb92025ca52833b3ba0330c727f996dc703a905e91af1acba",
+    "vsync24.log": "435e683486e541fbd437c2193891ea10301265f4abe295871076d3fd45ceb510",
+    "video-pipeline.log": "7cbf128a7e1ad01370d7f6d8a29c4cd39f2a12f72a896767031c35df46563d7b",
+    "native-av.log": "d99dd7f5ea8ce6c8a6e99e030d5811b4628324db432d0ee5b50ffc9a2bd2daec",
+    "controllers.log": "2f70f8de8dd2dcf38e0a272831fbb6cce738e2569aaaa230fd2907e75e5e0285",
+    "lz4.log": "177f0c84dc0e3027ae5972ebc89449416119db45b2513633b04299b73e4e938e",
+    "unit-tests.log": "c3ef7e255e114565e3f9e3b5fbf0cf2568e707f5c91e43dbf9163190ad3469a1",
+    "crt-lint.log": "24f57990b0052bf370302aa310cd0d0963a15424460426f46101ca94b01203bf",
+    "memory-inference.log": "55604413450dbdbade62a8d8c6334b921b2573f5fb291e438dec96bb9b8824bb",
+    "q25-prepare.log": "bee9278fffdb32c36abab5501f6736289c5a686d22e58281138f31ee162d7350"
+  }
+}

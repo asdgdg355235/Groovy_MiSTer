@@ -222,6 +222,10 @@ localparam CONF_STR = {
    "H1P1O[11],240p Crop,Off,On;",
    "H2P1O[16:12],Crop Offset,0,+1,+2,+3,+4,+5,+6,+7,+8,-8,-7,-6,-5,-4,-3,-2,-1;",     
    "P1-;",  
+`ifdef GROOVY_CRT_CABINET
+   "HFP1O[60],CRT Adjust,Off,On;",
+   "HEP1O[64:61],Cabinet V-Size,0,+1,+2,+3,+4,+5,+6,+7,-8,-7,-6,-5,-4,-3,-2,-1;",
+`endif
    "P1O[21:17],CRT H offset,0,-1,-2,-3,-4,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,-15,+16,+15,+14,+13,+12,+11,+10,+9,+8,+7,+6,+5,+4,+3,+2,+1;",  
    "P1O[26:22],CRT V offset,0,-1,-2,-3,-4,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,-15,+16,+15,+14,+13,+12,+11,+10,+9,+8,+7,+6,+5,+4,+3,+2,+1;",  
    "H8P1O[47],CRT scale enable, Off,On;",  
@@ -285,7 +289,7 @@ wire [1:0]  hps_audio_buffer = status[36:35];
 wire        hps_pwm = status[37];
 wire        hps_vsync_overlay = status[46];
 
-wire [60:0] status;
+wire [127:0] status;
 
 wire [31:0] joy0;
 wire [31:0] joy1;
@@ -314,8 +318,17 @@ hps_io #(.CONF_STR(CONF_STR)) hps_io
 // OSD option visibility
 wire [15:0] status_menumask; // a high value hides the menu item
 
-assign status_menumask[15] = 0, 
-       status_menumask[14] = 0, 
+assign status_menumask[15] =
+`ifdef GROOVY_CRT_CABINET
+       ~crt_supported,
+`else
+       0,
+`endif
+`ifdef GROOVY_CRT_CABINET
+       status_menumask[14] = ~status[60] | ~crt_supported,
+`else
+       status_menumask[14] = 0,
+`endif
        status_menumask[13] = 1, 
        status_menumask[12] = 1, 
        status_menumask[11] = 1, 
@@ -1695,9 +1708,14 @@ wire [7:0] hsize_r, hsize_g, hsize_b;
         .b_out      ( hsize_b   )
     );
 
+// One geometry path at a time. Off/unsupported uses the original JTFRAME
+// pipeline; selected feeds native video to the mixer & adjusts its output.
+wire crt_selected;
+wire [7:0] mixer_r, mixer_g, mixer_b;
+wire mixer_hs, mixer_vs, mixer_ce;
 video_mixer #(640, 0, 1) video_mixer(
  .CLK_VIDEO(CLK_VIDEO),
- .CE_PIXEL(CE_PIXEL),
+ .CE_PIXEL(mixer_ce),
  .ce_pix(ce_pix),
 
  .scandoubler(PoC_interlaced && !PoC_FB_interlaced ? 1'b0 : (forced_scandoubler || scandoubler_fx != 2'b00)),
@@ -1705,20 +1723,20 @@ video_mixer #(640, 0, 1) video_mixer(
 
  .gamma_bus(gamma_bus),
  
- .R(hsize_r),
- .G(hsize_g),
- .B(hsize_b),
+ .R(crt_selected ? r_core : hsize_r),
+ .G(crt_selected ? g_core : hsize_g),
+ .B(crt_selected ? b_core : hsize_b),
 
- .HBlank(hsize_hb),
- .VBlank(hsize_vb),
- .HSync(hsize_hs),
- .VSync(hsize_vs),
+ .HBlank(crt_selected ? hblank_core : hsize_hb),
+ .VBlank(crt_selected ? vblank_core : hsize_vb),
+ .HSync(crt_selected ? hsync_core : hsize_hs),
+ .VSync(crt_selected ? vsync_core : hsize_vs),
 
- .VGA_R(VGA_R),
- .VGA_G(VGA_G),
- .VGA_B(VGA_B),
- .VGA_VS(VGA_VS),
- .VGA_HS(VGA_HS),
+ .VGA_R(mixer_r),
+ .VGA_G(mixer_g),
+ .VGA_B(mixer_b),
+ .VGA_VS(mixer_vs),
+ .VGA_HS(mixer_hs),
  .VGA_DE(VGA_DE_MIXER),
 
  .HDMI_FREEZE(HDMI_FREEZE)
@@ -1726,6 +1744,66 @@ video_mixer #(640, 0, 1) video_mixer(
 
 
 wire VGA_DE_MIXER;
+wire geometry_de;
+`ifdef GROOVY_CRT_CABINET
+// True H/V blank sideband matching gamma_corr's two CE registers, then
+// video_mixer's free-running hde/vde register & CE-qualified output register.
+// Cabinet eligibility excludes scandoubling; no framework RTL is changed.
+reg [1:0] blank_h = 2'b11, blank_v = 2'b11;
+reg mixer_hblank_q = 1, mixer_vblank_q = 1;
+reg mixer_hblank = 1, mixer_vblank = 1;
+always @(posedge clk_sys) begin
+    if (ce_pix) begin
+        blank_h <= {blank_h[0], hblank_core};
+        blank_v <= {blank_v[0], vblank_core};
+    end
+    mixer_hblank_q <= blank_h[1];
+    mixer_vblank_q <= blank_v[1];
+    if (mixer_ce) begin
+        mixer_hblank <= mixer_hblank_q;
+        mixer_vblank <= mixer_vblank_q;
+    end
+end
+wire [15:0] crt_htotal = PoC_H + {8'd0,PoC_HFP} + {8'd0,PoC_HS} + {8'd0,PoC_HBP};
+wire [15:0] crt_vtotal = PoC_V + {8'd0,PoC_VFP} + {8'd0,PoC_VS} + {8'd0,PoC_VBP};
+wire signed [5:0] crt_vstep = {{2{status[64]}},status[64:61]};
+wire signed [5:0] crt_vsize = -(crt_vstep + (crt_vstep <<< 1));
+// Legacy offset labels negate the signed stored value. CONTENTSHIFT moves
+// pixels directly, so negate H; V still delays sync, matching jtframe_resync.
+wire signed [8:0] crt_hpos_stored = $signed({{4{hoffset[4]}},hoffset});
+wire signed [8:0] crt_hpos = CRT_HPOS_MODE == 1 ? -crt_hpos_stored : crt_hpos_stored;
+wire signed [5:0] crt_vshift = {voffset[4],voffset};
+// JTFRAME's positive scale advances the source faster (narrower). Preserve
+// that direction when translating to upstream's read-period convention.
+wire signed [4:0] crt_hsize = hsize_enable ? -$signed({hsize_scale[3],hsize_scale}) : 5'sd0;
+wire [23:0] crt_rgb;
+wire crt_hs, crt_vs, crt_ce, crt_de, crt_de_osd, crt_supported;
+`ifdef GROOVY_CRT_HPOS_SYNCSHIFT
+localparam CRT_HPOS_MODE = 0;
+`else
+localparam CRT_HPOS_MODE = 1;
+`endif
+groovy_crt #(.HPOS_MODE(CRT_HPOS_MODE)) u_crt (
+    .clk(clk_sys), .reset(RESET || vga_reset || vga_soft_reset || new_modeline != req_modeline),
+    .request(status[60]),
+    .unsupported(PoC_interlaced || forced_scandoubler || scandoubler_fx != 0),
+    .pixel_period(ce_pix_arm + 8'd1), .width(PoC_H), .height(PoC_V),
+    .htotal(crt_htotal), .vtotal(crt_vtotal),
+    .hsize(crt_hsize), .hpos(crt_hpos), .vshift(crt_vshift), .vsize(crt_vsize),
+    .ce_in(mixer_ce), .rgb_in({mixer_r,mixer_g,mixer_b}),
+    .hs_in(mixer_hs), .vs_in(mixer_vs), .de_in(VGA_DE_MIXER),
+    .hb_in(mixer_hblank), .vb_in(mixer_vblank),
+    .selected(crt_selected), .supported(crt_supported), .ce_out(crt_ce), .rgb_out(crt_rgb),
+    .hs_out(crt_hs), .vs_out(crt_vs), .de_out(crt_de), .de_osd(crt_de_osd)
+);
+assign {VGA_R,VGA_G,VGA_B} = crt_selected ? crt_rgb : {mixer_r,mixer_g,mixer_b};
+assign {VGA_HS,VGA_VS,CE_PIXEL} = crt_selected ? {crt_hs,crt_vs,crt_ce} : {mixer_hs,mixer_vs,mixer_ce};
+assign geometry_de = crt_selected ? crt_de_osd : VGA_DE_MIXER;
+`else
+assign crt_selected = 1'b0;
+assign {VGA_R,VGA_G,VGA_B,VGA_HS,VGA_VS,CE_PIXEL} = {mixer_r,mixer_g,mixer_b,mixer_hs,mixer_vs,mixer_ce};
+assign geometry_de = VGA_DE_MIXER;
+`endif
      
 video_freak video_freak(
  .CLK_VIDEO(CLK_VIDEO),
@@ -1737,7 +1815,7 @@ video_freak video_freak(
  .VIDEO_ARX(VIDEO_ARX),
  .VIDEO_ARY(VIDEO_ARY),
 
- .VGA_DE_IN(VGA_DE_MIXER),
+ .VGA_DE_IN(geometry_de),
  .ARX((!ar) ? ( no_rotate ? 12'd4 : 12'd3 ) : (ar - 1'd1)),
  .ARY((!ar) ? ( no_rotate ? 12'd3 : 12'd4 ) : 12'd0),
  .CROP_SIZE(crop_240p ? 240 : 0),

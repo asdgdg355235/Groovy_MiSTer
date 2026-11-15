@@ -1,0 +1,12 @@
++ iverilog -g2012 -s tb_lz4_timing -o /tmp/lz4-q25-compare-_lx84hw4/full-64-bit /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_lz4_timing.sv /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/lz4.v /tmp/lz4-q25-compare-_lx84hw4/lz4_reference.v
++ vvp /tmp/lz4-q25-compare-_lx84hw4/full-64-bit
+PASS: LZ4 134626 clocks, 39 golden packets, all counter states/reset/stalls/rollover; delta 65536 pairs
+LZ4 visited state mask=0000ffff
+/workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_lz4_timing.sv:189: $finish called at 1346260000 (1ps)
+PASS: full-64-bit
++ iverilog -g2012 -s tb_lz4_timing -o /tmp/lz4-q25-compare-_lx84hw4/byte-only -DMISTER_LZ4_DISABLE_64B /workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_lz4_timing.sv /workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/lz4.v /tmp/lz4-q25-compare-_lx84hw4/lz4_reference.v
++ vvp /tmp/lz4-q25-compare-_lx84hw4/byte-only
+PASS: LZ4 215939 clocks, 39 golden packets, all counter states/reset/stalls/rollover; delta 65536 pairs
+LZ4 visited state mask=0000ffff
+/workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_lz4_timing.sv:189: $finish called at 2159390000 (1ps)
+PASS: byte-only

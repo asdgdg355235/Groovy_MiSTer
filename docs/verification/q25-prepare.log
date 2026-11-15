@@ -1,0 +1,7 @@
+Prepared Groovy_Q25_BASE at /tmp/groovy-q25-prepare-gyof74hb/BASE-content
+Quartus was not executed. Physical timing is unmeasured.
+Prepared Groovy_Q25_CABINET at /tmp/groovy-q25-prepare-gyof74hb/CABINET-content
+Quartus was not executed. Physical timing is unmeasured.
+Prepared Groovy_Q25_CABINET at /tmp/groovy-q25-prepare-gyof74hb/CABINET-sync
+Quartus was not executed. Physical timing is unmeasured.
+PASS: BASE/CABINET/SYNCSHIFT isolated preparation, complete hashes, fresh-directory rejection; Quartus not executed

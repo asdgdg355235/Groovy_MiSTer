@@ -1,0 +1,105 @@
+Gamecontrollerdb: mapping buttons for test 
+Gamecontrollerdb: mapping analog axes for test 
+Gamecontrollerdb: mapping buttons for test 
+Gamecontrollerdb: mapping analog axes for test 
+Gamecontrollerdb: mapping buttons for test 
+Gamecontrollerdb: mapping analog axes for test 
+Gamecontrollerdb: mapping buttons for test 
+Gamecontrollerdb: mapping analog axes for test 
+joy_name[0] = Button 1
+joy_name[1] = Button 2
+joy_name[2] = Button 3
+joy_name[3] = Button 4
+joy_name[4] = Button 5
+joy_name[5] = Button 6
+joy_name[6] = Button 7
+joy_name[7] = Button 8
+joy_name[8] = Button 9
+joy_name[9] = Button 10
+joy_name[10] = L3
+joy_name[11] = R3
+
+joy_nname[0] = A
+joy_nname[1] = B
+joy_nname[2] = X
+joy_nname[3] = Y
+joy_nname[4] = L
+joy_nname[5] = R
+joy_nname[6] = L2
+joy_nname[7] = R2
+joy_nname[8] = Select
+joy_nname[9] = Start
+joy_nname[10] = L3
+joy_nname[11] = R3
+
+joy_name[0] = Button 1
+joy_name[1] = Button 2
+joy_name[2] = Button 3
+joy_name[3] = Button 4
+joy_name[4] = Button 5
+joy_name[5] = Button 6
+joy_name[6] = Button 7
+joy_name[7] = Button 8
+joy_name[8] = Button 9
+joy_name[9] = Button 10
+joy_name[10] = L3
+joy_name[11] = R3
+
+joy_nname[0] = A
+joy_nname[1] = B
+joy_nname[2] = X
+joy_nname[3] = Y
+joy_nname[4] = L
+joy_nname[5] = R
+joy_nname[6] = L2
+joy_nname[7] = R2
+joy_nname[8] = Select
+joy_nname[9] = Start
+joy_nname[10] = L3
+joy_nname[11] = R3
+
+Loaded legacy Groovy mapping Groovy_input__v3.map; existing assignments retained, empty L3/R3 slots use system mapping
+Loaded legacy Groovy mapping Groovy_input__v3.map; existing assignments retained, empty L3/R3 slots use system mapping
+Loaded legacy system mapping input__v3.map; define L2/R2/L3/R3 in Menu to save v4
+Gamecontrollerdb: mapping buttons for test 
+Gamecontrollerdb: mapping analog axes for test 
+Gamecontrollerdb: mapping buttons for test 
+Gamecontrollerdb: mapping analog axes for test 
+joy_name[0] = Button 1
+joy_name[1] = Button 2
+joy_name[2] = Button 3
+joy_name[3] = Button 4
+joy_name[4] = Button 5
+joy_name[5] = Button 6
+joy_name[6] = Button 7
+joy_name[7] = Button 8
+joy_name[8] = Button 9
+joy_name[9] = Button 10
+joy_name[10] = L3
+joy_name[11] = R3
+
+joy_nname[0] = A
+joy_nname[1] = B
+joy_nname[2] = X
+joy_nname[3] = Y
+joy_nname[4] = L
+joy_nname[5] = R
+joy_nname[6] = L2
+joy_nname[7] = R2
+joy_nname[8] = Select
+joy_nname[9] = Start
+joy_nname[10] = L3
+joy_nname[11] = R3
+
+Device  assigned to player 3
+PASS: trigger calibration, polarity, both slots, digital fallback, reset, registration and packet lengths
+PASS: database reload, Buttons 1..10, Button 2/3 independence, L3/R3 press/release, both ports, combined holds, alternate sets, analog, mapper slots, v3/v4 save/load, 28-button limit
+/workspace/scratch/d943720265bb/Groovy_MiSTer/hps_linux/src/menu.cpp: In function ‘char* getNet(int)’:
+/workspace/scratch/d943720265bb/Groovy_MiSTer/hps_linux/src/menu.cpp:630:42: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+  630 |         return spec ? (ifa ? host : 0) : (char*)netType;
+      |                                          ^~~~~~~~~~~~~~
+PASS: configuration limits, FPGA joystick word widths and JTFRAME dependencies
+PASS: regression test rejects restored defect: database-keycode-union
+PASS: regression test rejects restored defect: old-system-mapper-limit
+PASS: regression test rejects restored defect: missing-stick-click-mapping
+PASS: full changed HPS translation units compile (host syntax check)

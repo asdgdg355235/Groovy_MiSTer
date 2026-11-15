@@ -1,0 +1,16 @@
+/workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/vga.v:878: warning: Port 4 (i_pixel_out_x) of vga_overlay expects 11 bits, got 16.
+/workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/vga.v:878:        : Pruning 5 high bits of the expression.
+/workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/vga.v:878: warning: Port 5 (i_pixel_out_y) of vga_overlay expects 10 bits, got 16.
+/workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/vga.v:878:        : Pruning 6 high bits of the expression.
+/workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/vga.v:890: warning: Port 4 (i_pixel_out_x) of vga_overlay expects 11 bits, got 16.
+/workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/vga.v:890:        : Pruning 5 high bits of the expression.
+/workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/vga.v:890: warning: Port 5 (i_pixel_out_y) of vga_overlay expects 10 bits, got 16.
+/workspace/scratch/d943720265bb/Groovy_MiSTer/rtl/vga.v:890:        : Pruning 6 high bits of the expression.
+PASS: native audio rate selector=1 channels=1, 32 samples
+PASS: native audio rate selector=1 channels=2, 16 samples
+PASS: native audio rate selector=2 channels=1, 32 samples
+PASS: native audio rate selector=2 channels=2, 16 samples
+PASS: native audio rate selector=3 channels=1, 32 samples
+PASS: native audio rate selector=3 channels=2, 16 samples
+PASS: native 240p/480i, eight field changes, alternating half-line VSync phases
+/workspace/scratch/d943720265bb/Groovy_MiSTer/tests/tb_native_av.sv:108: $finish called at 10020256000 (1ps)

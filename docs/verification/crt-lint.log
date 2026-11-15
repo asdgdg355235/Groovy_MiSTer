@@ -1,0 +1,109 @@
+%Warning-WIDTHEXPAND: rtl/CRT/crt_adjust.sv:190:40: Operator ADD expects 17 bits on the RHS, but RHS's SIGNED generates 9 bits.
+                                                  : ... note: In instance 'groovy_crt.u_adjust'
+  190 |         ? $signed({1'b0, htotal_used}) + $signed(hoffset)
+      |                                        ^
+                      ... For warning description see https://verilator.org/warn/WIDTHEXPAND?v=5.032
+                      ... Use "/* verilator lint_off WIDTHEXPAND */" and lint_on around source to disable this message.
+%Warning-WIDTHEXPAND: rtl/CRT/crt_adjust.sv:190:9: Operator COND expects 17 bits on the Conditional False, but Conditional False's SIGNED generates 9 bits.
+                                                 : ... note: In instance 'groovy_crt.u_adjust'
+  190 |         ? $signed({1'b0, htotal_used}) + $signed(hoffset)
+      |         ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_adjust.sv:199:35: Operator EQ expects 17 bits on the RHS, but RHS's CONST '10'h0' generates 10 bits.
+                                                  : ... note: In instance 'groovy_crt.u_adjust'
+  199 |         hs_shifted <= (hshift_tap == 10'd0) ? hs_in : hsync_pix_shreg[hshift_tap - 10'd1];
+      |                                   ^~
+%Warning-WIDTHEXPAND: rtl/CRT/crt_adjust.sv:199:82: Operator SUB expects 17 bits on the RHS, but RHS's CONST '10'h1' generates 10 bits.
+                                                  : ... note: In instance 'groovy_crt.u_adjust'
+  199 |         hs_shifted <= (hshift_tap == 10'd0) ? hs_in : hsync_pix_shreg[hshift_tap - 10'd1];
+      |                                                                                  ^
+%Warning-WIDTHTRUNC: rtl/CRT/crt_adjust.sv:199:70: Bit extraction of var[1023:0] requires 10 bit index, not 17 bits.
+                                                 : ... note: In instance 'groovy_crt.u_adjust'
+  199 |         hs_shifted <= (hshift_tap == 10'd0) ? hs_in : hsync_pix_shreg[hshift_tap - 10'd1];
+      |                                                                      ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_adjust.sv:327:36: Operator COND expects 13 bits on the Conditional True, but Conditional True's SIGNED generates 9 bits.
+                                                  : ... note: In instance 'groovy_crt.u_adjust'
+  327 |                                    ? $signed(hoffset)
+      |                                    ^
+%Warning-WIDTHTRUNC: rtl/CRT/crt_adjust.sv:332:27: Operator ASSIGNW expects 11 bits on the Assign RHS, but Assign RHS's SUB generates 13 bits.
+                                                 : ... note: In instance 'groovy_crt.u_adjust'
+  332 |     wire [AW-1:0] rd_addr = (rdcnt_s - hoff_s);
+      |                           ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_adjust.sv:345:40: Operator ADD expects 17 bits on the RHS, but RHS's SIGNED generates 6 bits.
+                                                  : ... note: In instance 'groovy_crt.u_adjust'
+  345 |         ? $signed({1'b0, vtotal_used}) + $signed(voffset)
+      |                                        ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_adjust.sv:345:9: Operator COND expects 17 bits on the Conditional False, but Conditional False's SIGNED generates 6 bits.
+                                                 : ... note: In instance 'groovy_crt.u_adjust'
+  345 |         ? $signed({1'b0, vtotal_used}) + $signed(voffset)
+      |         ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_adjust.sv:354:35: Operator EQ expects 17 bits on the RHS, but RHS's CONST '9'h0' generates 9 bits.
+                                                  : ... note: In instance 'groovy_crt.u_adjust'
+  354 |         vs_shifted <= (vshift_tap == 9'd0) ? vs_in : vsync_line_shreg[vshift_tap - 9'd1];
+      |                                   ^~
+%Warning-WIDTHEXPAND: rtl/CRT/crt_adjust.sv:354:82: Operator SUB expects 17 bits on the RHS, but RHS's CONST '9'h1' generates 9 bits.
+                                                  : ... note: In instance 'groovy_crt.u_adjust'
+  354 |         vs_shifted <= (vshift_tap == 9'd0) ? vs_in : vsync_line_shreg[vshift_tap - 9'd1];
+      |                                                                                  ^
+%Warning-WIDTHTRUNC: rtl/CRT/crt_adjust.sv:354:70: Bit extraction of var[511:0] requires 9 bit index, not 17 bits.
+                                                 : ... note: In instance 'groovy_crt.u_adjust'
+  354 |         vs_shifted <= (vshift_tap == 9'd0) ? vs_in : vsync_line_shreg[vshift_tap - 9'd1];
+      |                                                                      ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_vsize.sv:188:47: Operator ADD expects 15 bits on the RHS, but RHS's VARREF 'wpx' generates 10 bits.
+                                                 : ... note: In instance 'groovy_crt.u_vsize'
+  188 |     wire [RAW-1:0] write_addr = line_base(wl) + wpx;
+      |                                               ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_vsize.sv:284:65: Operator ADD expects 11 bits on the RHS, but RHS's VARREF 'vsize_eff' generates 6 bits.
+                                                 : ... note: In instance 'groovy_crt.u_vsize'
+  284 |     wire signed [10:0] lines_out_s = $signed({1'b0, lines_nat}) + vsize_eff;
+      |                                                                 ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_vsize.sv:290:58: Operator SUB expects 11 bits on the RHS, but RHS's VARREF 'vsize_eff' generates 6 bits.
+                                                 : ... note: In instance 'groovy_crt.u_vsize'
+  290 |     wire signed [10:0] a_out_ts = $signed({1'b0, a_nat}) - vsize_eff;
+      |                                                          ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_vsize.sv:397:35: Operator COND expects 23 bits on the Conditional False, but Conditional False's SEL generates 22 bits.
+                                                 : ... note: In instance 'groovy_crt.u_vsize'
+  397 |             bres_acc <= line_tick ? (bres_sum - {1'b0, f_lat}) : bres_sum[21:0];
+      |                                   ^
+%Warning-WIDTHTRUNC: rtl/CRT/crt_vsize.sv:397:22: Operator ASSIGNDLY expects 22 bits on the Assign RHS, but Assign RHS's COND generates 23 bits.
+                                                : ... note: In instance 'groovy_crt.u_vsize'
+  397 |             bres_acc <= line_tick ? (bres_sum - {1'b0, f_lat}) : bres_sum[21:0];
+      |                      ^~
+%Warning-WIDTHEXPAND: rtl/CRT/crt_vsize.sv:481:42: Operator ADD expects 15 bits on the RHS, but RHS's VARREF 'o_px' generates 10 bits.
+                                                 : ... note: In instance 'groovy_crt.u_vsize'
+  481 |                 rd_addr <= line_base(rl) + o_px;
+      |                                          ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_vsize.sv:635:37: Operator SUB expects 25 bits on the LHS, but LHS's CONST '9'h100' generates 9 bits.
+                                                 : ... note: In instance 'groovy_crt.u_vsize'
+  635 |     wire [24:0] t_mix_r = ( (9'd256 - {1'b0, t_al}) * t_sqa_r ) + ( {1'b0, t_al} * t_sqb_r );
+      |                                     ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_vsize.sv:635:37: Operator SUB expects 25 bits on the RHS, but RHS's REPLICATE generates 9 bits.
+                                                 : ... note: In instance 'groovy_crt.u_vsize'
+  635 |     wire [24:0] t_mix_r = ( (9'd256 - {1'b0, t_al}) * t_sqa_r ) + ( {1'b0, t_al} * t_sqb_r );
+      |                                     ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_vsize.sv:636:37: Operator SUB expects 25 bits on the LHS, but LHS's CONST '9'h100' generates 9 bits.
+                                                 : ... note: In instance 'groovy_crt.u_vsize'
+  636 |     wire [24:0] t_mix_g = ( (9'd256 - {1'b0, t_al}) * t_sqa_g ) + ( {1'b0, t_al} * t_sqb_g );
+      |                                     ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_vsize.sv:636:37: Operator SUB expects 25 bits on the RHS, but RHS's REPLICATE generates 9 bits.
+                                                 : ... note: In instance 'groovy_crt.u_vsize'
+  636 |     wire [24:0] t_mix_g = ( (9'd256 - {1'b0, t_al}) * t_sqa_g ) + ( {1'b0, t_al} * t_sqb_g );
+      |                                     ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_vsize.sv:637:37: Operator SUB expects 25 bits on the LHS, but LHS's CONST '9'h100' generates 9 bits.
+                                                 : ... note: In instance 'groovy_crt.u_vsize'
+  637 |     wire [24:0] t_mix_b = ( (9'd256 - {1'b0, t_al}) * t_sqa_b ) + ( {1'b0, t_al} * t_sqb_b );
+      |                                     ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_vsize.sv:637:37: Operator SUB expects 25 bits on the RHS, but RHS's REPLICATE generates 9 bits.
+                                                 : ... note: In instance 'groovy_crt.u_vsize'
+  637 |     wire [24:0] t_mix_b = ( (9'd256 - {1'b0, t_al}) * t_sqa_b ) + ( {1'b0, t_al} * t_sqb_b );
+      |                                     ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_vsize.sv:656:61: Operator ADD expects 15 bits on the RHS, but RHS's VARREF 't_px_l' generates 10 bits.
+                                                 : ... note: In instance 'groovy_crt.u_vsize'
+  656 |             5'd0: rd_addr_t <= t_fetch ? line_base(t_slotA) + t_px_l : {RAW{1'b0}};
+      |                                                             ^
+%Warning-WIDTHEXPAND: rtl/CRT/crt_vsize.sv:657:61: Operator ADD expects 15 bits on the RHS, but RHS's VARREF 't_px_l' generates 10 bits.
+                                                 : ... note: In instance 'groovy_crt.u_vsize'
+  657 |             5'd1: rd_addr_t <= t_fetch ? line_base(t_slotB) + t_px_l : {RAW{1'b0}};
+      |                                                             ^
+- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)
+- Verilator: Built from 0.124 MB sources in 4 modules, into 0.168 MB in 5 C++ files needing 0.000 MB
+- Verilator: Walltime 0.084 s (elab=0.017, cvt=0.046, bld=0.000); cpu 0.084 s on 1 threads; alloced 11.652 MB
